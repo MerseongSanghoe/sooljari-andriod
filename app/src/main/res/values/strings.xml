@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SoolJari</string>
+    <string name="app_name">술자리</string>
+    <string name="searchbar_hint">오늘의 술자리를 찾아봐요</string>
 </resources>
