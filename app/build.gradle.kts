@@ -64,4 +64,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //status bar 색 변경용
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
 }
