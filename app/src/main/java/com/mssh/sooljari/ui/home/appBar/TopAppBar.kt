@@ -42,7 +42,7 @@ private fun addHashTag(tagList: List<String>): List<String> {
 
 @Composable
 fun LazyRowWithDynamicChips(
-    tagStrings: List<String>,
+    tagStrings: List<String> = testTags,
     lazyRowWidth: Dp
 ) {
     val density = LocalDensity.current
@@ -50,14 +50,14 @@ fun LazyRowWithDynamicChips(
     //받은 태그 목록에 해시태그 글자 추가
     val hashTaggedString: List<String> = addHashTag(tagStrings)
     //태그 사이 간격
-    val betweenSapce: Dp = 8.dp
+    val betweenSpace: Dp = 8.dp
 
     var currentWidth: Dp = 0.dp
 
 
 
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(betweenSapce),
+        horizontalArrangement = Arrangement.spacedBy(betweenSpace),
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
@@ -71,18 +71,15 @@ fun LazyRowWithDynamicChips(
                 textWidth + 24.dp
             }
             //chip 너비 + 태그 사이 간격
-            if (currentWidth + (chipWidth + betweenSapce) <= lazyRowWidth) {
+            if (currentWidth + (chipWidth + betweenSpace) <= lazyRowWidth) {
                 SearchBarTagChip(tagString = tagString)
-                currentWidth += (chipWidth + betweenSapce)
-            } else {
-                // 만약 새로운 chip 너비 + 기존 chip들 너비 합이 lazyRowWidth 보다 크면 새로운 칩을 추가 하지 않음
-                return@items
-            }
+                currentWidth += (chipWidth + betweenSpace)
+            } //else return@items
         }
     }
 }
 
-private val testTags: List<String> =
+val testTags: List<String> =
     listOf(
         "일곱글자태그임",
         "여섯글자태그",
@@ -141,8 +138,6 @@ fun TopAppBar() {
             )
         }
     }
-
-
 }
 
 
