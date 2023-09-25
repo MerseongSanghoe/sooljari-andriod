@@ -42,13 +42,11 @@ fun SearchBarTagChip(
                 horizontal = 12.dp,
                 vertical = 4.dp
             )
-
-
     ) {
         Text(
             text = tagString,
             color = colorResource(id = R.color.neutral0),
-            fontSize = 12.sp,
+            fontSize = 10.sp,
             modifier = Modifier
                 .align(Alignment.Center)
         )
