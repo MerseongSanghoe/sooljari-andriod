@@ -111,6 +111,11 @@ fun TopAppBar() {
                 .wrapContentHeight()
                 .padding(12.dp)
         ) {
+            //status bar 크기
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .height(24.dp))
+
             Text(
                 text = stringResource(id = R.string.app_name),
                 fontFamily = logoFont,
