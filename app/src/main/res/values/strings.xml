@@ -3,4 +3,9 @@
     <string name="searchbar_hint">오늘의 술자리를 찾아봐요</string>
     <string name="tag_short">#태그</string>
     <string name="tag_long">#일곱글자태그다</string>
+    <string name="navi_description_menu">카테고리</string>
+    <string name="navi_description_user">내 술자리</string>
+    <string name="navi_description_search">술 찾기</string>
+    <string name="navi_description_home">홈</string>
+    <string name="navi_description_review">리뷰</string>
 </resources>
