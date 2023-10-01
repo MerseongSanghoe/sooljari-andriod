@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.theme
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,10 +10,11 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.core.view.WindowCompat
 import com.mssh.sooljari.R
 
 private val DarkColorScheme = darkColorScheme(
@@ -53,23 +55,16 @@ fun SoolJariTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
-    val view = LocalView.current
-    val systemUiController = rememberSystemUiController()
 
-    val darkThemeColor = colorResource(id = R.color.neutral0_alpha15)
+    val view = LocalView.current
     val lightThemeColor = colorResource(id = R.color.neutral3_alpha15)
 
     if (!view.isInEditMode) {
         SideEffect {
-            if (darkTheme) {
-                systemUiController.setSystemBarsColor(
-                    color = darkThemeColor
-                )
-            } else {
-                systemUiController.setSystemBarsColor(
-                    color = lightThemeColor
-                )
-            }
+            //status bar 색상 변경
+            val window = (view.context as Activity).window
+            window.statusBarColor = lightThemeColor.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
