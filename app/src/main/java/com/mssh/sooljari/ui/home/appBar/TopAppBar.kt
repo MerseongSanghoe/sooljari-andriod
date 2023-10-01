@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -91,6 +94,7 @@ val testTags: List<String> =
 
 @Composable
 fun TopAppBar() {
+    val statusBarPadding = WindowInsets.statusBars.asPaddingValues()
 
     Box (
         modifier = Modifier
@@ -101,7 +105,8 @@ fun TopAppBar() {
             painter = painterResource(id = R.drawable.bg_main),
             contentScale = ContentScale.FillBounds,
             contentDescription = null,
-            modifier = Modifier.matchParentSize()
+            modifier = Modifier
+                .matchParentSize()
         )
 
         Column (
@@ -111,10 +116,10 @@ fun TopAppBar() {
                 .wrapContentHeight()
                 .padding(12.dp)
         ) {
-            //status bar 크기
             Spacer(modifier = Modifier
                 .fillMaxWidth()
-                .height(24.dp))
+                .height(statusBarPadding.calculateTopPadding())
+            )
 
             Text(
                 text = stringResource(id = R.string.app_name),
@@ -144,6 +149,7 @@ fun TopAppBar() {
         }
     }
 }
+
 
 
 @Preview

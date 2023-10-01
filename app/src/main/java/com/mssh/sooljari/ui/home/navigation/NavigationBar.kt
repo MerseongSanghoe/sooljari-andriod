@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -57,35 +58,39 @@ fun NavigationButton(
 }
 
 @Composable
-fun NavigationBar() {
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(color = colorResource(id = R.color.neutral0))
+fun NavigationBar(modifier: Modifier = Modifier) {
+    Surface(
+        shadowElevation = 1.dp
     ) {
-        NavigationButton(
-            icon = painterResource(id = R.drawable.ic_menu),
-            description = stringResource(id = R.string.navi_description_menu))
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .background(color = colorResource(id = R.color.neutral0))
+        ) {
+            NavigationButton(
+                icon = painterResource(id = R.drawable.ic_menu),
+                description = stringResource(id = R.string.navi_description_menu))
 
-        NavigationButton(
-            icon = painterResource(id = R.drawable.ic_search_star),
-            description = stringResource(id = R.string.navi_description_search))
+            NavigationButton(
+                icon = painterResource(id = R.drawable.ic_search_star),
+                description = stringResource(id = R.string.navi_description_search))
 
-        NavigationButton(
-            icon = painterResource(id = R.drawable.ic_home),
-            description = stringResource(id = R.string.navi_description_home))
+            NavigationButton(
+                icon = painterResource(id = R.drawable.ic_home),
+                description = stringResource(id = R.string.navi_description_home))
 
-        NavigationButton(
-            icon = painterResource(id = R.drawable.ic_user),
-            description = stringResource(id = R.string.navi_description_user))
+            NavigationButton(
+                icon = painterResource(id = R.drawable.ic_user),
+                description = stringResource(id = R.string.navi_description_user))
 
-        NavigationButton(
-            icon = painterResource(id = R.drawable.ic_review),
-            description = stringResource(id = R.string.navi_description_review))
+            NavigationButton(
+                icon = painterResource(id = R.drawable.ic_review),
+                description = stringResource(id = R.string.navi_description_review))
 
+        }
     }
 }
 
@@ -103,6 +108,6 @@ fun NavigationButtonPreview() {
 @Composable
 fun BottomNavigationPreview() {
     SoolJariTheme {
-        NavigationBar()
+        NavigationBar(Modifier.fillMaxWidth())
     }
 }
