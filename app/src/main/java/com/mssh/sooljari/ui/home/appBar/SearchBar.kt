@@ -2,6 +2,7 @@ package com.mssh.sooljari.ui.home.appBar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,21 +29,17 @@ import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.ui.theme.SoolJariTheme
 
-
 @Composable
-fun Search() {
-    SearchBar()
-}
-
-@Composable
-private fun SearchBar() {
+fun SearchBar(
+    onNavigateToSearch: () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .height(36.dp)
             .background(
-                color = colorResource(id = R.color.neutral0_alpha55),
+                color = colorResource(id = R.color.neutral0_alpha65),
                 shape = RoundedCornerShape(3.dp)
             )
             .border(
@@ -50,6 +47,7 @@ private fun SearchBar() {
                 color = colorResource(id = R.color.neutral0),
                 shape = RoundedCornerShape(3.dp)
             )
+            .clickable(onClick = onNavigateToSearch)
             .padding(8.dp)
     ) {
         Icon(
@@ -95,6 +93,7 @@ private fun SearchBar() {
 @Composable
 private fun SearchBarPreview() {
     SoolJariTheme {
-        SearchBar()
+        val search: () -> Unit = {}
+        SearchBar(search)
     }
 }

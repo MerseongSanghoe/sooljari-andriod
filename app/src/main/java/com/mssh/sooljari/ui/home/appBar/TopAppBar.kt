@@ -93,7 +93,9 @@ val testTags: List<String> =
 
 
 @Composable
-fun TopAppBar() {
+fun TopAppBar(
+    onNavigateToSearch: () -> Unit
+) {
     val statusBarPadding = WindowInsets.statusBars.asPaddingValues()
 
     Box (
@@ -134,7 +136,7 @@ fun TopAppBar() {
                     .height(12.dp)
             )
 
-            Search()
+            SearchBar(onNavigateToSearch)
 
             Spacer(
                 modifier = Modifier
@@ -156,6 +158,7 @@ fun TopAppBar() {
 @Composable
 fun TopAppbarPreview() {
     SoolJariTheme {
-        TopAppBar()
+        val search: () -> Unit = {}
+        TopAppBar(search)
     }
 }
