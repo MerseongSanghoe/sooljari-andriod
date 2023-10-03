@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,13 +54,53 @@ fun SearchBarTagChip(
     }
 }
 
+@Composable
+fun ResultCardChip(
+    tagString: String = stringResource(id = R.string.tag_short),
+    isKeyword: Boolean = false
+) {
+    val backgroundColor =
+        if (isKeyword) {
+            colorResource(id = R.color.purple0)
+        } else {
+            colorResource(id = R.color.neutral3_alpha15)
+        }
+    val textColor  =
+        if (isKeyword) {
+            colorResource(id = R.color.purple5)
+        } else {
+            colorResource(id = R.color.black)
+        }
+
+    Text(
+        text = tagString,
+        modifier = Modifier
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(3.dp),
+            )
+            .padding(horizontal = 4.dp),
+        color = textColor,
+        fontSize = 12.sp,
+    )
+}
+
 @Preview
 @Composable
-private fun ChipsPreview() {
+private fun SearchBarChipsPreview() {
     SoolJariTheme {
         Column {
             SearchBarTagChip()
             SearchBarTagChip(tagString = stringResource(id = R.string.tag_long))
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ResultCardChipsPreview() {
+    Column {
+        ResultCardChip()
+        ResultCardChip(isKeyword = true)
     }
 }
