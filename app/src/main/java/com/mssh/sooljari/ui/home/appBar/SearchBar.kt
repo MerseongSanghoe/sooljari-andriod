@@ -53,11 +53,13 @@ fun SearchBar(
         Icon(
             painter = painterResource(id = R.drawable.ic_search),
             tint = colorResource(id = R.color.neutral0),
-            contentDescription = null)
+            contentDescription = null
+        )
 
-        Spacer(modifier = Modifier
-            .fillMaxHeight()
-            .width(8.dp)
+        Spacer(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(8.dp)
         )
 
         Divider(
@@ -67,9 +69,10 @@ fun SearchBar(
                 .width(1.dp)
         )
 
-        Spacer(modifier = Modifier
-            .fillMaxHeight()
-            .width(8.dp)
+        Spacer(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(8.dp)
         )
 
         Row(
