@@ -85,6 +85,29 @@ fun ResultCardChip(
     )
 }
 
+/**
+ * 태그들을 표시하는 함수
+ *
+ * 태그를 표시하되, 레이아웃 크기를 넘어가는 태그는 표시하지 않습니다.
+ * 태그 문자열들을 담은 리스트와 태그가 표시될 컴포저블, 태그를 표시할 열 갯수에 따라
+ * 태그들을 배열합니다.
+ * 태그들은 가로로 배열되다 레이아웃 크기를  넘어가면 다음 행에 표시되거나
+ * 다음 행이 없는 경우 더이상 배열되지 않습니다.
+ *
+ * @param tagStringList 태그 문자열을 담은 string 리스트
+ * @param tagType 태그 문자열이 담길 컴포저블
+ * @param rowNum 태그가 표시될 행의 총 갯수
+ */
+
+@Composable
+fun TagListLazyColumn(
+    tagStringList: List<String>,
+    tagType: @Composable () -> Unit,
+    rowNum: Int
+) {
+
+}
+
 @Preview
 @Composable
 private fun SearchBarChipsPreview() {
