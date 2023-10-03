@@ -2,6 +2,7 @@ package com.mssh.sooljari.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -139,10 +141,6 @@ private fun SearchTextField(
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    /*
-    TODO: 디자인 대로 예쁘게 만들기
-     */
-
     BasicTextField(
         value = text,
         onValueChange = onTextChanged,
@@ -153,8 +151,15 @@ private fun SearchTextField(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier
                     .fillMaxHeight()
-                    //.wrapContentWidth()
-                    .background(color = colorResource(id = R.color.neutral0_alpha65))
+                    .background(
+                        color = colorResource(id = R.color.neutral0_alpha65),
+                        shape = RoundedCornerShape(3.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = colorResource(id = R.color.neutral0),
+                        shape = RoundedCornerShape(3.dp)
+                    )
                     .padding(horizontal = 8.dp)
             ) {
                 innerTextField()
