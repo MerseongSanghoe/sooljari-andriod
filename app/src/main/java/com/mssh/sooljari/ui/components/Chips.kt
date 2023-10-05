@@ -32,6 +32,22 @@ import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.ui.theme.SoolJariTheme
 
+enum class Chips {
+    SEARCH_BAR_TAG,
+    RESULT_CARD_TAG
+}
+
+data class Chip(
+    val chipType: Chips,
+    val fontSize: TextUnit,
+    val horizontalPadding: Dp
+)
+
+val searchBarTagChip: Chip =
+    Chip(Chips.SEARCH_BAR_TAG, 10.sp, 12.dp)
+val resultCardChip: Chip =
+    Chip(Chips.RESULT_CARD_TAG, 12.sp, 4.dp)
+
 @Composable
 fun SearchBarTagChip(
     tagString: String = stringResource(id = R.string.tag_short)
