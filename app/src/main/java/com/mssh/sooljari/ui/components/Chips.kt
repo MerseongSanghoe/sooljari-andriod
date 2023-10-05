@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -54,7 +55,8 @@ fun SearchBarTagChip(
 ) {
     val chipShape: Shape = CircleShape
 
-    Box(
+    Text(
+        text = tagString,
         modifier = Modifier
             .wrapContentSize()
             .background(
@@ -62,23 +64,19 @@ fun SearchBarTagChip(
                 shape = chipShape
             )
             .border(
-                width = 1.dp,
-                color = colorResource(id = R.color.neutral0),
-                shape = chipShape
+                BorderStroke(
+                    width = 1.dp,
+                    color = colorResource(id = R.color.neutral0)
+                ),
+                shape = RoundedCornerShape(50)
             )
             .padding(
-                horizontal = 12.dp,
+                horizontal = searchBarTagChip.horizontalPadding,
                 vertical = 4.dp
-            )
-    ) {
-        Text(
-            text = tagString,
-            color = colorResource(id = R.color.neutral0),
-            fontSize = 10.sp,
-            modifier = Modifier
-                .align(Alignment.Center)
-        )
-    }
+            ),
+        color = colorResource(id = R.color.neutral0),
+        fontSize = searchBarTagChip.fontSize,
+    )
 }
 
 @Composable
@@ -106,9 +104,11 @@ fun ResultCardTagChip(
                 color = backgroundColor,
                 shape = RoundedCornerShape(3.dp),
             )
-            .padding(horizontal = 4.dp),
+            .padding(
+                horizontal = resultCardChip.horizontalPadding
+            ),
         color = textColor,
-        fontSize = 12.sp,
+        fontSize = resultCardChip.fontSize
     )
 }
 
