@@ -99,7 +99,7 @@ fun ResultCard() {
                             .height(8.dp)
                     )
 
-                    ResultCardChip()
+                    ResultCardTagChip()
                 }
 
                 Button(
