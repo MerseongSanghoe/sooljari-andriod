@@ -1,24 +1,25 @@
 package com.mssh.sooljari.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -45,7 +46,7 @@ data class Chip(
 )
 
 val searchBarTagChip: Chip =
-    Chip(Chips.SEARCH_BAR_TAG, 10.sp, 12.dp)
+    Chip(Chips.SEARCH_BAR_TAG, 10.sp, 8.dp)
 val resultCardChip: Chip =
     Chip(Chips.RESULT_CARD_TAG, 12.sp, 4.dp)
 
@@ -58,7 +59,7 @@ fun SearchBarTagChip(
     Text(
         text = tagString,
         modifier = Modifier
-            .wrapContentSize()
+            //.wrapContentSize()
             .background(
                 color = colorResource(id = R.color.neutral0_alpha15),
                 shape = chipShape
@@ -122,17 +123,137 @@ fun ResultCardTagChip(
  * 다음 행이 없는 경우 더이상 배열되지 않습니다.
  *
  * @param tagStringList 태그 문자열을 담은 string 리스트
- * @param tagType 태그 문자열이 담길 컴포저블
+ * @param chip 표시될 칩 종류
+ * @param paddingBetweenChips 칩 사이 간격
  * @param rowNum 태그가 표시될 행의 총 갯수
+ * @param paddingBetweenRows 행 사이 간격
+ * @param keyword 특별히 강조해야 할 태그
  */
 
 @Composable
-fun TagListLazyColumn(
+fun TagListLazyRows(
     tagStringList: List<String>,
-    tagType: @Composable () -> Unit,
-    rowNum: Int
+    chip: Chip,
+    paddingBetweenChips: Dp = 0.dp,
+    rowNum: Int = 1,
+    paddingBetweenRows: Dp = 0.dp,
+    keyword: String = ""
 ) {
+    val density = LocalDensity.current
+    val rowWidth = remember { mutableStateOf(0.dp) }
+    val tagListRows = mutableListOf<List<String>>()
 
+    var sumOfChipWidth = 0.dp
+    var tagList = mutableListOf<String>()
+
+    tagStringList.forEach { tagString ->
+        val chipWidth = with(density) {
+            (tagString.length * chip.fontSize.value).sp.toDp() + chip.horizontalPadding
+        }
+
+        if (sumOfChipWidth + chipWidth <= rowWidth.value) {
+            tagList.add(tagString)
+            sumOfChipWidth += (chipWidth + paddingBetweenChips)
+        } else {
+            Log.i("added", "false")
+            tagListRows.add(tagList)
+            tagList = mutableListOf(tagString)
+            sumOfChipWidth = chipWidth
+        }
+    }
+
+    if (tagList.isNotEmpty()) {
+        tagListRows.add(tagList)
+    }
+
+    if (tagListRows.size > rowNum) {
+        tagListRows.subList(rowNum, tagListRows.size).clear()
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .onGloballyPositioned { coordinates ->
+                rowWidth.value = with(density) { coordinates.size.width.toDp() }
+                Log.i("rowWidth", rowWidth.value.toString())
+            }
+    ) {
+        items(tagListRows.size) { rowIndex ->
+            val row = tagListRows[rowIndex]
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.spacedBy(paddingBetweenChips)
+            ) {
+                items(row) { tagString ->
+                    Log.i("tagString", tagString)
+                    AddChip(chipType = chip.chipType, tagString = tagString, keyword = keyword)
+                }
+            }
+
+            if (rowIndex < tagListRows.size) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(paddingBetweenRows)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddChip(
+    chipType: Chips,
+    tagString: String,
+    keyword: String
+) {
+    return when (chipType) {
+        Chips.SEARCH_BAR_TAG -> {
+            SearchBarTagChip(tagString)
+        }
+
+        Chips.RESULT_CARD_TAG -> {
+            if (tagString == keyword) {
+                ResultCardTagChip(tagString, true)
+            } else ResultCardTagChip(tagString, false)
+        }
+    }
+}
+
+val testTags: List<String> =
+    listOf(
+        "일곱글자태그임",
+        "여섯글자태그",
+        "다섯자태그",
+        "네자태그",
+        "세글자",
+        "괜히늘려보기",
+        "플레이브",
+        "남예준",
+        "한노아",
+        "채밤비",
+        "도은호",
+        "유하민"
+    )
+
+@Preview
+@Composable
+private fun TagListLazyRowPreview() {
+
+    Column(
+        //modifier = Modifier.background(Color.Black)
+    ) {
+        TagListLazyRows(
+            tagStringList = testTags,
+            chip = resultCardChip,
+            keyword = "세글자",
+            rowNum = 2
+        )
+    }
 }
 
 @Preview
