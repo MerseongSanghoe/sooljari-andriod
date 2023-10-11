@@ -46,7 +46,13 @@ fun FairCard() {
 }
 
 @Composable
-fun ResultCard() {
+fun ResultCard(
+    name: String,
+    category: String,
+    degree: Float,
+    tags: List<String>,
+    keyword: String
+) {
     val cardHeight = 100.dp
 
     Card(
@@ -83,13 +89,13 @@ fun ResultCard() {
                         .wrapContentHeight()
                 ) {
                     Text(
-                        text = "술 이름",
+                        text = name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "주종 + 도수",
+                        text = "$category  $degree 도",
                         fontSize = 14.sp,
                     )
 
@@ -99,7 +105,14 @@ fun ResultCard() {
                             .height(8.dp)
                     )
 
-                    ResultCardTagChip()
+                    TagListLazyRows(
+                        tagStringList = tags,
+                        chip = resultCardChip,
+                        paddingBetweenChips = 4.dp,
+                        rowNum = 2,
+                        paddingBetweenRows = 4.dp,
+                        keyword = keyword
+                    )
                 }
 
                 Button(
@@ -126,5 +139,11 @@ fun ResultCard() {
 @Preview
 @Composable
 fun ResultCardPreview() {
-    ResultCard()
+    ResultCard(
+        name = "기네스 흑맥주",
+        category = "맥주",
+        degree = 4.5f,
+        tags = testTags,
+        keyword = "유하민"
+    )
 }
