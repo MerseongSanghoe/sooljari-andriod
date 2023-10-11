@@ -42,9 +42,11 @@ import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 
 @Composable
-fun SearchView() {
+fun SearchView(
+    onNavigateToHome: () -> Unit
+) {
     Column {
-        SearchAppBar()
+        SearchAppBar(onNavigateToHome)
 
         Column(
             modifier = Modifier
@@ -57,7 +59,9 @@ fun SearchView() {
 }
 
 @Composable
-private fun SearchAppBar() {
+private fun SearchAppBar(
+    onNavigateToHome: () -> Unit
+) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
     var text by remember {
@@ -98,7 +102,7 @@ private fun SearchAppBar() {
                     contentColor = colorResource(id = R.color.neutral0)
                 ),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { /*TODO*/ },
+                onClick = onNavigateToHome,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_left),
@@ -173,11 +177,13 @@ private fun SearchTextField(
 @Preview(heightDp = 48)
 @Composable
 private fun SearchAppBarPreview() {
-    SearchAppBar()
+    val home: () -> Unit = {}
+    SearchAppBar(home)
 }
 
 @Preview
 @Composable
 private fun SearchViewPreview() {
-    SearchView()
+    val home: () -> Unit = {}
+    SearchView(home)
 }

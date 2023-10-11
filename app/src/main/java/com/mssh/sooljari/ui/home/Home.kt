@@ -8,8 +8,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.window.Popup
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -48,8 +46,8 @@ fun HomeView(
 enum class SearchSections(
 
 ) {
-    Home,
-    Search
+    HOME,
+    SEARCH
 }
 
 @Composable
@@ -58,22 +56,34 @@ fun SetSearchGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "Home"
+        startDestination = SearchSections.HOME.name
     ) {
-        composable("Home") {
+        composable(SearchSections.HOME.name) {
             HomeView(
                 onNavigateToSearch = {
-                    navController.navigate("Search") {
-                        popUpTo("Home") {
+                    navController.navigate(SearchSections.SEARCH.name) {
+                        popUpTo(SearchSections.HOME.name)
 
-                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
                 }
             )
         }
 
         composable("Search") {
-            SearchView()
+            SearchView(
+                onNavigateToHome = {
+                    navController.navigate(SearchSections.HOME.name) {
+                        popUpTo(SearchSections.HOME.name) {
+                            inclusive = true
+                        }
+
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
         }
     }
 }
