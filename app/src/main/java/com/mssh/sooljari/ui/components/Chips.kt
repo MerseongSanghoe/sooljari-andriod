@@ -226,34 +226,29 @@ private fun AddChip(
 
 val testTags: List<String> =
     listOf(
-        "일곱글자태그임",
-        "여섯글자태그",
-        "다섯자태그",
-        "네자태그",
-        "세글자",
-        "괜히늘려보기",
-        "플레이브",
-        "남예준",
-        "한노아",
-        "채밤비",
-        "도은호",
-        "유하민"
+        "#일곱글자태그임",
+        "#여섯글자태그",
+        "#다섯자태그",
+        "#네자태그",
+        "#세글자",
+        "#괜히늘려보기",
+        "#플레이브",
+        "#남예준",
+        "#한노아",
+        "#채밤비",
+        "#도은호",
+        "#유하민"
     )
 
-@Preview
+@Preview(showBackground = true, backgroundColor = 0xF0FFFFFF)
 @Composable
 private fun TagListLazyRowPreview() {
-
-    Column(
-        //modifier = Modifier.background(Color.Black)
-    ) {
-        TagListLazyRows(
-            tagStringList = testTags,
-            chip = resultCardChip,
-            keyword = "세글자",
-            rowNum = 2
-        )
-    }
+    TagListLazyRows(
+        tagStringList = testTags,
+        chip = resultCardChip,
+        keyword = "세글자",
+        rowNum = 2
+    )
 }
 
 @Preview
