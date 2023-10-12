@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mssh.sooljari.ui.SearchView
+import com.mssh.sooljari.ui.search.SearchView
 import com.mssh.sooljari.ui.home.appBar.TopAppBar
 import com.mssh.sooljari.ui.home.navigation.NavigationBar
 

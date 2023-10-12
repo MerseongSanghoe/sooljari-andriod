@@ -1,4 +1,4 @@
-package com.mssh.sooljari.ui
+package com.mssh.sooljari.ui.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
