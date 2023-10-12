@@ -21,8 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,32 +43,45 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
 ) {
-    Column {
-        SearchAppBar(onNavigateToHome)
+    var query by remember { mutableStateOf("") }
 
+    Scaffold(
+        topBar = {
+            SearchAppBar(
+                query = query,
+                onTextChanged = { query = it },
+                onNavigateToHome = onNavigateToHome,
+                onSearchButtonClick = {
+
+                }
+            )
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = colorResource(id = R.color.neutral0)),
+                .padding(paddingValues)
         ) {
 
         }
     }
+
+
 }
 
 @Composable
 private fun SearchAppBar(
-    onNavigateToHome: () -> Unit
+    query: String,
+    onTextChanged: (String) -> Unit,
+    onNavigateToHome: () -> Unit,
+    onSearchButtonClick: () -> Unit
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-
-    var text by remember {
-        mutableStateOf("")
-    }
 
     Box(
         modifier = Modifier
@@ -111,10 +126,8 @@ private fun SearchAppBar(
             }
 
             SearchTextField(
-                text = text,
-                onTextChanged = { newText ->
-                    text = newText
-                },
+                text = query,
+                onTextChanged = onTextChanged,
                 modifier = Modifier
                     .weight(1f)
             )
@@ -128,7 +141,7 @@ private fun SearchAppBar(
                     contentColor = colorResource(id = R.color.neutral0)
                 ),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { /*TODO*/ },
+                onClick = onSearchButtonClick,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_search),
@@ -178,7 +191,7 @@ private fun SearchTextField(
 @Composable
 private fun SearchAppBarPreview() {
     val home: () -> Unit = {}
-    SearchAppBar(home)
+    SearchAppBar("", {}, home, home)
 }
 
 @Preview
