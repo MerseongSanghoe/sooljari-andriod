@@ -18,6 +18,7 @@ class AlcoholRepository {
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json {
+                ignoreUnknownKeys = true
                 prettyPrint = true
                 isLenient = true
             })
@@ -36,7 +37,7 @@ class AlcoholRepository {
             val query = URLEncoder.encode(keyword, "UTF-8")
             val results: AlcoholResults = client.get("$url$query").body()
 
-            Log.d("results", "$results")
+            Log.d("results", "query:$keyword  $results")
         }
 
 }
