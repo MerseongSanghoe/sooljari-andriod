@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,12 +43,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.AlcoholRepository
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(
     onNavigateToHome: () -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     var query by remember { mutableStateOf("") }
 
     Scaffold(
@@ -57,7 +62,9 @@ fun SearchView(
                 onTextChanged = { query = it },
                 onNavigateToHome = onNavigateToHome,
                 onSearchButtonClick = {
-
+                    coroutineScope.launch {
+                        AlcoholRepository().requestResults(query)
+                    }
                 }
             )
         }
