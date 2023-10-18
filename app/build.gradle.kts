@@ -1,6 +1,10 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
+
+    //kotlinx.serialization
+    id("org.jetbrains.kotlin.plugin.serialization") version org.gradle.kotlin.dsl.embeddedKotlinVersion
 }
 
 android {
@@ -23,7 +27,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -66,9 +73,18 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //status bar 색 변경용
-    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
 
     //navigation bar 적용용
     val nav_version = "2.7.3"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //http 통신용, ktor 라이브러리
+    val ktor_version = "2.3.5"
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-json:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
 }
