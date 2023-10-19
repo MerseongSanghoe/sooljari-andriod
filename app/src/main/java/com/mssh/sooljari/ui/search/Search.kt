@@ -29,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,16 +41,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.AlcoholRepository
-import kotlinx.coroutines.launch
+import com.mssh.sooljari.model.AlcoholViewModel
+import com.mssh.sooljari.model.AlcoholViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(
     onNavigateToHome: () -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val viewModel: AlcoholViewModel =
+        viewModel(factory = AlcoholViewModelFactory(AlcoholRepository()))
 
     var query by remember { mutableStateOf("") }
 
@@ -62,20 +64,16 @@ fun SearchView(
                 onTextChanged = { query = it },
                 onNavigateToHome = onNavigateToHome,
                 onSearchButtonClick = {
-                    coroutineScope.launch {
-                        AlcoholRepository().requestResults(query)
-                    }
+                    viewModel.getAlcoholList(query)
                 }
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-
-        }
+        SearchResults(
+            viewModel = viewModel,
+            query = query,
+            modifier = Modifier.padding(paddingValues)
+        )
     }
 
 

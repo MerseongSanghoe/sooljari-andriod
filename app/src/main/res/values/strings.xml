@@ -8,4 +8,5 @@
     <string name="navi_description_search">술 찾기</string>
     <string name="navi_description_home">홈</string>
     <string name="navi_description_review">리뷰</string>
+    <string name="error_no_value">no result</string>
 </resources>
