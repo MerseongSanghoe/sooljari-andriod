@@ -8,8 +8,6 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.net.URLEncoder
 
@@ -31,13 +29,13 @@ class AlcoholRepository {
         }
     }
 
-    suspend fun requestResults(keyword: String) =
-        withContext(Dispatchers.IO) {
-            val url = "http://211.37.148.214/api/alcohol/search?s="
-            val query = URLEncoder.encode(keyword, "UTF-8")
-            val results: AlcoholResults = client.get("$url$query").body()
+    suspend fun requestResults(keyword: String): AlcoholResults {
+        val url = "http://211.37.148.214/api/alcohol/search?s="
+        val query = URLEncoder.encode(keyword, "UTF-8")
+        val results: AlcoholResults = client.get("$url$query").body()
 
-            Log.d("results", "query:$keyword  $results")
-        }
+        Log.d("results", "query:$keyword  $results")
 
+        return results
+    }
 }

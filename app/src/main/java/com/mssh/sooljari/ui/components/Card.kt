@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.Alcohol
 
 @Composable
 fun VerticalCard() {
@@ -47,10 +48,7 @@ fun FairCard() {
 
 @Composable
 fun ResultCard(
-    name: String,
-    category: String,
-    degree: Float,
-    tags: List<String>,
+    alcohol: Alcohol,
     keyword: String
 ) {
     val cardHeight = 100.dp
@@ -89,13 +87,14 @@ fun ResultCard(
                         .wrapContentHeight()
                 ) {
                     Text(
-                        text = name,
+                        text = "${alcohol.name ?: R.string.error_no_value}",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "$category  $degree 도",
+                        text = "${alcohol.category ?: R.string.error_no_value}" +
+                                " ${alcohol.degree ?: 0f}도",
                         fontSize = 14.sp,
                     )
 
@@ -105,14 +104,14 @@ fun ResultCard(
                             .height(8.dp)
                     )
 
-                    TagListLazyRows(
-                        tagStringList = tags,
+                    /*TagListLazyRows(
+                        tagStringList = alcohol.tags,
                         chip = resultCardChip,
                         paddingBetweenChips = 4.dp,
                         rowNum = 2,
                         paddingBetweenRows = 4.dp,
                         keyword = keyword
-                    )
+                    )*/
                 }
 
                 Button(
@@ -140,10 +139,13 @@ fun ResultCard(
 @Composable
 fun ResultCardPreview() {
     ResultCard(
-        name = "기네스 흑맥주",
-        category = "맥주",
-        degree = 4.5f,
-        tags = testTags,
+        Alcohol(
+            id = 0L,
+            name = "기네스 흑맥주",
+            category = "맥주",
+            degree = 4.3f,
+            tags = testTags
+        ),
         keyword = "유하민"
     )
 }

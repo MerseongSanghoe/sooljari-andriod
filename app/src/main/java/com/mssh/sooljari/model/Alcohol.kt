@@ -5,19 +5,19 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Alcohol(
-    val id: Long,
+    val id: Long? = null,
 
     @SerialName("title")
-    val name: String,
+    val name: String? = null,
 
-    val category: String,
-    val degree: Float,
+    val category: String? = null,
+    val degree: Float? = null,
     val tags: List<String> = emptyList()
 )
 
 @Serializable
 data class AlcoholResults(
     val data: List<Alcohol> = emptyList(),
-    val count: Int
+    val count: Int? = null
 )
 
