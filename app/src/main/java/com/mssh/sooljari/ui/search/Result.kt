@@ -39,7 +39,10 @@ fun SearchResults(
     Log.d("Search Result result", "$results")
 
     if (results?.data?.size == 0) {
-        NoResult(query = query)
+        NoResult(
+            modifier = modifier,
+            query = query
+        )
     } else {
         LazyColumn(
             modifier = modifier
