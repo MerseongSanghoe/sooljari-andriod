@@ -5,13 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,10 +30,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,6 +56,8 @@ fun SearchView(
 ) {
     val viewModel: AlcoholViewModel =
         viewModel(factory = AlcoholViewModelFactory(AlcoholRepository()))
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     var query by remember { mutableStateOf("") }
 
@@ -65,7 +69,9 @@ fun SearchView(
                 onNavigateToHome = onNavigateToHome,
                 onSearchButtonClick = {
                     viewModel.getAlcoholList(query)
-                }
+                    focusManager.clearFocus()
+                },
+                focusRequester = focusRequester
             )
         }
     ) { paddingValues ->
@@ -84,7 +90,8 @@ private fun SearchAppBar(
     query: String,
     onTextChanged: (String) -> Unit,
     onNavigateToHome: () -> Unit,
-    onSearchButtonClick: () -> Unit
+    onSearchButtonClick: () -> Unit,
+    focusRequester: FocusRequester
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
@@ -135,6 +142,7 @@ private fun SearchAppBar(
                 onTextChanged = onTextChanged,
                 modifier = Modifier
                     .weight(1f)
+                    .focusRequester(focusRequester)
             )
 
             Button(
@@ -196,12 +204,13 @@ private fun SearchTextField(
 @Composable
 private fun SearchAppBarPreview() {
     val home: () -> Unit = {}
-    SearchAppBar("", {}, home, home)
+    SearchAppBar("", {}, home, home, FocusRequester())
 }
 
+/*
 @Preview
 @Composable
 private fun SearchViewPreview() {
     val home: () -> Unit = {}
     SearchView(home)
-}
+}*/
