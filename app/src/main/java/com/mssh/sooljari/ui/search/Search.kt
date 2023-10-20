@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +64,7 @@ fun SearchView(
     val focusManager = LocalFocusManager.current
 
     var query by remember { mutableStateOf("") }
+    val searchedQuery = remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -73,10 +75,12 @@ fun SearchView(
                 onSearchButtonClick = {
                     viewModel.getAlcoholList(query)
                     focusManager.clearFocus()
+                    searchedQuery.value = query
                 },
                 onKeyboardSearch = {
                     viewModel.getAlcoholList(query)
                     focusManager.clearFocus()
+                    searchedQuery.value = query
                 },
                 focusRequester = focusRequester
             )
@@ -85,6 +89,7 @@ fun SearchView(
         SearchResults(
             viewModel = viewModel,
             query = query,
+            searchedQuery = searchedQuery,
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -149,9 +154,9 @@ private fun SearchAppBar(
                 text = query,
                 onTextChanged = onTextChanged,
                 modifier = Modifier
-                    .weight(1f)
-                    .focusRequester(focusRequester),
-                onKeyboardSearch = onKeyboardSearch
+                    .weight(1f),
+                onKeyboardSearch = onKeyboardSearch,
+                focusRequester = focusRequester
             )
 
             Button(
@@ -179,12 +184,19 @@ private fun SearchTextField(
     text: String,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onKeyboardSearch: KeyboardActionScope.() -> Unit
+    onKeyboardSearch: KeyboardActionScope.() -> Unit,
+    focusRequester: FocusRequester
 ) {
+    //화면 시작과 동시에 검색바에 포커스 할당
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
     BasicTextField(
         value = text,
         onValueChange = onTextChanged,
-        modifier = modifier,
+        modifier = modifier
+            .focusRequester(focusRequester),
         textStyle = LocalTextStyle.current.copy(fontSize = 16.sp),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(

@@ -16,8 +16,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -33,7 +37,8 @@ import com.mssh.sooljari.ui.components.ResultCard
 fun SearchResults(
     modifier: Modifier = Modifier,
     viewModel: AlcoholViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    query: String
+    query: String,
+    searchedQuery: MutableState<String>
 ) {
     val results by viewModel.alcoholResults.collectAsState()
     Log.d("Search Result result", "$results")
@@ -41,7 +46,7 @@ fun SearchResults(
     if (results?.data?.size == 0) {
         NoResult(
             modifier = modifier,
-            query = query
+            queryState = searchedQuery
         )
     } else {
         LazyColumn(
@@ -58,7 +63,7 @@ fun SearchResults(
                 item(
                     key = alcohol.id
                 ) {
-                    ResultCard(alcohol = alcohol, keyword = query)
+                    ResultCard(alcohol = alcohol, keyword = searchedQuery.value)
                 }
             }
         }
@@ -68,9 +73,9 @@ fun SearchResults(
 @Composable
 fun NoResult(
     modifier: Modifier = Modifier,
-    query: String
+    queryState: MutableState<String>
 ) {
-    val keyword = query
+    val searchedQuery = rememberUpdatedState(newValue = queryState.value).value
 
     Column(
         modifier = modifier
@@ -82,7 +87,7 @@ fun NoResult(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "\' $keyword \'",
+            text = "\' $searchedQuery \'",
             color = colorResource(id = R.color.purple3),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
@@ -126,5 +131,5 @@ private fun SearchResultsPreview() {
 @Preview
 @Composable
 private fun NoResultPreview() {
-    NoResult(query = "한노아")
+    NoResult(queryState = remember { mutableStateOf("한노아") })
 }
