@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -51,14 +52,18 @@ fun ResultCard(
     alcohol: Alcohol,
     keyword: String
 ) {
-    val cardHeight = 100.dp
+    val cardHeight = 140.dp
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
+        shape = RoundedCornerShape(3.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.neutral0)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 1.dp
         )
     ) {
         Row(
@@ -141,7 +146,7 @@ fun ResultCardPreview() {
     ResultCard(
         Alcohol(
             id = 0L,
-            name = "기네스 흑맥주",
+            name = "기네스 흑맥주 말고 엄청나게 긴 이름",
             category = "맥주",
             degree = 4.3f,
             tags = testTags
