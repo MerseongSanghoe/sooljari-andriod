@@ -109,14 +109,14 @@ fun ResultCard(
                             .height(8.dp)
                     )
 
-                    /*TagListLazyRows(
+                    TagListLazyRows(
                         tagStringList = alcohol.tags,
                         chip = resultCardChip,
                         paddingBetweenChips = 4.dp,
                         rowNum = 2,
                         paddingBetweenRows = 4.dp,
                         keyword = keyword
-                    )*/
+                    )
                 }
 
                 Button(

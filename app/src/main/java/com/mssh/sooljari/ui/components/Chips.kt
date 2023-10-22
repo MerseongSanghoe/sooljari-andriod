@@ -6,14 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -170,31 +168,27 @@ fun TagListLazyRows(
         tagListRows.subList(rowNum, tagListRows.size).clear()
     }
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .onGloballyPositioned { coordinates ->
                 rowWidth.value = with(density) { coordinates.size.width.toDp() }
-                Log.i("rowWidth", rowWidth.value.toString())
             }
     ) {
-        items(tagListRows.size) { rowIndex ->
-            val row = tagListRows[rowIndex]
-
-            LazyRow(
+        tagListRows.forEachIndexed { index, tagListRow ->
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 horizontalArrangement = Arrangement.spacedBy(paddingBetweenChips)
             ) {
-                items(row) { tagString ->
-                    Log.i("tagString", tagString)
-                    AddChip(chipType = chip.chipType, tagString = tagString, keyword = keyword)
+                tagListRow.forEach { tag ->
+                    AddChip(chipType = chip.chipType, tagString = tag, keyword = keyword)
                 }
             }
 
-            if (rowIndex < tagListRows.size) {
+            if (index < tagListRows.size) {
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -247,7 +241,8 @@ private fun TagListLazyRowPreview() {
         tagStringList = testTags,
         chip = resultCardChip,
         keyword = "세글자",
-        rowNum = 2
+        rowNum = 2,
+        paddingBetweenRows = 4.dp
     )
 }
 

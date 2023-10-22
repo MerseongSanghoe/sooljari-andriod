@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -44,11 +45,15 @@ fun SearchResults(
     Log.d("Search Result result", "$results")
 
     if (results?.data?.size == 0) {
+        Log.d("no result found", "no result")
+
         NoResult(
             modifier = modifier,
             queryState = searchedQuery
         )
     } else {
+        Log.d("result found", "start lazyCol")
+
         LazyColumn(
             modifier = modifier
                 .fillMaxWidth()
@@ -56,15 +61,14 @@ fun SearchResults(
                 .background(
                     color = colorResource(id = R.color.neutral1)
                 ),
-            contentPadding = PaddingValues(horizontal = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            contentPadding = PaddingValues(
+                horizontal = 12.dp,
+                vertical = 8.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            results?.data?.forEachIndexed { i, alcohol ->
-                item(
-                    key = alcohol.id
-                ) {
-                    ResultCard(alcohol = alcohol, keyword = searchedQuery.value)
-                }
+            items(results?.data.orEmpty()) {
+                ResultCard(alcohol = it, keyword = query)
             }
         }
     }
@@ -118,8 +122,6 @@ fun NoResult(
             )
         }
     }
-
-
 }
 
 @Preview
