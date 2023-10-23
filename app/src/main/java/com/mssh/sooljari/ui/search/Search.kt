@@ -88,7 +88,6 @@ fun SearchView(
     ) { paddingValues ->
         SearchResults(
             viewModel = viewModel,
-            query = query,
             searchedQuery = searchedQuery,
             modifier = Modifier.padding(paddingValues)
         )

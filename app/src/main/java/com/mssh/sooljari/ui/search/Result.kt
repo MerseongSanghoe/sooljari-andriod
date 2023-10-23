@@ -20,8 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,18 +36,18 @@ import com.mssh.sooljari.ui.components.ResultCard
 fun SearchResults(
     modifier: Modifier = Modifier,
     viewModel: AlcoholViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    query: String,
     searchedQuery: MutableState<String>
 ) {
     val results by viewModel.alcoholResults.collectAsState()
     Log.d("Search Result result", "$results")
+    val query = rememberUpdatedState(newValue = searchedQuery.value).value
 
     if (results?.data?.size == 0) {
         Log.d("no result found", "no result")
 
         NoResult(
             modifier = modifier,
-            queryState = searchedQuery
+            query = query
         )
     } else {
         Log.d("result found", "start lazyCol")
@@ -77,9 +75,8 @@ fun SearchResults(
 @Composable
 fun NoResult(
     modifier: Modifier = Modifier,
-    queryState: MutableState<String>
+    query: String
 ) {
-    val searchedQuery = rememberUpdatedState(newValue = queryState.value).value
 
     Column(
         modifier = modifier
@@ -91,7 +88,7 @@ fun NoResult(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "\' $searchedQuery \'",
+            text = "\' $query \'",
             color = colorResource(id = R.color.purple3),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
@@ -133,5 +130,5 @@ private fun SearchResultsPreview() {
 @Preview
 @Composable
 private fun NoResultPreview() {
-    NoResult(queryState = remember { mutableStateOf("한노아") })
+    NoResult(query = "한노아")
 }
