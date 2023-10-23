@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.home
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -8,12 +9,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import com.mssh.sooljari.R
 import com.mssh.sooljari.ui.home.appBar.TopAppBar
 import com.mssh.sooljari.ui.home.navigation.NavigationBar
-import com.mssh.sooljari.ui.search.SearchView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,49 +43,21 @@ fun HomeView(
     }
 }
 
-enum class SearchSections(
-
+enum class HomeSections(
+    @StringRes val title: Int,
+    val route: String
 ) {
-    HOME,
-    SEARCH
+    CATEGORY(R.string.navi_description_menu, "home/category"),
+    FIND(R.string.navi_description_find, "home/find"),
+    FEED(R.string.navi_description_home, "home/feed"),
+    USER(R.string.navi_description_user, "home/user"),
+    REVIEW(R.string.navi_description_review, "home/review")
 }
 
-@Composable
-fun SetSearchGraph(
-    navController: NavHostController
+fun NavGraphBuilder.homeGraph(
+    navController: NavHostController,
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = SearchSections.HOME.name
-    ) {
-        composable(SearchSections.HOME.name) {
-            HomeView(
-                onNavigateToSearch = {
-                    navController.navigate(SearchSections.SEARCH.name) {
-                        popUpTo(SearchSections.HOME.name)
 
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
-        }
-
-        composable("Search") {
-            SearchView(
-                onNavigateToHome = {
-                    navController.navigate(SearchSections.HOME.name) {
-                        popUpTo(SearchSections.HOME.name) {
-                            inclusive = true
-                        }
-
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
-        }
-    }
 }
 
 @Preview

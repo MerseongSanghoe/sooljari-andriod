@@ -72,23 +72,28 @@ fun NavigationBar(modifier: Modifier = Modifier) {
         ) {
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_menu),
-                description = stringResource(id = R.string.navi_description_menu))
+                description = stringResource(id = R.string.navi_description_menu)
+            )
 
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_search_star),
-                description = stringResource(id = R.string.navi_description_search))
+                description = stringResource(id = R.string.navi_description_find)
+            )
 
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_home),
-                description = stringResource(id = R.string.navi_description_home))
+                description = stringResource(id = R.string.navi_description_home)
+            )
 
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_user),
-                description = stringResource(id = R.string.navi_description_user))
+                description = stringResource(id = R.string.navi_description_user)
+            )
 
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_review),
-                description = stringResource(id = R.string.navi_description_review))
+                description = stringResource(id = R.string.navi_description_review)
+            )
 
         }
     }
