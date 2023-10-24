@@ -57,6 +57,7 @@ import com.mssh.sooljari.model.AlcoholViewModelFactory
 @Composable
 fun SearchView(
     onNavigateToHome: () -> Unit,
+    onResultCardClick: (Long) -> Unit
 ) {
     val viewModel: AlcoholViewModel =
         viewModel(factory = AlcoholViewModelFactory(AlcoholRepository()))
@@ -89,11 +90,10 @@ fun SearchView(
         SearchResults(
             viewModel = viewModel,
             searchedQuery = searchedQuery,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            onResultCardClick = onResultCardClick
         )
     }
-
-
 }
 
 @Composable

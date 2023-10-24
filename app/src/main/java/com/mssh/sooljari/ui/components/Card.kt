@@ -2,6 +2,7 @@ package com.mssh.sooljari.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -50,14 +51,16 @@ fun FairCard() {
 @Composable
 fun ResultCard(
     alcohol: Alcohol,
-    keyword: String
+    keyword: String,
+    onResultCardClick: (Long) -> Unit
 ) {
     val cardHeight = 140.dp
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .wrapContentHeight()
+            .clickable(onClick = { alcohol.id?.let { onResultCardClick(it) } }),
         shape = RoundedCornerShape(3.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.neutral0)
@@ -151,6 +154,7 @@ fun ResultCardPreview() {
             degree = 4.3f,
             tags = testTags
         ),
-        keyword = "유하민"
+        keyword = "유하민",
+        onResultCardClick = {}
     )
 }

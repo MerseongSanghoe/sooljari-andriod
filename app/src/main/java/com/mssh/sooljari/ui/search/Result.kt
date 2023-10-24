@@ -36,7 +36,8 @@ import com.mssh.sooljari.ui.components.ResultCard
 fun SearchResults(
     modifier: Modifier = Modifier,
     viewModel: AlcoholViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    searchedQuery: MutableState<String>
+    searchedQuery: MutableState<String>,
+    onResultCardClick: (Long) -> Unit
 ) {
     val results by viewModel.alcoholResults.collectAsState()
     Log.d("Search Result result", "$results")
@@ -66,7 +67,11 @@ fun SearchResults(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(results?.data.orEmpty()) {
-                ResultCard(alcohol = it, keyword = query)
+                ResultCard(
+                    alcohol = it,
+                    keyword = query,
+                    onResultCardClick = onResultCardClick
+                )
             }
         }
     }
