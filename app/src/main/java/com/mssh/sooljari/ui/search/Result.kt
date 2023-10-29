@@ -66,9 +66,9 @@ fun SearchResults(
             ),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(results?.data.orEmpty()) {
+            items(results?.data.orEmpty()) { alcohol ->
                 ResultCard(
-                    alcohol = it,
+                    alcohol = alcohol,
                     keyword = query,
                     onResultCardClick = onResultCardClick
                 )

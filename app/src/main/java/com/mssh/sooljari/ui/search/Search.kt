@@ -51,10 +51,9 @@ import com.mssh.sooljari.ui.components.TransparentIconButton
 @Composable
 fun SearchView(
     onNavigateToHome: () -> Unit,
-    onResultCardClick: (Long) -> Unit
+    onResultCardClick: (Long) -> Unit,
+    viewModel: AlcoholViewModel
 ) {
-    val viewModel: AlcoholViewModel =
-        viewModel(factory = AlcoholViewModelFactory(AlcoholRepository()))
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
