@@ -11,9 +11,25 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     private val _alcoholResults = MutableStateFlow<AlcoholResults?>(null)
     val alcoholResults: StateFlow<AlcoholResults?> = _alcoholResults
 
+    private val _alcoholDetail = MutableStateFlow<AlcoholResponse?>(null)
+    val alcoholDetail: StateFlow<AlcoholResponse?> = _alcoholDetail
+
     fun getAlcoholList(keyword: String) {
         viewModelScope.launch {
             _alcoholResults.value = repository.requestResults(keyword)
+        }
+    }
+
+    fun getAlcoholDetail(id: Long) {
+        viewModelScope.launch {
+            _alcoholDetail.value = null
+            _alcoholDetail.value = repository.getAlcoholDetail(id)
+        }
+    }
+
+    fun login(id: String, pw: String) {
+        viewModelScope.launch {
+            repository.login(id, pw)
         }
     }
 }
