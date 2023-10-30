@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,7 +46,8 @@ import com.mssh.sooljari.ui.components.testTags
 fun AlcoholDetailView(
     modifier: Modifier = Modifier,
     alcoholId: Long,
-    viewModel: AlcoholViewModel
+    viewModel: AlcoholViewModel,
+    onBackButtonClick: () -> Unit
 ) {
     val alcoholDetail by viewModel.alcoholDetail.collectAsState()
 
@@ -65,7 +68,8 @@ fun AlcoholDetailView(
             val alcohol = alcoholDetail!!.dataObject?.alcohol
             AlcoholDetailView(
                 modifier = modifier,
-                alcoholDetail = alcohol!!
+                alcoholDetail = alcohol!!,
+                onBackButtonClick = onBackButtonClick
             )
         }
     }
@@ -75,14 +79,16 @@ fun AlcoholDetailView(
 @Composable
 private fun AlcoholDetailView(
     modifier: Modifier = Modifier,
-    alcoholDetail: AlcoholDetail
+    alcoholDetail: AlcoholDetail,
+    onBackButtonClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
             AlcoholDetailAppBar(
                 modifier = modifier,
                 title = alcoholDetail.title
-                    ?: stringResource(R.string.error_no_value)
+                    ?: stringResource(R.string.error_no_value),
+                onBackButtonClick = onBackButtonClick
             )
         }
     ) { paddingValues ->
@@ -106,7 +112,8 @@ private fun AlcoholDetailView(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 //태그 리스트
                 TagListLazyRows(
@@ -117,9 +124,13 @@ private fun AlcoholDetailView(
                     paddingBetweenRows = 8.dp,
                 )
 
-
+                //술 정보
+                AlcoholInfo(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    alcoholDetail = alcoholDetail
+                )
             }
-
 
 
         }
@@ -127,9 +138,94 @@ private fun AlcoholDetailView(
 }
 
 @Composable
+private fun AlcoholInfo(
+    modifier: Modifier = Modifier,
+    alcoholDetail: AlcoholDetail
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .background(
+                color = colorResource(id = R.color.neutral0)
+            ),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+        ) {
+            Text(
+                text = "도수",
+                modifier = Modifier.weight(0.3f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "${alcoholDetail.degree}",
+                modifier = Modifier.weight(0.7f),
+                fontSize = 16.sp,
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+        ) {
+            Text(
+                text = "주종",
+                modifier = Modifier.weight(0.3f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = alcoholDetail.category ?: stringResource(id = R.string.error_no_value),
+                modifier = Modifier.weight(0.7f),
+                fontSize = 16.sp,
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+        ) {
+            Text(
+                text = "양조장",
+                modifier = Modifier.weight(0.3f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = alcoholDetail.maker ?: stringResource(id = R.string.error_no_value),
+                modifier = Modifier.weight(0.7f),
+                fontSize = 16.sp,
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+        ) {
+            Text(
+                text = "기타정보",
+                modifier = Modifier.weight(0.3f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = alcoholDetail.explanation ?: stringResource(id = R.string.error_no_value),
+                modifier = Modifier.weight(0.7f),
+                fontSize = 16.sp,
+            )
+        }
+    }
+}
+
+@Composable
 private fun AlcoholDetailAppBar(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
+    onBackButtonClick: () -> Unit,
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
@@ -155,7 +251,7 @@ private fun AlcoholDetailAppBar(
                 .matchParentSize()
         ) {
             TransparentIconButton(
-                onClick = {},
+                onClick = onBackButtonClick,
                 icon = painterResource(R.drawable.ic_arrow_left),
                 iconColor = colorResource(R.color.neutral0),
                 buttonSize = 32.dp,
@@ -183,14 +279,27 @@ private fun AlcoholDetailAppBar(
             )
         }
     }
-
-
 }
 
 @Preview
 @Composable
 private fun AlcoholDetailAppBarPreview() {
-    AlcoholDetailAppBar(Modifier, "술제목")
+    AlcoholDetailAppBar(Modifier, "술제목", {})
+}
+
+@Preview
+@Composable
+private fun AlcoholInfoPreview() {
+    AlcoholInfo(
+        alcoholDetail = AlcoholDetail(
+            title = "PLAVE",
+            degree = 12.3f,
+            maker = "VLAST",
+            category = "우주 최강 아이도루",
+            tags = testTags,
+            explanation = stringResource(id = R.string.placeholder_long)
+        )
+    )
 }
 
 @Preview
@@ -199,9 +308,13 @@ private fun AlcoholDetailPreview() {
     AlcoholDetailView(
         modifier = Modifier,
         alcoholDetail = AlcoholDetail(
-            title = "제목",
-            degree = 12f,
-
-            )
+            title = "PLAVE",
+            degree = 12.3f,
+            maker = "VLAST",
+            category = "우주 최강 아이도루",
+            tags = testTags,
+            explanation = stringResource(id = R.string.placeholder_long)
+        ),
+        onBackButtonClick = {}
     )
 }

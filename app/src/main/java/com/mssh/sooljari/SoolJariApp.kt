@@ -100,7 +100,10 @@ private fun NavGraphBuilder.sooljariGraph(
         alcoholId?.let {
             AlcoholDetailView(
                 alcoholId = it,
-                viewModel = viewModel
+                viewModel = viewModel,
+                onBackButtonClick = {
+                    navController.popBackStack()
+                }
             )
         }
     }
