@@ -2,6 +2,7 @@ package com.mssh.sooljari.ui.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,6 +42,7 @@ import com.mssh.sooljari.model.AlcoholDetail
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.TransparentIconButton
+import com.mssh.sooljari.ui.components.defaultTagChip
 import com.mssh.sooljari.ui.components.resultCardChip
 import com.mssh.sooljari.ui.components.testTags
 
@@ -95,6 +99,7 @@ private fun AlcoholDetailView(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
         ) {
             //배너 대신 임시 이미지
             Image(
@@ -118,7 +123,7 @@ private fun AlcoholDetailView(
                 //태그 리스트
                 TagListLazyRows(
                     tagStringList = alcoholDetail.tags ?: testTags,
-                    chip = resultCardChip,
+                    chip = defaultTagChip,
                     paddingBetweenChips = resultCardChip.horizontalPadding,
                     rowNum = 3,
                     paddingBetweenRows = 8.dp,
