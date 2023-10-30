@@ -22,7 +22,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,11 +39,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mssh.sooljari.R
-import com.mssh.sooljari.model.AlcoholRepository
 import com.mssh.sooljari.model.AlcoholViewModel
-import com.mssh.sooljari.model.AlcoholViewModelFactory
 import com.mssh.sooljari.ui.components.TransparentIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,11 +155,6 @@ private fun SearchTextField(
     onKeyboardSearch: KeyboardActionScope.() -> Unit,
     focusRequester: FocusRequester
 ) {
-    //화면 시작과 동시에 검색바에 포커스 할당
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
     BasicTextField(
         value = text,
         onValueChange = onTextChanged,
