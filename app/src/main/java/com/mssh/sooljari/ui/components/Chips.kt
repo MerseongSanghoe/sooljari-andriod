@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -34,7 +36,8 @@ import com.mssh.sooljari.ui.theme.SoolJariTheme
 
 enum class Chips {
     SEARCH_BAR_TAG,
-    RESULT_CARD_TAG
+    RESULT_CARD_TAG,
+    DEFAULT_TAG
 }
 
 data class Chip(
@@ -44,9 +47,38 @@ data class Chip(
 )
 
 val searchBarTagChip: Chip =
-    Chip(Chips.SEARCH_BAR_TAG, 10.sp, 8.dp)
+    Chip(Chips.SEARCH_BAR_TAG, 12.sp, 8.dp)
 val resultCardChip: Chip =
-    Chip(Chips.RESULT_CARD_TAG, 12.sp, 4.dp)
+    Chip(Chips.RESULT_CARD_TAG, 14.sp, 4.dp)
+val defaultTagChip: Chip =
+    Chip(Chips.DEFAULT_TAG, 14.sp, 8.dp)
+
+@Composable
+fun DefaultTagChip(
+    tagString: String
+) {
+    Text(
+        text = tagString,
+        modifier = Modifier
+            .wrapContentSize()
+            .background(
+                color = Color.Transparent,
+                shape = CircleShape
+            )
+            .border(
+                BorderStroke(
+                    width = 1.dp,
+                    color = colorResource(id = R.color.purple4)
+                ),
+                shape = CircleShape
+            )
+            .padding(
+                horizontal = defaultTagChip.horizontalPadding,
+                vertical = 2.dp
+            ),
+        fontSize = defaultTagChip.fontSize
+    )
+}
 
 @Composable
 fun SearchBarTagChip(
@@ -215,6 +247,10 @@ private fun AddChip(
                 ResultCardTagChip(tagString, true)
             } else ResultCardTagChip(tagString, false)
         }
+
+        Chips.DEFAULT_TAG -> {
+            DefaultTagChip(tagString)
+        }
     }
 }
 
@@ -263,5 +299,14 @@ private fun ResultCardChipsPreview() {
     Column {
         ResultCardTagChip()
         ResultCardTagChip(isKeyword = true)
+    }
+}
+
+@Preview
+@Composable
+private fun DefaultTagChipPreview() {
+    Column {
+        DefaultTagChip(tagString = "#태그")
+        DefaultTagChip(tagString = "#엄청나게긴태그")
     }
 }
