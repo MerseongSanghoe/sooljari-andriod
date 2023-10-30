@@ -16,6 +16,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
 
     fun getAlcoholList(keyword: String) {
         viewModelScope.launch {
+            _alcoholResults.value = null
             _alcoholResults.value = repository.requestResults(keyword)
         }
     }
