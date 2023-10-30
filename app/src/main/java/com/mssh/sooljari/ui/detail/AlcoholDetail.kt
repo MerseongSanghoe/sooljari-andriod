@@ -1,6 +1,7 @@
 package com.mssh.sooljari.ui.detail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,10 +33,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.AlcoholDetail
 import com.mssh.sooljari.model.AlcoholViewModel
+import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.TransparentIconButton
+import com.mssh.sooljari.ui.components.resultCardChip
+import com.mssh.sooljari.ui.components.testTags
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlcoholDetailView(
     modifier: Modifier = Modifier,
@@ -58,24 +62,66 @@ fun AlcoholDetailView(
         }
 
         else -> {
-            Scaffold(
-                topBar = {
-                    AlcoholDetailAppBar(
-                        modifier = modifier,
-                        title = alcoholDetail!!.dataObject?.alcohol?.title
-                            ?: stringResource(R.string.error_no_value)
+            val alcohol = alcoholDetail!!.dataObject?.alcohol
+            AlcoholDetailView(
+                modifier = modifier,
+                alcoholDetail = alcohol!!
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AlcoholDetailView(
+    modifier: Modifier = Modifier,
+    alcoholDetail: AlcoholDetail
+) {
+    Scaffold(
+        topBar = {
+            AlcoholDetailAppBar(
+                modifier = modifier,
+                title = alcoholDetail.title
+                    ?: stringResource(R.string.error_no_value)
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+        ) {
+            //배너 대신 임시 이미지
+            Image(
+                painter = painterResource(id = R.drawable.img_placeholder),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .background(
+                        color = colorResource(id = R.color.neutral1)
                     )
-                }
-            ) { paddingValues ->
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                ) {
-                    Text(
-                        text = alcoholDetail!!.dataObject?.alcohol?.degree.toString()
-                    )
-                }
+            )
+
+            //술 정보 표시 영역
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                //태그 리스트
+                TagListLazyRows(
+                    tagStringList = alcoholDetail.tags ?: testTags,
+                    chip = resultCardChip,
+                    paddingBetweenChips = resultCardChip.horizontalPadding,
+                    rowNum = 3,
+                    paddingBetweenRows = 8.dp,
+                )
+
+
             }
+
+
+
         }
     }
 }
@@ -150,5 +196,12 @@ private fun AlcoholDetailAppBarPreview() {
 @Preview
 @Composable
 private fun AlcoholDetailPreview() {
-    //AlcoholDetailView(Modifier, AlcoholDetail())
+    AlcoholDetailView(
+        modifier = Modifier,
+        alcoholDetail = AlcoholDetail(
+            title = "제목",
+            degree = 12f,
+
+            )
+    )
 }
