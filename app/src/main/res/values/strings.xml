@@ -9,4 +9,5 @@
     <string name="navi_description_home">홈</string>
     <string name="navi_description_review">리뷰</string>
     <string name="error_no_value">no result</string>
+    <string name="placeholder_long">플레이브(PLAVE)는 2023년 3월 12일에 데뷔한 블래스트 소속 5인조 버추얼 보이그룹이다. PLAVE는 \'Play\'와 \'Rêve(꿈)\'를 결합시켜 만든 이름이며, 자신들의 꿈을 이루기 위해 새로운 세상을 만들어간다는 의미를 담고있다.</string>
 </resources>
