@@ -10,20 +10,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() {
-    private val _alcoholResults = MutableStateFlow<AlcoholResults?>(null)
-    val alcoholResults: StateFlow<AlcoholResults?> = _alcoholResults
-
-    private val _alcoholDetail = MutableStateFlow<AlcoholResponse?>(null)
-    val alcoholDetail: StateFlow<AlcoholResponse?> = _alcoholDetail
-
+    //검색 결과 리스트
     private val _alcoholList = MutableStateFlow<List<Alcohol>?>(emptyList())
     val alcoholList: StateFlow<List<Alcohol>?> = _alcoholList.asStateFlow()
 
+    //술 상세 정보
+    private val _alcoholDetail = MutableStateFlow<AlcoholResponse?>(null)
+    val alcoholDetail: StateFlow<AlcoholResponse?> = _alcoholDetail
 
+    //페이지네이션 변수
     private var currentPage = 0
     private var totalAlcoholCount = 0
     private var _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    private val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun initialLoad(keyword: String) {
         viewModelScope.launch {
@@ -60,15 +59,6 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         return _alcoholList.value?.size!! < totalAlcoholCount
     }
 
-
-    fun getAlcoholList(keyword: String) {
-        viewModelScope.launch {
-            _alcoholResults.value = null
-            _alcoholResults.value = repository.requestResults(keyword)
-            currentPage = 0
-        }
-    }
-
     fun getAlcoholDetail(id: Long) {
         viewModelScope.launch {
             _alcoholDetail.value = null
@@ -81,7 +71,6 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
             repository.login(id, pw)
         }
     }
-
 }
 
 class AlcoholViewModelFactory(private val alcoholRepository: AlcoholRepository) :
