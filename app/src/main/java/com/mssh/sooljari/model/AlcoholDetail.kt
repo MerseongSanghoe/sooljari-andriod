@@ -38,3 +38,38 @@ data class AlcoholResponse(
     @SerialName("data")
     val dataObject: AlcoholResponseDataObject? = null
 )
+
+@Serializable
+data class AlcoholDetailModified(
+    val id: Long? = null,
+    val title: String? = null,
+    val degree: Float? = null,
+    val category: String? = null,
+    val maker: Maker? = null,
+    val explanation: String?,
+    @SerialName("images")
+    val imageList: ImageList? = null,
+
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val publishedAt: String? = null,
+
+    val link: String? = null,
+    @SerialName("store_link")
+    val storeLink: String? = null,
+    @SerialName("sub_link")
+    val subLink: String? = null,
+)
+
+@Serializable
+data class Maker(
+    val id: Long? = null,
+    val name: String? = null,
+    val nation: String? = null,
+    val location: String? = null,
+    val url: String? = null,
+
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val publishedAt: String? = null,
+)
