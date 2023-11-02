@@ -18,6 +18,8 @@ data class Alcohol(
 @Serializable
 data class AlcoholResults(
     val data: List<Alcohol> = emptyList(),
-    val count: Int? = null
+    val count: Int? = null,
+    val size: Int? = null,
+    val page: Int? = null
 )
 
