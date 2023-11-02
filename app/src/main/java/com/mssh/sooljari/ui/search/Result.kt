@@ -12,15 +12,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -31,17 +36,39 @@ import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.ui.components.ResultCard
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 @Composable
 fun SearchResults(
     modifier: Modifier = Modifier,
-    viewModel: AlcoholViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel: AlcoholViewModel,
     searchedQuery: MutableState<String>,
     onResultCardClick: (Long) -> Unit
 ) {
     val results by viewModel.alcoholResults.collectAsState()
     Log.d("Search Result result", "$results")
     val query = rememberUpdatedState(newValue = searchedQuery.value).value
+
+    //스크롤 위치 기억
+    val listState = rememberLazyListState()
+
+    val alcoholList by viewModel.alcoholList.collectAsState()
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .distinctUntilChanged()
+            .collect{lastIndex ->
+                if (lastIndex != null) {
+                    val totalItemCount = listState.layoutInfo.totalItemsCount
+
+                    if (lastIndex == totalItemCount - 1) {
+                        viewModel.loadMoreList(searchedQuery.value)
+                    }
+                }
+            }
+
+    }
 
     if (results?.data?.size == 0) {
         Log.d("no result found", "no result")
@@ -53,6 +80,10 @@ fun SearchResults(
     } else {
         Log.d("result found", "start lazyCol")
 
+        /*
+        TODO: UI 그리는 부분 함수로 분리하기
+         */
+
         LazyColumn(
             modifier = modifier
                 .fillMaxWidth()
@@ -60,15 +91,24 @@ fun SearchResults(
                 .background(
                     color = colorResource(id = R.color.neutral1)
                 ),
+            state = listState,
             contentPadding = PaddingValues(
                 horizontal = 12.dp,
                 vertical = 8.dp
             ),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(results?.data.orEmpty()) { alcohol ->
+            /*items(results?.data.orEmpty()) { alcohol ->
                 ResultCard(
                     alcohol = alcohol,
+                    keyword = query,
+                    onResultCardClick = onResultCardClick
+                )
+            }*/
+
+            items(alcoholList.orEmpty()) {
+                ResultCard(
+                    alcohol = it,
                     keyword = query,
                     onResultCardClick = onResultCardClick
                 )

@@ -38,10 +38,26 @@ class AlcoholRepository {
         }
     }
 
-    suspend fun requestResults(keyword: String): AlcoholResults {
+    suspend fun getInitialResults(keyword: String): AlcoholResults {
         val url = "$BASE_URL/alcohol/search?s="
         val query = URLEncoder.encode(keyword, "UTF-8")
         val results: AlcoholResults = client.get("$url$query").body()
+
+        return results
+    }
+
+    suspend fun getMoreResults(keyword: String, page: Int): AlcoholResults {
+        val url = "$BASE_URL/alcohol/search?s="
+        val query = URLEncoder.encode(keyword, "UTF-8")
+        val results: AlcoholResults = client.get("$url$query&page=$page").body()
+
+        return results
+    }
+
+    suspend fun requestResults(keyword: String, page: Int = 0): AlcoholResults {
+        val url = "$BASE_URL/alcohol/search?s="
+        val query = URLEncoder.encode(keyword, "UTF-8")
+        val results: AlcoholResults = client.get("$url$query&page=$page").body()
 
         Log.d("results", "query:$keyword  $results")
 
