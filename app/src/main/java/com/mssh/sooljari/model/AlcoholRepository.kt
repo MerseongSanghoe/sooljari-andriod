@@ -19,6 +19,7 @@ import kotlinx.serialization.json.Json
 import java.net.URLEncoder
 
 val BASE_URL = "http://211.37.148.214/api"
+
 class AlcoholRepository {
     private var jwt: String? = null
 
@@ -38,6 +39,7 @@ class AlcoholRepository {
         }
     }
 
+    //최초 검색 결과 가져오기
     suspend fun getInitialResults(keyword: String): AlcoholResults {
         val url = "$BASE_URL/alcohol/search?s="
         val query = URLEncoder.encode(keyword, "UTF-8")
@@ -46,6 +48,7 @@ class AlcoholRepository {
         return results
     }
 
+    //추가 검색 결과 가져오기
     suspend fun getMoreResults(keyword: String, page: Int): AlcoholResults {
         val url = "$BASE_URL/alcohol/search?s="
         val query = URLEncoder.encode(keyword, "UTF-8")
@@ -54,16 +57,7 @@ class AlcoholRepository {
         return results
     }
 
-    suspend fun requestResults(keyword: String, page: Int = 0): AlcoholResults {
-        val url = "$BASE_URL/alcohol/search?s="
-        val query = URLEncoder.encode(keyword, "UTF-8")
-        val results: AlcoholResults = client.get("$url$query&page=$page").body()
-
-        Log.d("results", "query:$keyword  $results")
-
-        return results
-    }
-
+    //strip용 로그인
     suspend fun login(id: String, pw: String) {
         val response: HttpResponse = client.post("$BASE_URL/auth/local") {
             contentType(ContentType.Application.Json)
@@ -79,6 +73,7 @@ class AlcoholRepository {
         }
     }
 
+    //술 상세 정보 가져오기
     suspend fun getAlcoholDetail(id: Long): AlcoholResponse {
         val url = "$BASE_URL/alcohols/$id"
 
