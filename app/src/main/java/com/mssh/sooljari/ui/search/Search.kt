@@ -63,13 +63,11 @@ fun SearchView(
                 onTextChanged = { query = it },
                 onNavigateToHome = onNavigateToHome,
                 onSearchButtonClick = {
-                    //viewModel.getAlcoholList(query)
                     viewModel.initialLoad(query)
                     focusManager.clearFocus()
                     searchedQuery.value = query
                 },
                 onKeyboardSearch = {
-                    //viewModel.getAlcoholList(query)
                     viewModel.initialLoad(query)
                     focusManager.clearFocus()
                     searchedQuery.value = query
