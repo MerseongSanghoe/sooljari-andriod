@@ -138,7 +138,7 @@ fun NoResult(
 
         Text(
             text = "에 대한 검색 결과가 없어요.",
-            color = colorResource(id = R.color.neutral3_alpha75),
+            color = colorResource(id = R.color.neutral5_alpha75),
             fontSize = 16.sp
         )
 

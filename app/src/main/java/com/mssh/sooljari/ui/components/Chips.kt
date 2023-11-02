@@ -37,7 +37,8 @@ import com.mssh.sooljari.ui.theme.SoolJariTheme
 enum class Chips {
     SEARCH_BAR_TAG,
     RESULT_CARD_TAG,
-    DEFAULT_TAG
+    DEFAULT_TAG,
+    LIGHT_TAG
 }
 
 data class Chip(
@@ -52,6 +53,35 @@ val resultCardChip: Chip =
     Chip(Chips.RESULT_CARD_TAG, 14.sp, 4.dp)
 val defaultTagChip: Chip =
     Chip(Chips.DEFAULT_TAG, 14.sp, 8.dp)
+val lightTagChip: Chip =
+    Chip(Chips.LIGHT_TAG, 14.sp, 8.dp)
+
+@Composable
+fun LightTagChip(
+    tagString: String
+) {
+    Text(
+        text = tagString,
+        modifier = Modifier
+            .wrapContentSize()
+            .background(
+                color = Color.Transparent,
+                shape = CircleShape
+            )
+            .border(
+                BorderStroke(
+                    width = 0.5.dp,
+                    color = colorResource(id = R.color.neutral2)
+                ),
+                shape = CircleShape
+            )
+            .padding(
+                horizontal = lightTagChip.horizontalPadding,
+                vertical = 2.dp
+            ),
+        fontSize = lightTagChip.fontSize
+    )
+}
 
 @Composable
 fun DefaultTagChip(
@@ -119,7 +149,7 @@ fun ResultCardTagChip(
         if (isKeyword) {
             colorResource(id = R.color.purple0)
         } else {
-            colorResource(id = R.color.neutral3_alpha15)
+            colorResource(id = R.color.neutral5_alpha15)
         }
     val textColor =
         if (isKeyword) {
@@ -251,6 +281,10 @@ private fun AddChip(
         Chips.DEFAULT_TAG -> {
             DefaultTagChip(tagString)
         }
+
+        Chips.LIGHT_TAG -> {
+            LightTagChip(tagString)
+        }
     }
 }
 
@@ -308,5 +342,14 @@ private fun DefaultTagChipPreview() {
     Column {
         DefaultTagChip(tagString = "#태그")
         DefaultTagChip(tagString = "#엄청나게긴태그")
+    }
+}
+
+@Preview
+@Composable
+private fun LightTagChipPreview() {
+    Column {
+        LightTagChip(tagString = "#태그")
+        LightTagChip(tagString = "#엄청나게긴태그")
     }
 }
