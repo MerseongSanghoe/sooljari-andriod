@@ -79,7 +79,9 @@ fun SearchView(
         SearchResults(
             viewModel = viewModel,
             searchedQuery = searchedQuery,
-            modifier = Modifier.padding(paddingValues),
+            modifier = Modifier
+                .padding(paddingValues)
+                .background(colorResource(id = R.color.neutral1)),
             onResultCardClick = onResultCardClick
         )
     }
