@@ -79,7 +79,7 @@ fun ResultCard(
                 modifier = Modifier
                     .size(cardHeight)
                     .background(
-                        color = colorResource(id = R.color.neutral3_alpha15)
+                        color = colorResource(id = R.color.neutral5_alpha15)
                     ),
                 contentScale = ContentScale.Fit,
                 contentDescription = null

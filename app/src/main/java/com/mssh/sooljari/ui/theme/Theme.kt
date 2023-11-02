@@ -57,7 +57,7 @@ fun SoolJariTheme(
     }
 
     val view = LocalView.current
-    val lightThemeColor = colorResource(id = R.color.neutral3_alpha15)
+    val lightThemeColor = colorResource(id = R.color.neutral5_alpha15)
 
     if (!view.isInEditMode) {
         SideEffect {
