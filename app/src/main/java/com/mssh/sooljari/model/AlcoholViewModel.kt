@@ -15,8 +15,8 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     val alcoholList: StateFlow<List<Alcohol>?> = _alcoholList.asStateFlow()
 
     //술 상세 정보
-    private val _alcoholDetail = MutableStateFlow<AlcoholResponse?>(null)
-    val alcoholDetail: StateFlow<AlcoholResponse?> = _alcoholDetail
+    private val _alcoholDetailModified = MutableStateFlow<AlcoholDetailModified?>(null)
+    val alcoholDetailModified: StateFlow<AlcoholDetailModified?> = _alcoholDetailModified
 
     //페이지네이션 변수
     private var currentPage = 0
@@ -59,16 +59,16 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         return _alcoholList.value?.size!! < totalAlcoholCount
     }
 
-    fun getAlcoholDetail(id: Long) {
-        viewModelScope.launch {
-            _alcoholDetail.value = null
-            _alcoholDetail.value = repository.getAlcoholDetail(id)
-        }
-    }
-
     fun login(id: String, pw: String) {
         viewModelScope.launch {
             repository.login(id, pw)
+        }
+    }
+
+    fun getAlcoholDetailModified(id: Long) {
+        viewModelScope.launch {
+            _alcoholDetailModified.value = null
+            _alcoholDetailModified.value = repository.getAlcoholDetailModified(id)
         }
     }
 }

@@ -26,27 +26,13 @@ data class AlcoholDetail(
 )
 
 @Serializable
-data class AlcoholResponseDataObject(
-    val id: Long? = null,
-
-    @SerialName("attributes")
-    val alcohol: AlcoholDetail? = null
-)
-
-@Serializable
-data class AlcoholResponse(
-    @SerialName("data")
-    val dataObject: AlcoholResponseDataObject? = null
-)
-
-@Serializable
 data class AlcoholDetailModified(
     val id: Long? = null,
     val title: String? = null,
     val degree: Float? = null,
     val category: String? = null,
     val maker: Maker? = null,
-    val explanation: String?,
+    val explanation: String? = null,
     @SerialName("images")
     val imageList: ImageList? = null,
 

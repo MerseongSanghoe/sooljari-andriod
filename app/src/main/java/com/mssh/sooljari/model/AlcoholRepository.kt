@@ -19,6 +19,8 @@ import kotlinx.serialization.json.Json
 import java.net.URLEncoder
 
 val BASE_URL = "http://211.37.148.214/api"
+val LOGIN_ID = "testandroid"
+val LOGIN_PASSWORD = "catdog09321"
 
 class AlcoholRepository {
     private var jwt: String? = null
@@ -74,14 +76,14 @@ class AlcoholRepository {
     }
 
     //술 상세 정보 가져오기
-    suspend fun getAlcoholDetail(id: Long): AlcoholResponse {
-        val url = "$BASE_URL/alcohols/$id"
+    suspend fun getAlcoholDetailModified(id: Long): AlcoholDetailModified {
+        val url = "$BASE_URL/alcohols/:$id"
 
         if (jwt == null) {
-            login("testandroid", "catdog09321")
+            login(LOGIN_ID, LOGIN_PASSWORD)
         }
 
-        val result: AlcoholResponse = client.get(url) {
+        val result: AlcoholDetailModified = client.get(url) {
             header("Authorization", "Bearer $jwt")
         }.body()
 
