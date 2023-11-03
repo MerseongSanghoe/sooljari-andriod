@@ -1,8 +1,8 @@
 package com.mssh.sooljari.ui.detail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,8 +38,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
-import com.mssh.sooljari.model.AlcoholDetail
+import com.mssh.sooljari.model.AlcoholInfo
 import com.mssh.sooljari.model.AlcoholViewModel
+import com.mssh.sooljari.model.Maker
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.TransparentIconButton
 import com.mssh.sooljari.ui.components.defaultTagChip
@@ -53,13 +54,14 @@ fun AlcoholDetailView(
     viewModel: AlcoholViewModel,
     onBackButtonClick: () -> Unit
 ) {
-    val alcoholDetail by viewModel.alcoholDetail.collectAsState()
+    val alcoholInfo by viewModel.alcoholInfo.collectAsState()
 
     LaunchedEffect(alcoholId) {
-        viewModel.getAlcoholDetail(alcoholId)
+        viewModel.getAlcoholInfo(alcoholId)
+        Log.d("AlcoholDetailView", "AlcoholDetailView: $alcoholInfo")
     }
 
-    when (alcoholDetail) {
+    when (alcoholInfo) {
         null -> {
             Text(
                 text = "Loading...",
@@ -69,10 +71,11 @@ fun AlcoholDetailView(
         }
 
         else -> {
-            val alcohol = alcoholDetail!!.dataObject?.alcohol
+            Log.d("AlcoholDetailView in when", "AlcoholDetailView: $alcoholInfo")
+
             AlcoholDetailView(
                 modifier = modifier,
-                alcoholDetail = alcohol!!,
+                alcoholInfo = alcoholInfo!!,
                 onBackButtonClick = onBackButtonClick
             )
         }
@@ -83,14 +86,14 @@ fun AlcoholDetailView(
 @Composable
 private fun AlcoholDetailView(
     modifier: Modifier = Modifier,
-    alcoholDetail: AlcoholDetail,
+    alcoholInfo: AlcoholInfo,
     onBackButtonClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
             AlcoholDetailAppBar(
                 modifier = modifier,
-                title = alcoholDetail.title
+                title = alcoholInfo.title
                     ?: stringResource(R.string.error_no_value),
                 onBackButtonClick = onBackButtonClick
             )
@@ -122,7 +125,10 @@ private fun AlcoholDetailView(
             ) {
                 //태그 리스트
                 TagListLazyRows(
-                    tagStringList = alcoholDetail.tags ?: testTags,
+                    /*
+                    TODO: AlcoholInfo에 태그 리스트 추가되면 변경하기
+                     */
+                    tagStringList = testTags,
                     chip = defaultTagChip,
                     paddingBetweenChips = resultCardChip.horizontalPadding,
                     rowNum = 3,
@@ -133,7 +139,7 @@ private fun AlcoholDetailView(
                 AlcoholInfo(
                     modifier = modifier
                         .fillMaxWidth(),
-                    alcoholDetail = alcoholDetail
+                    alcoholInfo = alcoholInfo
                 )
             }
 
@@ -145,8 +151,17 @@ private fun AlcoholDetailView(
 @Composable
 private fun AlcoholInfo(
     modifier: Modifier = Modifier,
-    alcoholDetail: AlcoholDetail
+    alcoholInfo: AlcoholInfo
 ) {
+    val degree = alcoholInfo.degree
+        ?: stringResource(id = R.string.error_no_value)
+    val category = alcoholInfo.category
+        ?: stringResource(id = R.string.error_no_value)
+    val maker = alcoholInfo.maker?.name
+        ?: stringResource(id = R.string.error_no_value)
+    val explanation = alcoholInfo.explanation
+        ?: stringResource(id = R.string.error_no_value)
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -167,7 +182,7 @@ private fun AlcoholInfo(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "${alcoholDetail.degree}",
+                text = "$degree",
                 modifier = Modifier.weight(0.7f),
                 fontSize = 16.sp,
             )
@@ -184,7 +199,7 @@ private fun AlcoholInfo(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = alcoholDetail.category ?: stringResource(id = R.string.error_no_value),
+                text = category,
                 modifier = Modifier.weight(0.7f),
                 fontSize = 16.sp,
             )
@@ -201,7 +216,7 @@ private fun AlcoholInfo(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = alcoholDetail.maker ?: stringResource(id = R.string.error_no_value),
+                text = maker,
                 modifier = Modifier.weight(0.7f),
                 fontSize = 16.sp,
             )
@@ -218,7 +233,7 @@ private fun AlcoholInfo(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = alcoholDetail.explanation ?: stringResource(id = R.string.error_no_value),
+                text = explanation,
                 modifier = Modifier.weight(0.7f),
                 fontSize = 16.sp,
             )
@@ -296,14 +311,13 @@ private fun AlcoholDetailAppBarPreview() {
 @Composable
 private fun AlcoholInfoPreview() {
     AlcoholInfo(
-        alcoholDetail = AlcoholDetail(
-            title = "PLAVE",
-            degree = 12.3f,
-            maker = "VLAST",
-            category = "우주 최강 아이도루",
-            tags = testTags,
-            explanation = stringResource(id = R.string.placeholder_long)
-        )
+        title = "PLAVE",
+        degree = 12.3f,
+        maker = Maker(
+            name = "VLAST"
+        ),
+        category = "우주 최강 아이도루",
+        explanation = stringResource(id = R.string.placeholder_long)
     )
 }
 
@@ -312,12 +326,13 @@ private fun AlcoholInfoPreview() {
 private fun AlcoholDetailPreview() {
     AlcoholDetailView(
         modifier = Modifier,
-        alcoholDetail = AlcoholDetail(
+        alcoholInfo = AlcoholInfo(
             title = "PLAVE",
             degree = 12.3f,
-            maker = "VLAST",
+            maker = Maker(
+                name = "VLAST"
+            ),
             category = "우주 최강 아이도루",
-            tags = testTags,
             explanation = stringResource(id = R.string.placeholder_long)
         ),
         onBackButtonClick = {}

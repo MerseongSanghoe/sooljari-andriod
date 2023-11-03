@@ -16,17 +16,7 @@ data class JwtToken(
 )
 
 @Serializable
-data class AlcoholDetail(
-    val title: String? = null,
-    val degree: Float? = null,
-    val maker: String? = null,
-    val category: String? = null,
-    val tags: List<String>? = null,
-    val explanation: String? = null,
-)
-
-@Serializable
-data class AlcoholDetailModified(
+data class AlcoholInfo(
     val id: Long? = null,
     val title: String? = null,
     val degree: Float? = null,
@@ -34,7 +24,7 @@ data class AlcoholDetailModified(
     val maker: Maker? = null,
     val explanation: String? = null,
     @SerialName("images")
-    val imageList: ImageList? = null,
+    val imageList: List<Image>? = null,
 
     val createdAt: String? = null,
     val updatedAt: String? = null,

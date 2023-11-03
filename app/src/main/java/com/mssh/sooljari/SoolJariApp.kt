@@ -1,5 +1,6 @@
 package com.mssh.sooljari
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -98,6 +99,8 @@ private fun NavGraphBuilder.sooljariGraph(
     ) { backStackEntry ->
         val alcoholId = backStackEntry.arguments?.getLong("alcoholId")
         alcoholId?.let {
+            Log.d("SoolJariApp", "alcoholId: $alcoholId")
+
             AlcoholDetailView(
                 alcoholId = it,
                 viewModel = viewModel,

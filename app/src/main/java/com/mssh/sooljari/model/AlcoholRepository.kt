@@ -76,16 +76,19 @@ class AlcoholRepository {
     }
 
     //술 상세 정보 가져오기
-    suspend fun getAlcoholDetailModified(id: Long): AlcoholDetailModified {
-        val url = "$BASE_URL/alcohols/:$id"
+    suspend fun getAlcoholInfo(id: Long): AlcoholInfo {
+        val url = "$BASE_URL/alcohols/$id"
+        Log.d("술 상세 정보", url)
 
         if (jwt == null) {
             login(LOGIN_ID, LOGIN_PASSWORD)
         }
 
-        val result: AlcoholDetailModified = client.get(url) {
+        val result: AlcoholInfo = client.get(url) {
             header("Authorization", "Bearer $jwt")
         }.body()
+
+        Log.d("술 상세 정보", result.toString())
 
         return result
     }
