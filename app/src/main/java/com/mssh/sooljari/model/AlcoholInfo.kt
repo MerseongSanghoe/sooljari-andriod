@@ -1,5 +1,6 @@
 package com.mssh.sooljari.model
 
+import android.util.Log
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,7 +25,9 @@ data class AlcoholInfo(
     val maker: Maker? = null,
     val explanation: String? = null,
     @SerialName("images")
-    val imageList: List<Image>? = null,
+    val imageList: List<Image>? = emptyList(),
+    @SerialName("tags")
+    val tagList: List<Tag>? = emptyList(),
 
     val createdAt: String? = null,
     val updatedAt: String? = null,
@@ -49,3 +52,32 @@ data class Maker(
     val updatedAt: String? = null,
     val publishedAt: String? = null,
 )
+
+@Serializable
+data class Tag(
+    @SerialName("title")
+    val string: String? = null,
+    val weight: Int? = null
+)
+
+fun tagListToStringList(tagList: List<Tag>): List<String> {
+    val stringList: MutableList<String> = mutableListOf()
+
+    tagList.forEach { tag ->
+        if (tag.string == null) return@forEach
+
+        stringList.add(tag.string)
+    }
+
+    return stringList
+}
+
+fun addHash(tagList: List<String>): List<String> {
+    val hashAddedList: MutableList<String> = mutableListOf()
+
+    tagList.forEach { tag ->
+        hashAddedList += "#$tag"
+    }
+
+    return hashAddedList
+}

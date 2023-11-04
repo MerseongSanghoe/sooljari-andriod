@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.Alcohol
+import com.mssh.sooljari.model.addHash
 
 @Composable
 fun VerticalCard() {
@@ -112,8 +113,10 @@ fun ResultCard(
                             .height(8.dp)
                     )
 
+                    val tagList = addHash(alcohol.tags)
+
                     TagListLazyRows(
-                        tagStringList = alcohol.tags,
+                        tagStringList = tagList,
                         chip = resultCardChip,
                         paddingBetweenChips = 4.dp,
                         rowNum = 2,

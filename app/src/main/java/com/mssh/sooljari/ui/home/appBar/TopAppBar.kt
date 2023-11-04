@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.searchBarTagChip
 import com.mssh.sooljari.ui.components.testTags
@@ -82,8 +83,10 @@ fun TopAppBar(
                     .height(12.dp)
             )
 
+            val tagList = addHash(testTags)
+
             TagListLazyRows(
-                tagStringList = testTags,
+                tagStringList = tagList,
                 chip = searchBarTagChip,
                 paddingBetweenChips = 8.dp,
                 rowNum = 1

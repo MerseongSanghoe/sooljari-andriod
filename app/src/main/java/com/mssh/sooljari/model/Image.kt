@@ -10,8 +10,3 @@ data class Image(
     val updatedAt: String? = null,
     val publishedAt: String? = null
 )
-
-@Serializable
-data class ImageList(
-    val data: List<Image>? = null,
-)

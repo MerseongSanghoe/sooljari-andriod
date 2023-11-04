@@ -47,6 +47,8 @@ class AlcoholRepository {
         val query = URLEncoder.encode(keyword, "UTF-8")
         val results: AlcoholResults = client.get("$url$query").body()
 
+        Log.d("최초 검색 결과", results.toString())
+
         return results
     }
 

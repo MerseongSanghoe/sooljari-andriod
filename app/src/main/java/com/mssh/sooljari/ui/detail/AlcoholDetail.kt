@@ -1,6 +1,5 @@
 package com.mssh.sooljari.ui.detail
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,11 +40,12 @@ import com.mssh.sooljari.R
 import com.mssh.sooljari.model.AlcoholInfo
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.model.Maker
+import com.mssh.sooljari.model.addHash
+import com.mssh.sooljari.model.tagListToStringList
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.TransparentIconButton
 import com.mssh.sooljari.ui.components.defaultTagChip
 import com.mssh.sooljari.ui.components.resultCardChip
-import com.mssh.sooljari.ui.components.testTags
 
 @Composable
 fun AlcoholDetailView(
@@ -58,7 +58,6 @@ fun AlcoholDetailView(
 
     LaunchedEffect(alcoholId) {
         viewModel.getAlcoholInfo(alcoholId)
-        Log.d("AlcoholDetailView", "AlcoholDetailView: $alcoholInfo")
     }
 
     when (alcoholInfo) {
@@ -71,8 +70,6 @@ fun AlcoholDetailView(
         }
 
         else -> {
-            Log.d("AlcoholDetailView in when", "AlcoholDetailView: $alcoholInfo")
-
             AlcoholDetailView(
                 modifier = modifier,
                 alcoholInfo = alcoholInfo!!,
@@ -124,11 +121,13 @@ private fun AlcoholDetailView(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 //태그 리스트
+                val tagList = addHash(
+                    tagListToStringList(alcoholInfo.tagList ?: emptyList())
+                )
+
+
                 TagListLazyRows(
-                    /*
-                    TODO: AlcoholInfo에 태그 리스트 추가되면 변경하기
-                     */
-                    tagStringList = testTags,
+                    tagStringList = tagList,
                     chip = defaultTagChip,
                     paddingBetweenChips = resultCardChip.horizontalPadding,
                     rowNum = 3,
