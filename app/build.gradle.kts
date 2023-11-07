@@ -87,4 +87,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
+
+    //이미지 로딩용
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }
