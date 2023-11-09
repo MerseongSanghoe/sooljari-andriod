@@ -42,6 +42,7 @@ import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.model.Maker
 import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.model.tagListToStringList
+import com.mssh.sooljari.ui.components.Banner
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.TransparentIconButton
 import com.mssh.sooljari.ui.components.defaultTagChip
@@ -101,16 +102,11 @@ private fun AlcoholDetailView(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            //배너 대신 임시 이미지
-            Image(
-                painter = painterResource(id = R.drawable.img_placeholder),
-                contentDescription = null,
-                modifier = Modifier
+            Banner(
+                modifier = modifier
                     .fillMaxWidth()
-                    .height(250.dp)
-                    .background(
-                        color = colorResource(id = R.color.neutral1)
-                    )
+                    .wrapContentHeight(),
+                imageList = alcoholInfo.imageList ?: emptyList()
             )
 
             //술 정보 표시 영역
