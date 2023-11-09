@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.AlcoholInfo
 import com.mssh.sooljari.model.AlcoholViewModel
+import com.mssh.sooljari.model.Image
 import com.mssh.sooljari.model.Maker
 import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.model.tagListToStringList
@@ -102,12 +103,24 @@ private fun AlcoholDetailView(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            Banner(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                imageList = alcoholInfo.imageList ?: emptyList()
-            )
+            //배너 표시 또는 placeholder 이미지 표시
+            if (alcoholInfo.imageList == null
+                || alcoholInfo.imageList == emptyList<Image>()) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_placeholder),
+                    contentDescription = null,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(280.dp)
+                )
+            } else {
+                Banner(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(280.dp),
+                    imageList = alcoholInfo.imageList
+                )
+            }
 
             //술 정보 표시 영역
             Column(
