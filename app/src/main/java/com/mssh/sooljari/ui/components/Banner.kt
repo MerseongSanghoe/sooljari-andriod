@@ -25,6 +25,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.BASE_URL
 import com.mssh.sooljari.model.Image
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
@@ -45,7 +46,7 @@ fun Banner(
                 .wrapContentHeight()
         ) { index ->
             GlideImage(
-                model = imageList[index].url,
+                model = "http://211.37.148.214${imageList[index].url}",
                 contentDescription = null,
                 modifier = modifier
                     .fillMaxWidth()
