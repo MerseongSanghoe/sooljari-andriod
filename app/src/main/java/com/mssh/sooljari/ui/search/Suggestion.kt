@@ -8,14 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -116,6 +118,7 @@ private fun PopularTags(
 @Composable
 private fun TagRanking(
     modifier: Modifier = Modifier,
+    tagList: List<String> = testTags
 ) {
     Column(
         modifier = modifier
@@ -128,6 +131,55 @@ private fun TagRanking(
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
+
+        //랭킹 표시
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+        ) {
+            //1위부터 5위
+            Column(
+                modifier = modifier
+                    .weight(1f)
+                    .wrapContentHeight(),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                for (index in 0..4) {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("${index + 1}")
+                            }
+                            append("\t\t")
+                            append(tagList[index])
+                        },
+                        fontSize = 14.sp
+                    )
+                }
+            }
+
+            //6위부터 10위
+            Column(
+                modifier = modifier
+                    .weight(1f)
+                    .wrapContentHeight(),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                for (index in 5..9) {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("${index + 1}")
+                            }
+                            append("\t\t")
+                            append(tagList[index])
+                        },
+                        fontSize = 14.sp
+                    )
+                }
+            }
+        }
     }
 }
 
