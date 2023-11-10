@@ -56,34 +56,45 @@ fun SearchView(
     var query by remember { mutableStateOf("") }
     val searchedQuery = remember { mutableStateOf("") }
 
+    val isSearching = remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             SearchAppBar(
                 query = query,
-                onTextChanged = { query = it },
+                onTextChanged = {
+                    query = it
+                    isSearching.value = query.isNotEmpty()
+                },
                 onNavigateToHome = onNavigateToHome,
                 onSearchButtonClick = {
                     viewModel.initialLoad(query)
                     focusManager.clearFocus()
                     searchedQuery.value = query
+                    isSearching.value = false
                 },
                 onKeyboardSearch = {
                     viewModel.initialLoad(query)
                     focusManager.clearFocus()
                     searchedQuery.value = query
+                    isSearching.value = false
                 },
                 focusRequester = focusRequester
             )
         }
     ) { paddingValues ->
-        SearchResults(
-            viewModel = viewModel,
-            searchedQuery = searchedQuery,
-            modifier = Modifier
-                .padding(paddingValues)
-                .background(colorResource(id = R.color.neutral1)),
-            onResultCardClick = onResultCardClick
-        )
+        when {
+            query.isEmpty() -> SearchSuggestions(modifier = Modifier.padding(paddingValues))
+            isSearching.value -> SearchKeywords(modifier = Modifier.padding(paddingValues))
+            else -> SearchResults(
+                viewModel = viewModel,
+                searchedQuery = searchedQuery,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .background(colorResource(id = R.color.neutral1)),
+                onResultCardClick = onResultCardClick
+            )
+        }
     }
 }
 
