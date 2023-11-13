@@ -41,7 +41,7 @@ onSurface = Color(0xFF1C1B1F),
 
 @Composable
 fun SoolJariTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false, // force Light Theme, isSystemInDarkTheme() to use DarkMode
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
