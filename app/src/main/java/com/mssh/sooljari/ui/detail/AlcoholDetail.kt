@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.detail
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,13 +28,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +40,7 @@ import com.mssh.sooljari.model.AlcoholInfo
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.model.Image
 import com.mssh.sooljari.model.Maker
+import com.mssh.sooljari.model.Tag
 import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.model.tagListToStringList
 import com.mssh.sooljari.ui.components.Banner
@@ -81,6 +81,7 @@ fun AlcoholDetailView(
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AlcoholDetailView(
@@ -92,15 +93,12 @@ private fun AlcoholDetailView(
         topBar = {
             AlcoholDetailAppBar(
                 modifier = modifier,
-                title = alcoholInfo.title
-                    ?: stringResource(R.string.error_no_value),
                 onBackButtonClick = onBackButtonClick
             )
         }
-    ) { paddingValues ->
+    ) { _ ->
         Column(
             modifier = Modifier
-                .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
             //배너 표시 또는 placeholder 이미지 표시
@@ -129,11 +127,57 @@ private fun AlcoholDetailView(
                     .padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Row {
+                        Text(
+                            text = alcoholInfo.title
+                                ?: stringResource(R.string.error_no_value),
+                            modifier = Modifier
+                                .weight(1f),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                        )
+                    }
+
+                    Row {
+                        Text(
+                            text = alcoholInfo.maker?.name
+                                ?: stringResource(R.string.error_no_value),
+                            modifier = Modifier
+                                .weight(1f),
+                            color = colorResource(id = R.color.neutral3),
+                            fontSize = 16.sp,
+                            maxLines = 1,
+                        )
+                    }
+
+                    Row {
+                        Text(
+                            text = "${alcoholInfo.category ?: ""}, ${alcoholInfo.degree ?: 0}도",
+                            modifier = Modifier
+                                .weight(1f),
+                            color = colorResource(id = R.color.neutral3),
+                            fontSize = 16.sp,
+                            maxLines = 1,
+                        )
+                    }
+                }
+
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = colorResource(id = R.color.neutral3),
+                    thickness = 0.5f.dp
+                )
+
                 //태그 리스트
                 val tagList = addHash(
                     tagListToStringList(alcoholInfo.tagList ?: emptyList())
                 )
-
 
                 TagListLazyRows(
                     tagStringList = tagList,
@@ -161,12 +205,14 @@ private fun AlcoholInfo(
     modifier: Modifier = Modifier,
     alcoholInfo: AlcoholInfo
 ) {
+    /*
     val degree = alcoholInfo.degree
         ?: stringResource(id = R.string.error_no_value)
     val category = alcoholInfo.category
         ?: stringResource(id = R.string.error_no_value)
     val maker = alcoholInfo.maker?.name
         ?: stringResource(id = R.string.error_no_value)
+     */
     val explanation = alcoholInfo.explanation
         ?: stringResource(id = R.string.error_no_value)
 
@@ -184,66 +230,10 @@ private fun AlcoholInfo(
                 .height(IntrinsicSize.Min)
         ) {
             Text(
-                text = "도수",
-                modifier = Modifier.weight(0.3f),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "$degree",
-                modifier = Modifier.weight(0.7f),
-                fontSize = 16.sp,
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .height(IntrinsicSize.Min)
-        ) {
-            Text(
-                text = "주종",
-                modifier = Modifier.weight(0.3f),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = category,
-                modifier = Modifier.weight(0.7f),
-                fontSize = 16.sp,
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .height(IntrinsicSize.Min)
-        ) {
-            Text(
-                text = "양조장",
-                modifier = Modifier.weight(0.3f),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = maker,
-                modifier = Modifier.weight(0.7f),
-                fontSize = 16.sp,
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .height(IntrinsicSize.Min)
-        ) {
-            Text(
-                text = "기타정보",
-                modifier = Modifier.weight(0.3f),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
                 text = explanation,
-                modifier = Modifier.weight(0.7f),
+                modifier = Modifier.weight(1f),
                 fontSize = 16.sp,
+                fontWeight = FontWeight.Light
             )
         }
     }
@@ -252,7 +242,6 @@ private fun AlcoholInfo(
 @Composable
 private fun AlcoholDetailAppBar(
     modifier: Modifier = Modifier,
-    title: String,
     onBackButtonClick: () -> Unit,
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
@@ -262,6 +251,7 @@ private fun AlcoholDetailAppBar(
             .fillMaxWidth()
             .height(48.dp + statusBarHeight)
     ) {
+        /* Background of top bar
         Image(
             painter = painterResource(id = R.drawable.bg_main),
             contentScale = ContentScale.FillBounds,
@@ -269,6 +259,7 @@ private fun AlcoholDetailAppBar(
             modifier = Modifier
                 .matchParentSize()
         )
+        */
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -281,30 +272,28 @@ private fun AlcoholDetailAppBar(
             TransparentIconButton(
                 onClick = onBackButtonClick,
                 icon = painterResource(R.drawable.ic_arrow_left),
-                iconColor = colorResource(R.color.neutral0),
+                iconColor = colorResource(R.color.black),
                 buttonSize = 32.dp,
                 iconSize = 24.dp
             )
 
-            Text(
-                text = title,
-                modifier = Modifier
-                    .weight(1f),
-                color = colorResource(R.color.neutral0),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-            )
+            Row {
+                TransparentIconButton(
+                    onClick = {},
+                    icon = painterResource(R.drawable.ic_share),
+                    iconColor = colorResource(R.color.black),
+                    buttonSize = 32.dp,
+                    iconSize = 24.dp
+                )
 
-            TransparentIconButton(
-                onClick = {},
-                icon = painterResource(R.drawable.ic_star),
-                iconColor = colorResource(R.color.neutral0),
+                TransparentIconButton(
+                        onClick = {},
+                icon = painterResource(R.drawable.ic_search),
+                iconColor = colorResource(R.color.black),
                 buttonSize = 32.dp,
                 iconSize = 24.dp
-            )
+                )
+            }
         }
     }
 }
@@ -312,20 +301,20 @@ private fun AlcoholDetailAppBar(
 @Preview
 @Composable
 private fun AlcoholDetailAppBarPreview() {
-    AlcoholDetailAppBar(Modifier, "술제목", {})
+    AlcoholDetailAppBar(Modifier) {}
 }
 
-@Preview
 @Composable
-private fun AlcoholInfoPreview() {
-    AlcoholInfo(
+private fun alcoholInfoPreview(): AlcoholInfo {
+    return AlcoholInfo(
         title = "PLAVE",
         degree = 12.3f,
         maker = Maker(
             name = "VLAST"
         ),
         category = "우주 최강 아이도루",
-        explanation = stringResource(id = R.string.placeholder_long)
+        explanation = stringResource(id = R.string.placeholder_long),
+        tagList = listOf(Tag(string = "태그1"), Tag(string = "테스트태그2"), Tag(string = "좀더긴테스트태그3"), Tag(string = "테그4"))
     )
 }
 
@@ -334,15 +323,7 @@ private fun AlcoholInfoPreview() {
 private fun AlcoholDetailPreview() {
     AlcoholDetailView(
         modifier = Modifier,
-        alcoholInfo = AlcoholInfo(
-            title = "PLAVE",
-            degree = 12.3f,
-            maker = Maker(
-                name = "VLAST"
-            ),
-            category = "우주 최강 아이도루",
-            explanation = stringResource(id = R.string.placeholder_long)
-        ),
+        alcoholInfo = alcoholInfoPreview(),
         onBackButtonClick = {}
     )
 }
