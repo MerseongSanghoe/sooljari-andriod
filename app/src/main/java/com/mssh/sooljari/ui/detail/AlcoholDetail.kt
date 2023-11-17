@@ -96,10 +96,11 @@ private fun AlcoholDetailView(
                 onBackButtonClick = onBackButtonClick
             )
         }
-    ) { _ ->
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
+                .padding(paddingValues)
         ) {
             //배너 표시 또는 placeholder 이미지 표시
             if (alcoholInfo.imageList == null
@@ -132,6 +133,7 @@ private fun AlcoholDetailView(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
+                    //술 이름
                     Row {
                         Text(
                             text = alcoholInfo.title
@@ -144,6 +146,7 @@ private fun AlcoholDetailView(
                         )
                     }
 
+                    //양조장
                     Row {
                         Text(
                             text = alcoholInfo.maker?.name
@@ -156,6 +159,7 @@ private fun AlcoholDetailView(
                         )
                     }
 
+                    //주종, 도수
                     Row {
                         Text(
                             text = "${alcoholInfo.category ?: ""}, ${alcoholInfo.degree ?: 0}도",
@@ -171,7 +175,7 @@ private fun AlcoholDetailView(
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colorResource(id = R.color.neutral3),
-                    thickness = 0.5f.dp
+                    thickness = 0.25.dp
                 )
 
                 //태그 리스트
