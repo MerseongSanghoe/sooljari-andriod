@@ -96,11 +96,11 @@ private fun AlcoholDetailView(
                 onBackButtonClick = onBackButtonClick
             )
         }
-    ) { paddingValues ->
+    ) { PaddingValues ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(paddingValues)
+                .padding(bottom = PaddingValues.calculateBottomPadding())
         ) {
             //배너 표시 또는 placeholder 이미지 표시
             if (alcoholInfo.imageList == null
