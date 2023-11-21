@@ -80,7 +80,7 @@ fun VerticalCard(
                 .padding(top = 4.dp)
                 .fillMaxWidth(),
             text = "${alcohol.name ?: R.string.error_no_value}",
-            fontSize = 20.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.ExtraBold,
             overflow = TextOverflow.Ellipsis,
             maxLines = titleMaxLines
@@ -100,7 +100,7 @@ fun VerticalCard(
             tagStringList = tagList,
             chip = resultCardChip,
             paddingBetweenChips = 4.dp,
-            rowNum = 2,
+            rowNum = 1,
             keyword = keyword,
             paddingBetweenRows = 4.dp
         )
@@ -141,8 +141,94 @@ fun VerticalCard(
 }
 
 @Composable
-fun HorizontalCard() {
+fun HorizontalCard(
+    alcohol: Alcohol,
+    height: Dp = 110.dp,
+    keyword: String = "",
+    titleMaxLines: Int = 1,
+    contentMaxLines: Int = 2,
+    onCardClick: (Long) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height)
+            .clickable(onClick = { alcohol.id?.let { onCardClick(it) } }),
+        shape = RoundedCornerShape(3.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.neutral0)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 1.dp
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img_placeholder),
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .size(height)
+                    .background(
+                        color = colorResource(id = R.color.neutral5_alpha15)
+                    ),
+                contentScale = ContentScale.Fit,
+                contentDescription = null
+            )
 
+            Row(
+                modifier = Modifier
+                    .padding(top = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentHeight()
+                ) {
+                    Text(
+                        text = "${alcohol.name ?: R.string.error_no_value}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = titleMaxLines
+                    )
+
+                    Text(
+                        text = "${alcohol.category ?: R.string.error_no_value}",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                    )
+
+                    val tagList = addHash(alcohol.tags)
+
+                    TagListLazyRows(
+                        tagStringList = tagList,
+                        chip = resultCardChip,
+                        paddingBetweenChips = 4.dp,
+                        rowNum = 1,
+                        paddingBetweenRows = 4.dp,
+                        keyword = keyword
+                    )
+
+                    Text(
+                        text = "${alcohol.name}${alcohol.name}${alcohol.name}${alcohol.name}${alcohol.name}${alcohol.name}",/*TODO*/
+                        fontSize = 10.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = contentMaxLines
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -267,6 +353,21 @@ fun ResultCardPreview() {
 @Composable
 fun VerticalCardPreview() {
     VerticalCard(
+        keyword = "플레이브",
+        alcohol = Alcohol(
+            id = 0L,
+            name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
+            category = "맛있어보이는 흑맥주",
+            degree = 4.3f,
+            tags = testTags
+        ),
+        onCardClick = {})
+}
+
+@Preview
+@Composable
+fun HorizontalCardPreview() {
+    HorizontalCard(
         keyword = "플레이브",
         alcohol = Alcohol(
             id = 0L,
