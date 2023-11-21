@@ -3,10 +3,14 @@ package com.mssh.sooljari.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,14 +47,13 @@ import com.mssh.sooljari.model.addHash
 @Composable
 fun VerticalCard(
     alcohol: Alcohol,
-    width: Dp = 200.dp,
     keyword: String = "",
     titleMaxLines: Int = 1,
     onCardClick: (Long) -> Unit
 ) {
     Card(
         modifier = Modifier
-            .width(width)
+            .fillMaxWidth()
             .wrapContentHeight()
             .clickable(onClick = { alcohol.id?.let { onCardClick(it) } }),
         shape = RoundedCornerShape(3.dp),
@@ -65,7 +68,7 @@ fun VerticalCard(
             painter = painterResource(id = R.drawable.img_placeholder),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(width)
+                .aspectRatio(1f)
                 .clip(RoundedCornerShape(3.dp))
                 .background(
                     color = colorResource(id = R.color.neutral5_alpha15)
@@ -143,7 +146,6 @@ fun VerticalCard(
 @Composable
 fun HorizontalCard(
     alcohol: Alcohol,
-    height: Dp = 110.dp,
     keyword: String = "",
     titleMaxLines: Int = 1,
     contentMaxLines: Int = 2,
@@ -152,7 +154,7 @@ fun HorizontalCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(height)
+            .wrapContentHeight()
             .clickable(onClick = { alcohol.id?.let { onCardClick(it) } }),
         shape = RoundedCornerShape(3.dp),
         colors = CardDefaults.cardColors(
@@ -171,7 +173,7 @@ fun HorizontalCard(
                 painter = painterResource(id = R.drawable.img_placeholder),
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp)
-                    .size(height)
+                    .aspectRatio(1f)
                     .background(
                         color = colorResource(id = R.color.neutral5_alpha15)
                     ),
@@ -352,29 +354,39 @@ fun ResultCardPreview() {
 @Preview
 @Composable
 fun VerticalCardPreview() {
-    VerticalCard(
-        keyword = "플레이브",
-        alcohol = Alcohol(
-            id = 0L,
-            name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
-            category = "맛있어보이는 흑맥주",
-            degree = 4.3f,
-            tags = testTags
-        ),
-        onCardClick = {})
+    Box(
+        modifier = Modifier
+            .width(200.dp)
+    ) {
+        VerticalCard(
+            keyword = "플레이브",
+            alcohol = Alcohol(
+                id = 0L,
+                name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
+                category = "맛있어보이는 흑맥주",
+                degree = 4.3f,
+                tags = testTags
+            ),
+            onCardClick = {})
+    }
 }
 
 @Preview
 @Composable
 fun HorizontalCardPreview() {
-    HorizontalCard(
-        keyword = "플레이브",
-        alcohol = Alcohol(
-            id = 0L,
-            name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
-            category = "맛있어보이는 흑맥주",
-            degree = 4.3f,
-            tags = testTags
-        ),
-        onCardClick = {})
+    Box(
+        modifier = Modifier
+            .height(110.dp)
+    ) {
+        HorizontalCard(
+            keyword = "플레이브",
+            alcohol = Alcohol(
+                id = 0L,
+                name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
+                category = "맛있어보이는 흑맥주",
+                degree = 4.3f,
+                tags = testTags
+            ),
+            onCardClick = {})
+    }
 }
