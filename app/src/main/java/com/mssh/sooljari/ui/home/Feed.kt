@@ -31,50 +31,10 @@ fun Feed(
             .background(color = colorResource(id = R.color.neutral1))
             .fillMaxSize()
     ) {
-        Text(
-            text = "Feed"
-        )
-
-        Row {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(130.dp)
-                    .padding(all = 8.dp)
-            ) {
-                HorizontalCard(
-                    keyword = "플레이브",
-                    alcohol = Alcohol(
-                        id = 0L,
-                        name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
-                        category = "맛있어보이는 흑맥주",
-                        degree = 4.3f,
-                        tags = testTags
-                    ),
-                    onCardClick = {})
-            }
-        }
-
-        Row {
-            Box(
-                modifier = Modifier
-                    .padding(all = 8.dp)
-                    .width(130.dp)
-            ) {
-                VerticalCard(
-                    alcohol = Alcohol(
-                        id = 0L,
-                        name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
-                        category = "맛있어보이는 흑맥주",
-                        degree = 4.3f,
-                        tags = testTags
-                    ),
-                    keyword = "플레이브",
-                    onCardClick = {})
-            }
-        }
     }
 }
+
+
 
 @Preview
 @Composable

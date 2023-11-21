@@ -18,6 +18,10 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     private val _alcoholInfo = MutableStateFlow<AlcoholInfo?>(null)
     val alcoholInfo: StateFlow<AlcoholInfo?> = _alcoholInfo
 
+    //태그로 가져온 술 리스트
+    private val _alcoholListByTag = MutableStateFlow<SearchedByTagAlcoholResults?>(null)
+    val alcoholListByTag: StateFlow<SearchedByTagAlcoholResults?> = _alcoholListByTag
+
     //페이지네이션 변수
     private var currentPage = 0
     private var totalAlcoholCount = 0
@@ -69,6 +73,13 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         viewModelScope.launch {
             _alcoholInfo.value = null
             _alcoholInfo.value = repository.getAlcoholInfo(id)
+        }
+    }
+
+    fun getAlcoholsByTag(tag: String) {
+        viewModelScope.launch {
+            _alcoholListByTag.value = null
+            _alcoholListByTag.value = repository.getAlcoholsByTag(tag)
         }
     }
 }

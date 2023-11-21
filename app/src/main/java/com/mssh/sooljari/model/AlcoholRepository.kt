@@ -94,4 +94,13 @@ class AlcoholRepository {
 
         return result
     }
+
+    //태그로 술 가져오기
+    suspend fun getAlcoholsByTag(tag: String): SearchedByTagAlcoholResults {
+        val url = "$BASE_URL/tag/bytag"
+        val query = URLEncoder.encode(tag, "UTF-8")
+        val results: SearchedByTagAlcoholResults = client.get("$url/$query").body()
+
+        return results
+    }
 }
