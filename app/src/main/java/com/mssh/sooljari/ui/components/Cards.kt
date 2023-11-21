@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -20,14 +21,19 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
@@ -35,8 +41,103 @@ import com.mssh.sooljari.model.Alcohol
 import com.mssh.sooljari.model.addHash
 
 @Composable
-fun VerticalCard() {
+fun VerticalCard(
+    alcohol: Alcohol,
+    width: Dp = 200.dp,
+    keyword: String = "",
+    titleMaxLines: Int = 1,
+    onCardClick: (Long) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .width(width)
+            .wrapContentHeight()
+            .clickable(onClick = { alcohol.id?.let { onCardClick(it) } }),
+        shape = RoundedCornerShape(3.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.neutral0)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 1.dp
+        )
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.img_placeholder),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(width)
+                .clip(RoundedCornerShape(3.dp))
+                .background(
+                    color = colorResource(id = R.color.neutral5_alpha15)
+                ),
+            contentScale = ContentScale.Fit,
+            contentDescription = null
+        )
 
+        // title
+        Text(
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .fillMaxWidth(),
+            text = "${alcohol.name ?: R.string.error_no_value}",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.ExtraBold,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = titleMaxLines
+        )
+
+        // category
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = "${alcohol.category ?: R.string.error_no_value}",
+            fontSize = 14.sp,
+        )
+
+        val tagList = addHash(alcohol.tags)
+
+        TagListLazyRows(
+            tagStringList = tagList,
+            chip = resultCardChip,
+            paddingBetweenChips = 4.dp,
+            rowNum = 2,
+            keyword = keyword,
+            paddingBetweenRows = 4.dp
+        )
+
+        Row(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .size(18.dp),
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = Color.Gray
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_star),
+                    contentDescription = null,
+                )
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(start = 2.dp),
+                text = "${1045}명이 별표", /*TODO*/
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+        }
+    }
 }
 
 @Composable
@@ -160,4 +261,19 @@ fun ResultCardPreview() {
         keyword = "유하민",
         onResultCardClick = {}
     )
+}
+
+@Preview
+@Composable
+fun VerticalCardPreview() {
+    VerticalCard(
+        keyword = "플레이브",
+        alcohol = Alcohol(
+            id = 0L,
+            name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
+            category = "맛있어보이는 흑맥주",
+            degree = 4.3f,
+            tags = testTags
+        ),
+        onCardClick = {})
 }
