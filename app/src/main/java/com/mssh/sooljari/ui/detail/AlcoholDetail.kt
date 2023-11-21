@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -22,12 +21,15 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,7 +47,6 @@ import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.model.tagListToStringList
 import com.mssh.sooljari.ui.components.Banner
 import com.mssh.sooljari.ui.components.TagListLazyRows
-import com.mssh.sooljari.ui.components.TransparentIconButton
 import com.mssh.sooljari.ui.components.defaultTagChip
 import com.mssh.sooljari.ui.components.resultCardChip
 
@@ -89,11 +90,15 @@ private fun AlcoholDetailView(
     alcoholInfo: AlcoholInfo,
     onBackButtonClick: () -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AlcoholDetailAppBar(
                 modifier = modifier,
-                onBackButtonClick = onBackButtonClick
+                onBackButtonClick = onBackButtonClick,
+                scrollBehavior = scrollBehavior
             )
         }
     ) { PaddingValues ->
@@ -104,7 +109,8 @@ private fun AlcoholDetailView(
         ) {
             //배너 표시 또는 placeholder 이미지 표시
             if (alcoholInfo.imageList == null
-                || alcoholInfo.imageList == emptyList<Image>()) {
+                || alcoholInfo.imageList == emptyList<Image>()
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.img_placeholder),
                     contentDescription = null,
@@ -243,19 +249,25 @@ private fun AlcoholInfo(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AlcoholDetailAppBar(
     modifier: Modifier = Modifier,
     onBackButtonClick: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
-    Box(
+    TopAppBar(
+        title = { /*TODO*/ }
+    )
+
+    /*Box(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp + statusBarHeight)
     ) {
-        /* Background of top bar
+        *//* Background of top bar
         Image(
             painter = painterResource(id = R.drawable.bg_main),
             contentScale = ContentScale.FillBounds,
@@ -263,7 +275,7 @@ private fun AlcoholDetailAppBar(
             modifier = Modifier
                 .matchParentSize()
         )
-        */
+        *//*
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -291,21 +303,22 @@ private fun AlcoholDetailAppBar(
                 )
 
                 TransparentIconButton(
-                        onClick = {},
-                icon = painterResource(R.drawable.ic_search),
-                iconColor = colorResource(R.color.black),
-                buttonSize = 32.dp,
-                iconSize = 24.dp
+                    onClick = {},
+                    icon = painterResource(R.drawable.ic_search),
+                    iconColor = colorResource(R.color.black),
+                    buttonSize = 32.dp,
+                    iconSize = 24.dp
                 )
             }
         }
-    }
+    }*/
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun AlcoholDetailAppBarPreview() {
-    AlcoholDetailAppBar(Modifier) {}
+    AlcoholDetailAppBar(Modifier, {}, TopAppBarDefaults.pinnedScrollBehavior())
 }
 
 @Composable
@@ -318,7 +331,12 @@ private fun alcoholInfoPreview(): AlcoholInfo {
         ),
         category = "우주 최강 아이도루",
         explanation = stringResource(id = R.string.placeholder_long),
-        tagList = listOf(Tag(string = "태그1"), Tag(string = "테스트태그2"), Tag(string = "좀더긴테스트태그3"), Tag(string = "테그4"))
+        tagList = listOf(
+            Tag(string = "태그1"),
+            Tag(string = "테스트태그2"),
+            Tag(string = "좀더긴테스트태그3"),
+            Tag(string = "테그4")
+        )
     )
 }
 
