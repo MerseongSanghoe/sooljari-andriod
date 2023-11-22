@@ -7,28 +7,33 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -42,13 +47,13 @@ import com.mssh.sooljari.model.AlcoholInfo
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.model.Image
 import com.mssh.sooljari.model.Maker
-import com.mssh.sooljari.model.Tag
 import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.model.tagListToStringList
+import com.mssh.sooljari.model.testTagList
 import com.mssh.sooljari.ui.components.Banner
 import com.mssh.sooljari.ui.components.TagListLazyRows
-import com.mssh.sooljari.ui.components.defaultTagChip
-import com.mssh.sooljari.ui.components.resultCardChip
+import com.mssh.sooljari.ui.components.TransparentIconButton
+import com.mssh.sooljari.ui.components.randomBackgroundChip
 
 @Composable
 fun AlcoholDetailView(
@@ -90,7 +95,7 @@ private fun AlcoholDetailView(
     alcoholInfo: AlcoholInfo,
     onBackButtonClick: () -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -191,8 +196,8 @@ private fun AlcoholDetailView(
 
                 TagListLazyRows(
                     tagStringList = tagList,
-                    chip = defaultTagChip,
-                    paddingBetweenChips = resultCardChip.horizontalPadding,
+                    chip = randomBackgroundChip,
+                    paddingBetweenChips = randomBackgroundChip.horizontalPadding,
                     rowNum = 3,
                     paddingBetweenRows = 8.dp,
                 )
@@ -258,33 +263,10 @@ private fun AlcoholDetailAppBar(
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
-    TopAppBar(
-        title = { /*TODO*/ }
-    )
-
-    /*Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp + statusBarHeight)
-    ) {
-        *//* Background of top bar
-        Image(
-            painter = painterResource(id = R.drawable.bg_main),
-            contentScale = ContentScale.FillBounds,
-            contentDescription = null,
-            modifier = Modifier
-                .matchParentSize()
-        )
-        *//*
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(8.dp)
-                .padding(top = statusBarHeight)
-                .matchParentSize()
-        ) {
+    CenterAlignedTopAppBar(
+        title = { /*TODO*/ },
+        modifier = Modifier,
+        navigationIcon = {
             TransparentIconButton(
                 onClick = onBackButtonClick,
                 icon = painterResource(R.drawable.ic_arrow_left),
@@ -292,26 +274,36 @@ private fun AlcoholDetailAppBar(
                 buttonSize = 32.dp,
                 iconSize = 24.dp
             )
+        },
+        actions = {
+            TransparentIconButton(
+                onClick = {},
+                icon = painterResource(R.drawable.ic_share),
+                iconColor = colorResource(R.color.black),
+                buttonSize = 32.dp,
+                iconSize = 28.dp
+            )
 
-            Row {
-                TransparentIconButton(
-                    onClick = {},
-                    icon = painterResource(R.drawable.ic_share),
-                    iconColor = colorResource(R.color.black),
-                    buttonSize = 32.dp,
-                    iconSize = 24.dp
-                )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(4.dp)
+            )
 
-                TransparentIconButton(
-                    onClick = {},
-                    icon = painterResource(R.drawable.ic_search),
-                    iconColor = colorResource(R.color.black),
-                    buttonSize = 32.dp,
-                    iconSize = 24.dp
-                )
-            }
-        }
-    }*/
+            TransparentIconButton(
+                onClick = {},
+                icon = painterResource(R.drawable.ic_search),
+                iconColor = colorResource(R.color.black),
+                buttonSize = 32.dp,
+                iconSize = 24.dp
+            )
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+            scrolledContainerColor = Color.White
+        ),
+        scrollBehavior = scrollBehavior
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -331,12 +323,7 @@ private fun alcoholInfoPreview(): AlcoholInfo {
         ),
         category = "우주 최강 아이도루",
         explanation = stringResource(id = R.string.placeholder_long),
-        tagList = listOf(
-            Tag(string = "태그1"),
-            Tag(string = "테스트태그2"),
-            Tag(string = "좀더긴테스트태그3"),
-            Tag(string = "테그4")
-        )
+        tagList = testTagList
     )
 }
 
