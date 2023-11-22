@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,10 +46,18 @@ fun Banner(
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) { index ->
+            val url = if (imageList[index].url.orEmpty().contains("http://")
+                || imageList[index].url.orEmpty().contains("https://")) {
+                imageList[index].url
+            } else {
+                "http://211.37.148.214${imageList[index].url}"
+            }
+
             GlideImage(
-                model = "http://211.37.148.214${imageList[index].url}",
+                model = url,
                 contentDescription = null,
                 modifier = modifier
+                    .background(Color.White)
                     .fillMaxWidth()
                     .height(280.dp),
                 contentScale = ContentScale.Fit,
