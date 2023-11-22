@@ -33,12 +33,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.ui.theme.SoolJariTheme
+import kotlin.random.Random
 
 enum class Chips {
     SEARCH_BAR_TAG,
     RESULT_CARD_TAG,
     DEFAULT_TAG,
-    LIGHT_TAG
+    LIGHT_TAG,
+    RANDOM_BACKGROUND_TAG
 }
 
 data class Chip(
@@ -55,6 +57,46 @@ val defaultTagChip: Chip =
     Chip(Chips.DEFAULT_TAG, 14.sp, 8.dp)
 val lightTagChip: Chip =
     Chip(Chips.LIGHT_TAG, 14.sp, 8.dp)
+val randomBackgroundChip: Chip =
+    Chip(Chips.RANDOM_BACKGROUND_TAG, 16.sp, 8.dp)
+
+@Composable
+fun RandomBackgroundTagChip(
+    tagString: String
+) {
+    val random = Random.nextInt(0, 8)
+
+    val backgroundColor =
+        when(random) {
+            0 -> colorResource(id = R.color.purple0)
+            1 -> colorResource(id = R.color.purple_200)
+
+            else -> colorResource(id = R.color.neutral5_alpha15)
+        }
+
+    val textColor =
+        when(random) {
+            in 0..1 -> colorResource(id = R.color.purple5)
+
+            else -> colorResource(id = R.color.black)
+        }
+
+
+    Text(
+        text = tagString,
+        modifier = Modifier
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(3.dp),
+            )
+            .padding(
+                horizontal = randomBackgroundChip.horizontalPadding,
+                vertical = 2.dp
+            ),
+        color = textColor,
+        fontSize = randomBackgroundChip.fontSize
+    )
+}
 
 @Composable
 fun LightTagChip(
@@ -285,6 +327,10 @@ private fun AddChip(
         Chips.LIGHT_TAG -> {
             LightTagChip(tagString)
         }
+
+        Chips.RANDOM_BACKGROUND_TAG -> {
+            RandomBackgroundTagChip(tagString)
+        }
     }
 }
 
@@ -351,5 +397,15 @@ private fun LightTagChipPreview() {
     Column {
         LightTagChip(tagString = "#태그")
         LightTagChip(tagString = "#엄청나게긴태그")
+    }
+}
+
+@Preview
+@Composable
+private fun RandomBackgroundTagChipPreview() {
+    Row {
+        testTags.forEach {
+            RandomBackgroundTagChip(it)
+        }
     }
 }
