@@ -22,6 +22,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +59,8 @@ fun SearchView(
 
     val isSearching = remember { mutableStateOf(false) }
 
+    val alcoholList by viewModel.alcoholList.collectAsState()
+
     Scaffold(
         topBar = {
             SearchAppBar(
@@ -84,7 +87,7 @@ fun SearchView(
         }
     ) { paddingValues ->
         when {
-            query.isEmpty() -> SearchSuggestions(modifier = Modifier.padding(paddingValues))
+            query.isEmpty() && alcoholList.isNullOrEmpty() -> SearchSuggestions(modifier = Modifier.padding(paddingValues))
             isSearching.value -> SearchKeywords(modifier = Modifier.padding(paddingValues))
             else -> SearchResults(
                 viewModel = viewModel,
