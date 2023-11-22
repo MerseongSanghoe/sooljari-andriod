@@ -98,7 +98,7 @@ fun VerticalCardContainer(
                         modifier = Modifier
                             .fillMaxHeight()
                             .width(0.3.dp),
-                        color = colorResource(id = R.color.neutral3)
+                        color = colorResource(id = R.color.neutral2)
                     )
                 }
             }

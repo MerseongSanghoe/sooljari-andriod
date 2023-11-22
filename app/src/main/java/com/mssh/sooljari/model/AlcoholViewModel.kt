@@ -34,6 +34,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
             currentPage = result.page ?: 0
             totalAlcoholCount = result.count ?: 0
             _alcoholList.value = result.data
+            _isLoading.value = false
         }
     }
 

@@ -116,6 +116,7 @@ fun VerticalCard(
             paddingBetweenRows = 4.dp
         )
 
+        //별표
         Row(
             modifier = Modifier
                 .padding(top = 8.dp)
@@ -143,7 +144,7 @@ fun VerticalCard(
             Text(
                 modifier = Modifier
                     .padding(start = 2.dp),
-                text = "${Random.nextInt(0, 3000)}명이 별표", /*TODO*/
+                text = "${String.format("%,d", Random.nextInt(0, 3000))}명이 별표", /*TODO*/
                 fontSize = 14.sp,
                 color = Color.Gray
             )
