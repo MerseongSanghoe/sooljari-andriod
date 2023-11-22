@@ -59,15 +59,27 @@ private fun NavGraphBuilder.sooljariGraph(
         homeGraph(navController)
     }
     composable(SoolJariDestinations.HOME_ROUTE) {
-        HomeView(onNavigateToSearch = {
-            navController.navigate(SoolJariDestinations.SEARCH_ROUTE) {
-                popUpTo(SoolJariDestinations.HOME_ROUTE) {
-                    saveState = true
+        HomeView(
+            onNavigateToSearch = {
+                navController.navigate(SoolJariDestinations.SEARCH_ROUTE) {
+                    popUpTo(SoolJariDestinations.HOME_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
                 }
-                launchSingleTop = true
-                restoreState = true
+            },
+            viewModel = viewModel,
+            onVerticalCardClick = { alcoholId ->
+                navController.navigate("alcoholDetail/$alcoholId") {
+                    popUpTo(SoolJariDestinations.HOME_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
-        })
+        )
     }
 
     composable(SoolJariDestinations.SEARCH_ROUTE) {

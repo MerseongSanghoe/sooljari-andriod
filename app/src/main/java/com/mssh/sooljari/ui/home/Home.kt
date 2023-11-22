@@ -14,13 +14,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.AlcoholRepository
+import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.ui.home.appBar.TopAppBar
 import com.mssh.sooljari.ui.home.navigation.NavigationBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeView(
-    onNavigateToSearch: () -> Unit
+    onNavigateToSearch: () -> Unit,
+    viewModel: AlcoholViewModel,
+    onVerticalCardClick: (Long) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -40,7 +44,9 @@ fun HomeView(
         ) {
             Feed(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                viewModel = viewModel,
+                onVerticalCardClick = onVerticalCardClick
             )
         }
     }
@@ -66,6 +72,9 @@ fun NavGraphBuilder.homeGraph(
 @Preview
 @Composable
 fun HomePreview() {
-    val search: () -> Unit = {}
-    HomeView(search)
+    HomeView(
+        onNavigateToSearch = {},
+        viewModel = AlcoholViewModel(AlcoholRepository()),
+        onVerticalCardClick = {}
+    )
 }

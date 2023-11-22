@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,18 +39,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.Alcohol
+import com.mssh.sooljari.model.SearchedByTagAlcohol
+import com.mssh.sooljari.model.Tag
 import com.mssh.sooljari.model.addHash
+import com.mssh.sooljari.model.tagListToStringList
+import kotlin.random.Random
 
 @Composable
 fun VerticalCard(
-    alcohol: Alcohol,
+    alcohol: SearchedByTagAlcohol,
     keyword: String = "",
     titleMaxLines: Int = 1,
     onCardClick: (Long) -> Unit
 ) {
+    val name = alcohol.name ?: stringResource(id = R.string.error_no_value)
+    val category = alcohol.category ?: stringResource(id = R.string.error_no_value)
+
     Card(
         modifier = Modifier
-            .fillMaxWidth()
+            .size(
+                width = 160.dp,
+                height = 260.dp
+            )
             .wrapContentHeight()
             .clickable(onClick = { alcohol.id?.let { onCardClick(it) } }),
         shape = RoundedCornerShape(3.dp),
@@ -57,7 +68,7 @@ fun VerticalCard(
             containerColor = colorResource(id = R.color.neutral0)
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 0.dp
         )
     ) {
         Image(
@@ -78,7 +89,7 @@ fun VerticalCard(
             modifier = Modifier
                 .padding(top = 4.dp)
                 .fillMaxWidth(),
-            text = "${alcohol.name ?: R.string.error_no_value}",
+            text = name,
             fontSize = 16.sp,
             fontWeight = FontWeight.ExtraBold,
             overflow = TextOverflow.Ellipsis,
@@ -88,12 +99,13 @@ fun VerticalCard(
         // category
         Text(
             modifier = Modifier
-                .fillMaxWidth(),
-            text = "${alcohol.category ?: R.string.error_no_value}",
+                .fillMaxWidth()
+                .padding(bottom = 4.dp),
+            text = category,
             fontSize = 14.sp,
         )
 
-        val tagList = addHash(alcohol.tags)
+        val tagList = addHash(tagListToStringList(alcohol.relatedTags))
 
         TagListLazyRows(
             tagStringList = tagList,
@@ -131,7 +143,7 @@ fun VerticalCard(
             Text(
                 modifier = Modifier
                     .padding(start = 2.dp),
-                text = "${1045}명이 별표", /*TODO*/
+                text = "${Random.nextInt(0, 3000)}명이 별표", /*TODO*/
                 fontSize = 14.sp,
                 color = Color.Gray
             )
@@ -350,21 +362,23 @@ fun ResultCardPreview() {
 @Preview
 @Composable
 fun VerticalCardPreview() {
-    Box(
-        modifier = Modifier
-            .width(200.dp)
-    ) {
-        VerticalCard(
-            keyword = "플레이브",
-            alcohol = Alcohol(
-                id = 0L,
-                name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
-                category = "맛있어보이는 흑맥주",
-                degree = 4.3f,
-                tags = testTags
-            ),
-            onCardClick = {})
-    }
+    VerticalCard(
+        keyword = "플레이브",
+        alcohol = SearchedByTagAlcohol(
+            id = 0L,
+            name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
+            category = "맛있어보이는 흑맥주",
+            degree = 4.3f,
+            relatedTags = listOf(
+                Tag("테스트 태그", 1),
+                Tag("무언가", 1),
+                Tag("아이우에오", 1),
+                Tag("머리아프다", 1),
+                Tag("라라라", 1),
+                Tag("영어", 1),
+            )
+        ),
+        onCardClick = {})
 }
 
 @Preview

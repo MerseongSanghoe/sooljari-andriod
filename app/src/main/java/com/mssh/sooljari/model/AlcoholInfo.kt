@@ -60,6 +60,13 @@ data class Tag(
     val weight: Int? = null
 )
 
+val testTagList: List<Tag> = listOf(
+    Tag(string = "test1", weight = 1),
+    Tag(string = "test2", weight = 2),
+    Tag(string = "test3", weight = 3),
+    Tag(string = "test4", weight = 4),
+)
+
 fun tagListToStringList(tagList: List<Tag>): List<String> {
     val stringList: MutableList<String> = mutableListOf()
 

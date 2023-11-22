@@ -31,10 +31,14 @@ data class AlcoholResults(
  */
 @Serializable
 data class SearchedByTagAlcohol(
-    @SerialName("alcohol")
+    val id: Long? = null,
+    val weight: Int? = null,
+
+    @SerialName("title")
     val name: String? = null,
 
-    val weight: Int? = null,
+    val degree: Float? = null,
+    val category: String? = null,
 
     @SerialName("otherTags")
     val relatedTags: List<Tag> = emptyList()
@@ -45,4 +49,48 @@ data class SearchedByTagAlcoholResults(
     val data: List<SearchedByTagAlcohol> = emptyList(),
     val count: Int? = null
 )
+
+val testSearchedByTagAlcoholList: List<SearchedByTagAlcohol> =
+    listOf(
+        SearchedByTagAlcohol(
+            id = 1,
+            weight = 1,
+            name = "술이름",
+            degree = 15.0f,
+            category = "소주",
+            relatedTags = testTagList
+        ),
+        SearchedByTagAlcohol(
+            id = 1,
+            weight = 1,
+            name = "술이름",
+            degree = 15.0f,
+            category = "소주",
+            relatedTags = testTagList
+        ),
+        SearchedByTagAlcohol(
+            id = 1,
+            weight = 1,
+            name = "술이름",
+            degree = 15.0f,
+            category = "소주",
+            relatedTags = testTagList
+        ),
+        SearchedByTagAlcohol(
+            id = 1,
+            weight = 1,
+            name = "술이름",
+            degree = 15.0f,
+            category = "소주",
+            relatedTags = testTagList
+        ),
+        SearchedByTagAlcohol(
+            id = 1,
+            weight = 1,
+            name = "술이름",
+            degree = 15.0f,
+            category = "소주",
+            relatedTags = testTagList
+        )
+    )
 
