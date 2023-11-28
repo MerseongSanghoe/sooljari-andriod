@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,10 +16,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
@@ -32,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.Alcohol
-import com.mssh.sooljari.model.AlcoholResults
+import com.mssh.sooljari.model.AlcoholRepository
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.ui.components.ResultCard
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -49,20 +50,24 @@ fun SearchResults(
 
     val searchedQuery = rememberUpdatedState(newValue = query).value
 
-    if (results.isEmpty() && !isLoading) {
-        NoResult(
-            modifier = modifier,
-            query = searchedQuery
-        )
-    } else {
-        SearchResults(
-            modifier = modifier,
-            viewModel = viewModel,
-            query = searchedQuery,
-            isLoading = isLoading,
-            results = results,
-            onResultCardClick = onResultCardClick
-        )
+    when {
+        results.isEmpty() && !isLoading -> {
+            NoResult(
+                modifier = modifier,
+                query = searchedQuery
+            )
+        }
+
+        else -> {
+            SearchResults(
+                modifier = modifier,
+                viewModel = viewModel,
+                query = searchedQuery,
+                isLoading = isLoading,
+                results = results,
+                onResultCardClick = onResultCardClick
+            )
+        }
     }
 }
 
@@ -92,32 +97,42 @@ private fun SearchResults(
             }
     }
 
-    if (isLoading) {
-        Text(text = "로딩중....")
-    } else {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .background(
-                    color = colorResource(id = R.color.neutral1)
-                ),
-            state = listState,
-            contentPadding = PaddingValues(
-                horizontal = 12.dp,
-                vertical = 8.dp
+
+    LazyColumn(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .background(
+                color = colorResource(id = R.color.neutral1)
             ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(results) {
-                ResultCard(
-                    alcohol = it,
-                    keyword = query,
-                    onResultCardClick = onResultCardClick
+        state = listState,
+        contentPadding = PaddingValues(
+            horizontal = 12.dp,
+            vertical = 8.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(results) {
+            ResultCard(
+                alcohol = it,
+                keyword = query,
+                onResultCardClick = onResultCardClick
+            )
+        }
+
+        if (isLoading) {
+            item {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(52.dp),
+                    color = colorResource(id = R.color.purple3),
                 )
             }
         }
     }
+
+
 }
 
 @Composable
@@ -169,10 +184,18 @@ fun NoResult(
     }
 }
 
-@Preview
+@Preview(showBackground = true, backgroundColor = 0xF8F8F8)
 @Composable
 private fun SearchResultsPreview() {
-    //SearchResults(Modifier.fillMaxSize(), viewModel(), "")
+    SearchResults(
+        modifier = Modifier
+            .fillMaxSize(),
+        viewModel = AlcoholViewModel(AlcoholRepository()),
+        query = "한노아",
+        isLoading = true,
+        results = emptyList(),
+        onResultCardClick = {}
+    )
 }
 
 @Preview
