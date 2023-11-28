@@ -1,6 +1,5 @@
 package com.mssh.sooljari.model
 
-import android.util.Log
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -52,39 +51,3 @@ data class Maker(
     val updatedAt: String? = null,
     val publishedAt: String? = null,
 )
-
-@Serializable
-data class Tag(
-    @SerialName("title")
-    val string: String? = null,
-    val weight: Int? = null
-)
-
-val testTagList: List<Tag> = listOf(
-    Tag(string = "test1", weight = 1),
-    Tag(string = "test2", weight = 2),
-    Tag(string = "test3", weight = 3),
-    Tag(string = "test4", weight = 4),
-)
-
-fun tagListToStringList(tagList: List<Tag>): List<String> {
-    val stringList: MutableList<String> = mutableListOf()
-
-    tagList.forEach { tag ->
-        if (tag.string == null) return@forEach
-
-        stringList.add(tag.string)
-    }
-
-    return stringList
-}
-
-fun addHash(tagList: List<String>): List<String> {
-    val hashAddedList: MutableList<String> = mutableListOf()
-
-    tagList.forEach { tag ->
-        hashAddedList += "#$tag"
-    }
-
-    return hashAddedList
-}
