@@ -1,12 +1,14 @@
 package com.mssh.sooljari.model
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() {
@@ -30,7 +32,23 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     private var currentPage = 0
     private var totalAlcoholCount = 0
     private var _isLoading = MutableStateFlow(false)
-    private val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    //검색화면 사용자 인풋 플로우
+    private val userInputFlow = MutableStateFlow("")
+
+    /*
+     검색 관련 함수들
+
+     initialLoad
+
+     loadMoreList
+
+     canLoadMore
+
+     resetSearchResult
+
+     */
 
     fun initialLoad(keyword: String) {
         viewModelScope.launch {
@@ -84,12 +102,23 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         }
     }
 
+    /*
+    술 상세 정보 관련 함수들
+
+    getAlcoholInfo
+
+     */
+
     fun getAlcoholInfo(id: Long) {
         viewModelScope.launch {
             _alcoholInfo.value = null
             _alcoholInfo.value = repository.getAlcoholInfo(id)
         }
     }
+
+    /*
+    태그 관련 함수들
+     */
 
     fun getAlcoholsByTag(tag: String) {
         viewModelScope.launch {
