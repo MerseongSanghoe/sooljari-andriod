@@ -1,6 +1,5 @@
 package com.mssh.sooljari.ui.search
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +40,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.ui.components.TransparentIconButton
@@ -54,8 +56,7 @@ fun SearchView(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
-    var query by remember { mutableStateOf("") }
-    val searchedQuery = remember { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf("") }
 
     val isSearching = remember { mutableStateOf(false) }
 
@@ -76,13 +77,11 @@ fun SearchView(
                 onSearchButtonClick = {
                     viewModel.initialLoad(query)
                     focusManager.clearFocus()
-                    searchedQuery.value = query
                     isSearching.value = false
                 },
                 onKeyboardSearch = {
                     viewModel.initialLoad(query)
                     focusManager.clearFocus()
-                    searchedQuery.value = query
                     isSearching.value = false
                 },
                 focusRequester = focusRequester
@@ -107,7 +106,6 @@ fun SearchView(
                         viewModel.initialLoad(it)
                         focusManager.clearFocus()
                         query = it
-                        searchedQuery.value = it
                         isSearching.value = false
                     }
                 )
@@ -116,10 +114,11 @@ fun SearchView(
             else -> {
                 SearchResults(
                     viewModel = viewModel,
-                    searchedQuery = searchedQuery,
+                    query = query,
                     modifier = Modifier
                         .padding(paddingValues)
                         .background(colorResource(id = R.color.neutral1)),
+                    results = alcoholList ?: emptyList(),
                     onResultCardClick = onResultCardClick
                 )
             }

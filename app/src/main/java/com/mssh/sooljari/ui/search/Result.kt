@@ -1,6 +1,5 @@
 package com.mssh.sooljari.ui.search
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.Alcohol
+import com.mssh.sooljari.model.AlcoholResults
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.ui.components.ResultCard
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -40,24 +41,26 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 fun SearchResults(
     modifier: Modifier = Modifier,
     viewModel: AlcoholViewModel,
-    searchedQuery: MutableState<String>,
+    query: String,
+    results: List<Alcohol>,
     onResultCardClick: (Long) -> Unit
 ) {
-    val results by viewModel.alcoholList.collectAsState()
-    val query = rememberUpdatedState(newValue = searchedQuery.value).value
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    if (results?.size == 0) {
-        Log.d("no result found", "no result")
+    val searchedQuery = rememberUpdatedState(newValue = query).value
 
+    if (results.isEmpty() && !isLoading) {
         NoResult(
             modifier = modifier,
-            query = query
+            query = searchedQuery
         )
     } else {
         SearchResults(
             modifier = modifier,
             viewModel = viewModel,
-            query = query,
+            query = searchedQuery,
+            isLoading = isLoading,
+            results = results,
             onResultCardClick = onResultCardClick
         )
     }
@@ -68,11 +71,11 @@ private fun SearchResults(
     modifier: Modifier = Modifier,
     viewModel: AlcoholViewModel,
     query: String,
+    isLoading: Boolean,
+    results: List<Alcohol>,
     onResultCardClick: (Long) -> Unit
 ) {
     val listState = rememberLazyListState()
-    val alcoholList by viewModel.alcoholList.collectAsState()
-
 
     //스크롤이 마지막에 닿으면 추가 데이터 로드
     LaunchedEffect(listState) {
@@ -87,29 +90,32 @@ private fun SearchResults(
                     }
                 }
             }
-
     }
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .background(
-                color = colorResource(id = R.color.neutral1)
+    if (isLoading) {
+        Text(text = "로딩중....")
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(
+                    color = colorResource(id = R.color.neutral1)
+                ),
+            state = listState,
+            contentPadding = PaddingValues(
+                horizontal = 12.dp,
+                vertical = 8.dp
             ),
-        state = listState,
-        contentPadding = PaddingValues(
-            horizontal = 12.dp,
-            vertical = 8.dp
-        ),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(alcoholList.orEmpty()) {
-            ResultCard(
-                alcohol = it,
-                keyword = query,
-                onResultCardClick = onResultCardClick
-            )
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(results) {
+                ResultCard(
+                    alcohol = it,
+                    keyword = query,
+                    onResultCardClick = onResultCardClick
+                )
+            }
         }
     }
 }
