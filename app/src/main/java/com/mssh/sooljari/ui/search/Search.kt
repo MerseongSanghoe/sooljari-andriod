@@ -126,6 +126,7 @@ fun SearchView(
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun SearchAppBar(
     query: String,
@@ -142,8 +143,8 @@ private fun SearchAppBar(
             .fillMaxWidth()
             .height(48.dp + statusBarHeight)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.bg_main),
+        GlideImage(
+            model = R.drawable.bg_main,
             contentScale = ContentScale.FillBounds,
             contentDescription = null,
             modifier = Modifier

@@ -22,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.ui.components.TagListLazyRows
@@ -30,6 +32,7 @@ import com.mssh.sooljari.ui.components.testTags
 import com.mssh.sooljari.ui.theme.SoolJariTheme
 import com.mssh.sooljari.ui.theme.logoFont
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun TopAppBar(
     onNavigateToSearch: () -> Unit
@@ -41,8 +44,8 @@ fun TopAppBar(
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.bg_main),
+        GlideImage(
+            model = R.drawable.bg_main,
             contentScale = ContentScale.FillBounds,
             contentDescription = null,
             modifier = Modifier
