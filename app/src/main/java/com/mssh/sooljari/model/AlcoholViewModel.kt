@@ -51,6 +51,10 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
      */
 
     fun initialLoad(keyword: String) {
+        if (isLoading.value) return
+
+        _isLoading.value = true
+
         viewModelScope.launch {
             val result = repository.getInitialResults(keyword)
             currentPage = result.page ?: 0
@@ -61,9 +65,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     }
 
     fun loadMoreList(keyword: String) {
-        if (isLoading.value) {
-            return
-        }
+        if (isLoading.value) return
 
         _isLoading.value = true
 
