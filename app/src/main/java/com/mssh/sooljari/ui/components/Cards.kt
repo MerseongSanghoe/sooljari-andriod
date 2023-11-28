@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -37,6 +36,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.Alcohol
 import com.mssh.sooljari.model.SearchedByTagAlcohol
@@ -247,6 +249,7 @@ fun FairCard() {
 
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ResultCard(
     alcohol: Alcohol,
@@ -254,6 +257,15 @@ fun ResultCard(
     onResultCardClick: (Long) -> Unit
 ) {
     val cardHeight = 140.dp
+
+    val thumbnail = "http://211.37.148.214${alcohol.imageUrl}"
+    val name = alcohol.name ?: stringResource(id = R.string.error_no_value)
+    val category = alcohol.category ?: stringResource(id = R.string.error_no_value)
+    val degree = if (alcohol.degree == null) {
+        ""
+    } else {
+        alcohol.degree.toString() + "도"
+    }
 
     Card(
         modifier = Modifier
@@ -273,14 +285,15 @@ fun ResultCard(
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_placeholder),
+            GlideImage(
+                model = thumbnail,
                 modifier = Modifier
                     .size(cardHeight)
                     .background(
-                        color = colorResource(id = R.color.neutral5_alpha15)
+                        color = colorResource(id = R.color.neutral0)
                     ),
                 contentScale = ContentScale.Fit,
+                failure = placeholder(R.drawable.img_placeholder),
                 contentDescription = null
             )
 
@@ -294,14 +307,13 @@ fun ResultCard(
                         .wrapContentHeight()
                 ) {
                     Text(
-                        text = "${alcohol.name ?: R.string.error_no_value}",
+                        text = name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "${alcohol.category ?: R.string.error_no_value}" +
-                                " ${alcohol.degree ?: 0f}도",
+                        text = "$category  $degree",
                         fontSize = 14.sp,
                     )
 
