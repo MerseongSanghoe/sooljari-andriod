@@ -68,6 +68,9 @@ private fun NavGraphBuilder.sooljariGraph(
                     launchSingleTop = true
                     restoreState = true
                 }
+
+                //검색 기록 초기화
+                viewModel.resetSearchResult()
             },
             viewModel = viewModel,
             onVerticalCardClick = { alcoholId ->

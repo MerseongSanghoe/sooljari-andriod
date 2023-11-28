@@ -68,6 +68,19 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         return _alcoholList.value?.size!! < totalAlcoholCount
     }
 
+    fun resetSearchResult() {
+        currentPage = 0
+        totalAlcoholCount = 0
+        _alcoholList.value = emptyList()
+    }
+
+    /*
+    로그인 관련 함수들
+
+    login
+
+     */
+
     fun login(id: String, pw: String) {
         viewModelScope.launch {
             repository.login(id, pw)
