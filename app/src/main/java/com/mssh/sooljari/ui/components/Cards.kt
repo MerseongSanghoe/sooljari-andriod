@@ -258,7 +258,11 @@ fun ResultCard(
 ) {
     val cardHeight = 140.dp
 
-    val thumbnail = "http://211.37.148.214${alcohol.imageUrl}"
+    val thumbnail = if (alcohol.imageUrl.isNullOrEmpty()) {
+        R.drawable.img_placeholder
+    } else {
+        "http://211.37.148.214${alcohol.imageUrl}"
+    }
     val name = alcohol.name ?: stringResource(id = R.string.error_no_value)
     val category = alcohol.category ?: stringResource(id = R.string.error_no_value)
     val degree = if (alcohol.degree == null) {
