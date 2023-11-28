@@ -97,10 +97,20 @@ class AlcoholRepository {
 
     //태그로 술 가져오기
     suspend fun getAlcoholsByTag(tag: String): SearchedByTagAlcoholResults {
-        val url = "$BASE_URL/tag/bytag"
+        val url = "$BASE_URL/tag/bytag/"
         val query = URLEncoder.encode(tag, "UTF-8")
-        val results: SearchedByTagAlcoholResults = client.get("$url/$query").body()
+        val results: SearchedByTagAlcoholResults = client.get("$url$query").body()
 
         return results
+    }
+
+    //자동완성 키워드 가져오기
+    suspend fun getAutoCompleteKeywords(query: String): Keywords {
+        val url = "$BASE_URL/autoc?k="
+        val encodedUrl = URLEncoder.encode(query, "UTF-8")
+        val result: Keywords = client.get("$url$encodedUrl").body()
+        Log.d("자동완성 키워드", result.toString())
+
+        return result
     }
 }

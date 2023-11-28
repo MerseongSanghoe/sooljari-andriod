@@ -68,6 +68,9 @@ fun SearchView(
                 onTextChanged = {
                     query = it
                     isSearching.value = query.isNotEmpty()
+
+                    //뷰모델에 사용자 입력 업데이트
+                    viewModel.updateUserInput(it)
                 },
                 onNavigateToHome = onNavigateToHome,
                 onSearchButtonClick = {
@@ -86,17 +89,40 @@ fun SearchView(
             )
         }
     ) { paddingValues ->
+        //유저 검색 상태에 따라 다른 검색 화면 표시
         when {
-            query.isEmpty() && alcoholList.isNullOrEmpty() -> SearchSuggestions(modifier = Modifier.padding(paddingValues))
-            isSearching.value -> SearchKeywords(modifier = Modifier.padding(paddingValues))
-            else -> SearchResults(
-                viewModel = viewModel,
-                searchedQuery = searchedQuery,
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .background(colorResource(id = R.color.neutral1)),
-                onResultCardClick = onResultCardClick
-            )
+            //검색어 입력 안했을 때
+            query.isEmpty() && alcoholList.isNullOrEmpty() -> {
+                SearchSuggestions(modifier = Modifier.padding(paddingValues))
+            }
+
+            //검색중 일 때
+            isSearching.value -> {
+                SearchKeywords(
+                    modifier = Modifier.padding(paddingValues),
+                    viewModel = viewModel,
+                    query = query,
+                    onKeywordClick = {
+                        //키워드 클릭 시 키워드로 검색
+                        viewModel.initialLoad(it)
+                        focusManager.clearFocus()
+                        query = it
+                        searchedQuery.value = it
+                        isSearching.value = false
+                    }
+                )
+            }
+            //위의 모든 상황이 해당되지 않으면 검색 결과 화면 표시
+            else -> {
+                SearchResults(
+                    viewModel = viewModel,
+                    searchedQuery = searchedQuery,
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .background(colorResource(id = R.color.neutral1)),
+                    onResultCardClick = onResultCardClick
+                )
+            }
         }
     }
 }

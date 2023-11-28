@@ -22,6 +22,10 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     private val _alcoholListByTag = MutableStateFlow<SearchedByTagAlcoholResults?>(null)
     val alcoholListByTag: StateFlow<SearchedByTagAlcoholResults?> = _alcoholListByTag
 
+    //자동완성 키워드 리스트
+    private val _keywordList = MutableStateFlow<List<String>?>(emptyList())
+    val keywordList: StateFlow<List<String>?> = _keywordList
+
     //페이지네이션 변수
     private var currentPage = 0
     private var totalAlcoholCount = 0
@@ -82,6 +86,31 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
             _alcoholListByTag.value = null
             _alcoholListByTag.value = repository.getAlcoholsByTag(tag)
         }
+    }
+
+    /*
+    자동 완성 관련 함수들
+
+    getAutocompleteKeywords
+
+    updateUserInput
+     */
+
+    @OptIn(FlowPreview::class)
+    fun getAutocompleteKeywords() {
+        viewModelScope.launch {
+            userInputFlow
+                .debounce(300)
+                .filter { it.isNotBlank() }
+                .collect { input ->
+                    val autoCompletedKeywords = repository.getAutoCompleteKeywords(input).data
+                    _keywordList.value = autoCompletedKeywords
+                }
+        }
+    }
+
+    fun updateUserInput(input: String) {
+        userInputFlow.value = input
     }
 }
 
