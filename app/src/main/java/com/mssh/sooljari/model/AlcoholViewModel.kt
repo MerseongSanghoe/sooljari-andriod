@@ -82,7 +82,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     }
 
     private fun canLoadMore(): Boolean {
-        return _alcoholList.value?.size!! < totalAlcoholCount
+        return (_alcoholList.value?.size!! - 1) < totalAlcoholCount
     }
 
     fun resetSearchResult() {
