@@ -15,6 +15,10 @@ data class Alcohol(
 
     val category: String? = null,
     val degree: Float? = null,
+
+    @SerialName("image")
+    val imageUrl: String? = null,
+
     val tags: List<String> = emptyList()
 )
 
