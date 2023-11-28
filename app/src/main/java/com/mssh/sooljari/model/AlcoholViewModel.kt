@@ -44,14 +44,12 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
 
     fun loadMoreList(keyword: String) {
         if (isLoading.value) {
-            Log.d("loadMoreList", "로딩중")
             return
         }
 
         _isLoading.value = true
 
         viewModelScope.launch {
-            Log.d("loadMoreList", "로드 시작")
             if (canLoadMore()) {
                 val nextPage = currentPage + 1
                 val result = repository.getMoreResults(keyword, nextPage)
@@ -59,7 +57,6 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
                 currentPage = result.page ?: nextPage
                 _alcoholList.value = _alcoholList.value?.plus(result.data)
                 _isLoading.value = false
-                Log.d("loadMoreList -> canLoadMore", "로드 함")
             }
         }
     }

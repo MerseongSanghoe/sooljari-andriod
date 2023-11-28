@@ -47,8 +47,6 @@ class AlcoholRepository {
         val query = URLEncoder.encode(keyword, "UTF-8")
         val results: AlcoholResults = client.get("$url$query").body()
 
-        Log.d("최초 검색 결과", results.toString())
-
         return results
     }
 
@@ -80,7 +78,6 @@ class AlcoholRepository {
     //술 상세 정보 가져오기
     suspend fun getAlcoholInfo(id: Long): AlcoholInfo {
         val url = "$BASE_URL/alcohols/$id"
-        Log.d("술 상세 정보", url)
 
         if (jwt == null) {
             login(LOGIN_ID, LOGIN_PASSWORD)
@@ -89,8 +86,6 @@ class AlcoholRepository {
         val result: AlcoholInfo = client.get(url) {
             header("Authorization", "Bearer $jwt")
         }.body()
-
-        Log.d("술 상세 정보", result.toString())
 
         return result
     }
@@ -109,7 +104,6 @@ class AlcoholRepository {
         val url = "$BASE_URL/autoc?k="
         val encodedUrl = URLEncoder.encode(query, "UTF-8")
         val result: Keywords = client.get("$url$encodedUrl").body()
-        Log.d("자동완성 키워드", result.toString())
 
         return result
     }

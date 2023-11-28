@@ -257,7 +257,6 @@ fun TagListLazyRows(
             tagList.add(tagString)
             sumOfChipWidth += (chipWidth + paddingBetweenChips)
         } else {
-            Log.i("added", "false")
             tagListRows.add(tagList)
             tagList = mutableListOf(tagString)
             sumOfChipWidth = chipWidth
