@@ -14,6 +14,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,16 +27,27 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.mssh.sooljari.R
-import com.mssh.sooljari.model.BASE_URL
 import com.mssh.sooljari.model.Image
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun Banner(
     modifier: Modifier = Modifier,
-    imageList: List<Image>
+    imageList: List<Image>,
+    isAutoScroll: Boolean = true
 ) {
-    val pagerState = rememberPagerState(pageCount = { imageList.size })
+    val pageCount = imageList.size
+    val pagerState = rememberPagerState(pageCount = { Int.MAX_VALUE })
+
+    //3초마다 다음 배너로 넘어감
+    LaunchedEffect(pagerState) {
+        while (true) {
+            delay(3000)
+            //스크롤이 Int.MAX 보다 큰 경우 처리
+            pagerState.animateScrollToPage((pagerState.currentPage + 1) % Int.MAX_VALUE)
+        }
+    }
 
     Box(
         modifier = modifier
@@ -46,11 +58,15 @@ fun Banner(
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) { index ->
-            val url = if (imageList[index].url.orEmpty().contains("http://")
-                || imageList[index].url.orEmpty().contains("https://")) {
-                imageList[index].url
+            //실제 사용할 페이지 인덱스
+            val pageIndex = index % pageCount
+
+            val url = if (imageList[pageIndex].url.orEmpty().contains("http://")
+                || imageList[pageIndex].url.orEmpty().contains("https://")
+            ) {
+                imageList[pageIndex].url
             } else {
-                "http://211.37.148.214${imageList[index].url}"
+                "http://211.37.148.214${imageList[pageIndex].url}"
             }
 
             GlideImage(
@@ -60,7 +76,7 @@ fun Banner(
                     .background(Color.White)
                     .fillMaxWidth()
                     .height(280.dp),
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.FillHeight,
                 failure = placeholder(R.drawable.img_placeholder)
             )
         }
@@ -74,12 +90,15 @@ fun Banner(
                 .padding(bottom = 8.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            repeat(pagerState.pageCount) { iteration ->
+            repeat(pageCount) { iteration ->
+                //실제 사용되는 페이지 인덱스
+                val pageIndex = pagerState.currentPage % pageCount
+
                 val color =
-                    if (pagerState.currentPage == iteration) {
+                    if (pageIndex == iteration) {
                         colorResource(id = R.color.neutral0)
                     } else {
-                        colorResource(id = R.color.neutral0_alpha15)
+                        colorResource(id = R.color.neutral5_alpha25)
                     }
                 Box(
                     modifier = Modifier
