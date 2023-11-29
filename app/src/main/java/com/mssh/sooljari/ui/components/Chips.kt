@@ -1,6 +1,5 @@
 package com.mssh.sooljari.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,7 +39,8 @@ enum class Chips {
     RESULT_CARD_TAG,
     DEFAULT_TAG,
     LIGHT_TAG,
-    RANDOM_BACKGROUND_TAG
+    RANDOM_BACKGROUND_TAG,
+    TEXT_TAG
 }
 
 data class Chip(
@@ -59,6 +59,26 @@ val lightTagChip: Chip =
     Chip(Chips.LIGHT_TAG, 14.sp, 8.dp)
 val randomBackgroundChip: Chip =
     Chip(Chips.RANDOM_BACKGROUND_TAG, 16.sp, 8.dp)
+val textTagChip: Chip =
+    Chip(Chips.TEXT_TAG, 14.sp, 0.dp)
+
+@Composable
+fun TextTagChip(
+    tagString: String
+) {
+    Text(
+        text = tagString,
+        modifier = Modifier
+            .wrapContentSize()
+            .background(
+                color = Color.Transparent,
+            )
+            .padding(
+                horizontal = textTagChip.horizontalPadding,
+            ),
+        fontSize = textTagChip.fontSize
+    )
+}
 
 @Composable
 fun RandomBackgroundTagChip(
@@ -67,7 +87,7 @@ fun RandomBackgroundTagChip(
     val random = Random.nextInt(0, 8)
 
     val backgroundColor =
-        when(random) {
+        when (random) {
             0 -> colorResource(id = R.color.purple0)
             1 -> colorResource(id = R.color.purple_200)
 
@@ -75,7 +95,7 @@ fun RandomBackgroundTagChip(
         }
 
     val textColor =
-        when(random) {
+        when (random) {
             in 0..1 -> colorResource(id = R.color.purple5)
 
             else -> colorResource(id = R.color.black)
@@ -234,6 +254,7 @@ fun ResultCardTagChip(
 
 @Composable
 fun TagListLazyRows(
+    modifier: Modifier = Modifier,
     tagStringList: List<String>,
     chip: Chip,
     paddingBetweenChips: Dp = 0.dp,
@@ -272,7 +293,7 @@ fun TagListLazyRows(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .onGloballyPositioned { coordinates ->
@@ -281,7 +302,7 @@ fun TagListLazyRows(
     ) {
         tagListRows.forEachIndexed { index, tagListRow ->
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 horizontalArrangement = Arrangement.spacedBy(paddingBetweenChips)
@@ -293,7 +314,7 @@ fun TagListLazyRows(
 
             if (index < tagListRows.size) {
                 Spacer(
-                    modifier = Modifier
+                    modifier = modifier
                         .fillMaxWidth()
                         .height(paddingBetweenRows)
                 )
@@ -329,6 +350,10 @@ private fun AddChip(
 
         Chips.RANDOM_BACKGROUND_TAG -> {
             RandomBackgroundTagChip(tagString)
+        }
+
+        Chips.TEXT_TAG -> {
+            TextTagChip(tagString)
         }
     }
 }
@@ -402,9 +427,18 @@ private fun LightTagChipPreview() {
 @Preview
 @Composable
 private fun RandomBackgroundTagChipPreview() {
-    Row {
+    Column {
         testTags.forEach {
             RandomBackgroundTagChip(it)
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TextTagChipPreview() {
+    Column {
+        TextTagChip(tagString = "#태그")
+        TextTagChip(tagString = "#엄청나게긴태그")
     }
 }
