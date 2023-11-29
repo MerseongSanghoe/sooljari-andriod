@@ -22,4 +22,5 @@
     <color name="neutral2">#B7B7B7</color>
     <color name="neutral3">#787878</color>
     <color name="neutral4">#313131</color>
+    <color name="neutral5_alpha25">#40000000</color>
 </resources>
