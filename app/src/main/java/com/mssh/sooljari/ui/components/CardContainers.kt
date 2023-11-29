@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,8 +16,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,6 +63,9 @@ fun VerticalCardContainer(
     alcoholList: List<SearchedByTagAlcohol> = emptyList(),
     onCardClick: (Long) -> Unit
 ) {
+    val density = LocalDensity.current
+    val cardHeight = remember { mutableStateOf(0.dp) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,6 +76,7 @@ fun VerticalCardContainer(
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
     ) {
+        //헤더
         CardListContainerHeader(
             headerTitle = headerTitle
         )
@@ -78,11 +85,16 @@ fun VerticalCardContainer(
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(260.dp),
+                .wrapContentHeight()
+                .onGloballyPositioned {
+                    cardHeight.value = with(density) { it.size.height.toDp() }
+                },
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             itemsIndexed(alcoholList) { index, alcohol ->
                 VerticalCard(
+                    modifier = Modifier
+                        .wrapContentHeight(),
                     alcohol = alcohol,
                     onCardClick = onCardClick
                 )
@@ -90,14 +102,14 @@ fun VerticalCardContainer(
                 if (index < (alcoholList.size - 1)) {
                     Spacer(
                         modifier = Modifier
-                            .fillMaxHeight()
+                            .height(cardHeight.value)
                             .width(8.dp)
                     )
 
                     Divider(
                         modifier = Modifier
-                            .fillMaxHeight()
-                            .width(0.3.dp),
+                            .height(cardHeight.value)
+                            .width(0.25.dp),
                         color = colorResource(id = R.color.neutral2)
                     )
                 }
