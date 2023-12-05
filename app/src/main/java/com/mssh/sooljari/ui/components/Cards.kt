@@ -41,21 +41,24 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.Alcohol
-import com.mssh.sooljari.model.SearchedByTagAlcohol
-import com.mssh.sooljari.model.Tag
 import com.mssh.sooljari.model.addHash
-import com.mssh.sooljari.model.tagListToStringList
 import kotlin.random.Random
 
 @Composable
+@OptIn(ExperimentalGlideComposeApi::class)
 fun VerticalCard(
-    alcohol: SearchedByTagAlcohol,
+    alcohol: Alcohol,
     keyword: String = "",
     titleMaxLines: Int = 1,
     onCardClick: (Long) -> Unit
 ) {
     val name = alcohol.name ?: stringResource(id = R.string.error_no_value)
     val category = alcohol.category ?: stringResource(id = R.string.error_no_value)
+    val thumbnail = if (alcohol.imageUrl.isNullOrEmpty()) {
+        R.drawable.img_placeholder
+    } else {
+        "http://211.37.148.214${alcohol.imageUrl}"
+    }
 
     Card(
         modifier = Modifier
@@ -73,8 +76,8 @@ fun VerticalCard(
             defaultElevation = 0.dp
         )
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img_placeholder),
+        GlideImage(
+            model = thumbnail,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
@@ -83,6 +86,7 @@ fun VerticalCard(
                     color = colorResource(id = R.color.neutral5_alpha15)
                 ),
             contentScale = ContentScale.Fit,
+            failure = placeholder(R.drawable.img_placeholder),
             contentDescription = null
         )
 
@@ -107,7 +111,7 @@ fun VerticalCard(
             fontSize = 14.sp,
         )
 
-        val tagList = addHash(tagListToStringList(alcohol.relatedTags))
+        val tagList = addHash(alcohol.tags)
 
         TagListLazyRows(
             tagStringList = tagList,
@@ -381,18 +385,18 @@ fun ResultCardPreview() {
 fun VerticalCardPreview() {
     VerticalCard(
         keyword = "플레이브",
-        alcohol = SearchedByTagAlcohol(
+        alcohol = Alcohol(
             id = 0L,
             name = "기네스 컴포즈 기네스 컴포즈기네스 컴포즈",
             category = "맛있어보이는 흑맥주",
             degree = 4.3f,
-            relatedTags = listOf(
-                Tag("테스트 태그", 1),
-                Tag("무언가", 1),
-                Tag("아이우에오", 1),
-                Tag("머리아프다", 1),
-                Tag("라라라", 1),
-                Tag("영어", 1),
+            tags = listOf(
+                "테스트 태그",
+                "무언가",
+                "아이우에오",
+                "머리아프다",
+                "라라라",
+                "영어"
             )
         ),
         onCardClick = {})

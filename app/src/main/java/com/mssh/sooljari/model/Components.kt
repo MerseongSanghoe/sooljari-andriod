@@ -52,6 +52,10 @@ val testTagList: List<Tag> = listOf(
     Tag(string = "test4", weight = 4),
 )
 
+val testTagTitleOnlyList: List<String> = listOf(
+    "test1", "test2", "test3", "test4"
+)
+
 fun tagListToStringList(tagList: List<Tag>): List<String> {
     val stringList: MutableList<String> = mutableListOf()
 
