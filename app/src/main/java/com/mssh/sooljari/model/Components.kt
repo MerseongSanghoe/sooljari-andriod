@@ -14,22 +14,16 @@ data class Image(
 
 val testImageList: List<Image> = listOf(
     Image(
-        url = "https://i.namu.wiki/i/fW1CzsNKwgp9gh7bcZC5L-sz0ze5LmGI9CO-UA91altMXHB246OM-BOX9upSTERXHjyq3WW_OuL6G63T2gw24oQcdvOtMIsqtr36IQrjm5NAggOix_LzmsPzQmD1c68ujWKyvEyowKgSparlsoqMTg.webp"
+        url = "https://www.siwse.com/images/contents/landing_visual.png"
     ),
     Image(
-        url = "https://i.namu.wiki/i/P4jz7lEmjbtc8hvSo7HdyqurKJfTopTATFh_k6xZ4DZ-LraU3eBXXexaigQx27PUVGek-KpocuOcgBrOT2iAVFp192qrKcSQqMlVQkRO13yShCoKY6QFIL8jUiKUkFeyddrQfp4rbmrzFOTZTyS0kQ.webp"
+        url = "https://bsiwse.com/data/designImages/POPUP_1701598081.jpg"
     ),
     Image(
-        url = "https://i.namu.wiki/i/CaD9Es4eheBSRRNG0_qOWIL29ROrEC1nurLNY8auh8maOPC1zMiJ8LGsBFa2GqqBZdkOze1I8NhMXs0HwyahMBUOEomk7drff7xPSeGqsQNYzGHh4uKxZjw-8THgza-M7Gtx_GTAfESqE3XhkHcAqA.webp"
+        url = "https://thesool.com/images/front/cont/info-logo.png"
     ),
     Image(
-        url = "https://i.namu.wiki/i/F-2L3j9HXREG3XWw-d4ZXKRVk7dY7z08cG2SX0vaEUpbsO0WUYuIDGH0hR7r2qnz4LSx-ZZ1lQW_ERrsjV6HzZ0-PPsTgx2AEdvum2DzFO8BPCn-7O1Q_pO82mjXuHnr5zAxwuadkrXIjVXwkYLIOg.webp"
-    ),
-    Image(
-        url = "https://i.namu.wiki/i/t_EWmZTqkk3UUj3dQ0yoHr8a8KCPJ42lLQ3gJM35KA-19C51y7GfCt_-T0dzdDJBD9mvxgoUWtyckTIlcqGvTcxkNUuCsznVvsK18HPc8oDRPKrrDxK-l-O38oQf2N7BsT9il2k-cSsA-U3hY2VvGQ.webp"
-    ),
-    Image(
-        url = "https://i.namu.wiki/i/bXwn-O3BvTgwA-KnDHI36_vJqzYvgoZE9b8QqGtNPqE2YDJFD4h128fretUt25KQVZjxaxTCiCJazgoXeBxJyUhhVOSwc0AcoilZcOsPUAShhUS7FQNCdLaayDCzDItWrgsrZ6Pr7TFE4fb5tP3s3A.webp"
+        url = "https://thesool.com/ckeditor/imageUpload/%EC%8B%9C%EC%9D%8C%EC%83%81%EB%8B%B4%ED%9A%8C1_1692681920574.jpg"
     ),
 )
 
