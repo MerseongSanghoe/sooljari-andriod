@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.Alcohol
 import com.mssh.sooljari.model.SearchedByTagAlcohol
 import com.mssh.sooljari.model.testSearchedByTagAlcoholList
 
@@ -60,7 +61,7 @@ fun CardListContainerHeader(
 @Composable
 fun VerticalCardContainer(
     headerTitle: String,
-    alcoholList: List<SearchedByTagAlcohol> = emptyList(),
+    alcoholList: List<Alcohol> = emptyList(),
     onCardClick: (Long) -> Unit
 ) {
     val density = LocalDensity.current

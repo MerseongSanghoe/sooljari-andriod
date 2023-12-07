@@ -94,7 +94,10 @@ class AlcoholRepository {
     suspend fun getAlcoholsByTag(tag: String): SearchedByTagAlcoholResults {
         val url = "$BASE_URL/tag/bytag/"
         val query = URLEncoder.encode(tag, "UTF-8")
-        val results: SearchedByTagAlcoholResults = client.get("$url$query").body()
+        val response = client.get("$url$query")
+        if (response.status != HttpStatusCode.OK)
+            Log.d("http", response.toString());
+        val results: SearchedByTagAlcoholResults = response.body()
 
         return results
     }

@@ -4,11 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /*
-검색 결과로 반환되는 데이터
+검색 결과, 태그 검색 결과로 반환되는 데이터
  */
 @Serializable
 data class Alcohol(
     val id: Long? = null,
+    val score: Long = 0,
 
     @SerialName("title")
     val name: String? = null,
@@ -34,6 +35,7 @@ data class AlcoholResults(
 태그 검색 결과로 반환되는 데이터
  */
 @Serializable
+@Deprecated("Use Alcohol Instead")
 data class SearchedByTagAlcohol(
     val id: Long? = null,
     val weight: Int? = null,
@@ -50,51 +52,51 @@ data class SearchedByTagAlcohol(
 
 @Serializable
 data class SearchedByTagAlcoholResults(
-    val data: List<SearchedByTagAlcohol> = emptyList(),
+    val data: List<Alcohol> = emptyList(),
     val count: Int? = null
 )
 
-val testSearchedByTagAlcoholList: List<SearchedByTagAlcohol> =
+val testSearchedByTagAlcoholList: List<Alcohol> =
     listOf(
-        SearchedByTagAlcohol(
+        Alcohol(
             id = 1,
-            weight = 1,
+            score = 1,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
-            relatedTags = testTagList
+            tags = testTagTitleOnlyList
         ),
-        SearchedByTagAlcohol(
+        Alcohol(
             id = 1,
-            weight = 1,
+            score = 1,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
-            relatedTags = testTagList
+            tags = testTagTitleOnlyList
         ),
-        SearchedByTagAlcohol(
+        Alcohol(
             id = 1,
-            weight = 1,
+            score = 1,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
-            relatedTags = testTagList
+            tags = testTagTitleOnlyList
         ),
-        SearchedByTagAlcohol(
+        Alcohol(
             id = 1,
-            weight = 1,
+            score = 1,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
-            relatedTags = testTagList
+            tags = testTagTitleOnlyList
         ),
-        SearchedByTagAlcohol(
+        Alcohol(
             id = 1,
-            weight = 1,
+            score = 1,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
-            relatedTags = testTagList
+            tags = testTagTitleOnlyList
         )
     )
 
