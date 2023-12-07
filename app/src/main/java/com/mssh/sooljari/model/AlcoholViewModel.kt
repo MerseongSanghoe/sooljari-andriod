@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +22,10 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     val alcoholInfo: StateFlow<AlcoholInfo?> = _alcoholInfo
 
     //태그로 가져온 술 리스트
-    private val _alcoholListByTag = MutableStateFlow<SearchedByTagAlcoholResults?>(null)
-    val alcoholListByTag: StateFlow<SearchedByTagAlcoholResults?> = _alcoholListByTag
+    private val _alcoholListByTag = MutableStateFlow<MutableMap<String, SearchedByTagAlcoholResults?>>(
+        mutableMapOf()
+    )
+    val alcoholListByTag: StateFlow<MutableMap<String, SearchedByTagAlcoholResults?>> = _alcoholListByTag
 
     //자동완성 키워드 리스트
     private val _keywordList = MutableStateFlow<List<String>?>(emptyList())
@@ -122,10 +125,14 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     태그 관련 함수들
      */
 
-    fun getAlcoholsByTag(tag: String) {
-        viewModelScope.launch {
-            _alcoholListByTag.value = null
-            _alcoholListByTag.value = repository.getAlcoholsByTag(tag)
+    fun getAlcoholsByTags(tags: List<String>) {
+        viewModelScope.async {
+            val newList = mutableMapOf<String, SearchedByTagAlcoholResults?>()
+            for (tag in tags) {
+                newList[tag] = null
+                newList[tag] = repository.getAlcoholsByTag(tag)
+            }
+            _alcoholListByTag.emit(newList);
         }
     }
 

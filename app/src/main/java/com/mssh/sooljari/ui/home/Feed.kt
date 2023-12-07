@@ -15,6 +15,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.Alcohol
 import com.mssh.sooljari.model.AlcoholRepository
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.model.testImageList
@@ -27,11 +28,11 @@ fun Feed(
     viewModel: AlcoholViewModel,
     onVerticalCardClick: (Long) -> Unit
 ) {
-    val tag = "와인"
+    val tags = listOf("와인", "막걸리", "신맛")
     val alcoholList = viewModel.alcoholListByTag.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getAlcoholsByTag(tag)
+        viewModel.getAlcoholsByTags(tags)
     }
 
     Column(
@@ -54,17 +55,13 @@ fun Feed(
                 .wrapContentHeight(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            VerticalCardContainer(
-                headerTitle = "요즘 인기있는 #$tag",
-                alcoholList = alcoholList.value?.data ?: emptyList(),
-                onCardClick = onVerticalCardClick
-            )
-
-            VerticalCardContainer(
-                headerTitle = "요즘 인기있는 #$tag",
-                alcoholList = alcoholList.value?.data ?: emptyList(),
-                onCardClick = onVerticalCardClick
-            )
+            for (tag in tags) {
+                VerticalCardContainer(
+                    headerTitle = "요즘 인기있는 #$tag",
+                    alcoholList = alcoholList.value[tag]?.data ?: emptyList(),
+                    onCardClick = onVerticalCardClick
+                )
+            }
         }
     }
 }
