@@ -94,7 +94,7 @@ fun VerticalCardContainer(
         ) {
             itemsIndexed(alcoholList) { index, alcohol ->
                 VerticalCard(
-                    modifier = Modifier
+                    Modifier = Modifier
                         .wrapContentHeight(),
                     alcohol = alcohol,
                     onCardClick = onCardClick
