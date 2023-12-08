@@ -45,6 +45,7 @@ fun SoolJariApp() {
 object SoolJariDestinations {
     const val HOME_ROUTE = "home"
     const val SEARCH_ROUTE = "search"
+    const val SEARCH_WITH_QUERY_ROUTE = "search/{query}"
     const val ALCOHOL_DETAIL_ROUTE = "alcoholDetail/{alcoholId}"
 }
 
@@ -81,12 +82,50 @@ private fun NavGraphBuilder.sooljariGraph(
                     launchSingleTop = true
                     restoreState = true
                 }
+            },
+            onNavigateToSearchByQuery = { query ->
+                navController.navigate("search/$query") {
+                    popUpTo(SoolJariDestinations.HOME_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
         )
     }
 
     composable(SoolJariDestinations.SEARCH_ROUTE) {
         SearchView(
+            initialQuery = "",
+            onNavigateToHome = {
+                navController.navigate(SoolJariDestinations.HOME_ROUTE) {
+                    popUpTo(SoolJariDestinations.SEARCH_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                }
+            },
+            onResultCardClick = { alcoholId ->
+                navController.navigate("alcoholDetail/$alcoholId") {
+                    popUpTo(SoolJariDestinations.SEARCH_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            viewModel = viewModel
+        )
+    }
+
+    composable(
+        route = SoolJariDestinations.SEARCH_WITH_QUERY_ROUTE,
+        arguments = listOf(navArgument("query") { type = NavType.StringType })
+    ) {backStackEntry ->
+        val query = backStackEntry.arguments?.getString("query") ?: ""
+        SearchView(
+            initialQuery = query,
             onNavigateToHome = {
                 navController.navigate(SoolJariDestinations.HOME_ROUTE) {
                     popUpTo(SoolJariDestinations.SEARCH_ROUTE) {

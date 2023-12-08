@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,7 @@ import com.mssh.sooljari.model.testSearchedByTagAlcoholList
 @Composable
 fun CardListContainerHeader(
     headerTitle: String,
+    onMoreButtonClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -51,7 +54,9 @@ fun CardListContainerHeader(
         Text(
             text = "+ 더보기",
             modifier = Modifier
-                .clickable { },
+                .clickable(
+                    onClick = onMoreButtonClick
+                ),
             color = colorResource(id = R.color.purple3),
             fontSize = 14.sp,
         )
@@ -62,7 +67,8 @@ fun CardListContainerHeader(
 fun VerticalCardContainer(
     headerTitle: String,
     alcoholList: List<Alcohol> = emptyList(),
-    onCardClick: (Long) -> Unit
+    onCardClick: (Long) -> Unit,
+    onMoreButtonClick: () -> Unit,
 ) {
     val density = LocalDensity.current
     val cardHeight = remember { mutableStateOf(0.dp) }
@@ -79,7 +85,8 @@ fun VerticalCardContainer(
     ) {
         //헤더
         CardListContainerHeader(
-            headerTitle = headerTitle
+            headerTitle = headerTitle,
+            onMoreButtonClick = onMoreButtonClick
         )
 
         //카드 리스트
@@ -123,7 +130,8 @@ fun VerticalCardContainer(
 @Composable
 private fun CardListContainerHeaderPreview() {
     CardListContainerHeader(
-        headerTitle = "오늘의 추천"
+        headerTitle = "오늘의 추천",
+        onMoreButtonClick = {}
     )
 }
 
@@ -133,6 +141,7 @@ private fun VerticalCardContainerPreview() {
     VerticalCardContainer(
         headerTitle = "오늘의 추천",
         alcoholList = testSearchedByTagAlcoholList,
-        onCardClick = {}
+        onCardClick = {},
+        onMoreButtonClick = {}
     )
 }

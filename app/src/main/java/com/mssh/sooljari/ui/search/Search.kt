@@ -51,7 +51,8 @@ import com.mssh.sooljari.ui.components.TransparentIconButton
 fun SearchView(
     onNavigateToHome: () -> Unit,
     onResultCardClick: (Long) -> Unit,
-    viewModel: AlcoholViewModel
+    viewModel: AlcoholViewModel,
+    initialQuery: String = "",
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -59,6 +60,12 @@ fun SearchView(
     var query by rememberSaveable { mutableStateOf("") }
 
     val isSearching = remember { mutableStateOf(false) }
+
+    if (!initialQuery.isNullOrEmpty()) {
+        query = initialQuery
+        viewModel.initialLoad(initialQuery)
+        focusManager.clearFocus()
+    }
 
     val alcoholList by viewModel.alcoholList.collectAsState()
 

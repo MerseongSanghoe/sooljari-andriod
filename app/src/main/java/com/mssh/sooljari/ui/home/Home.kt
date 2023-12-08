@@ -24,7 +24,8 @@ import com.mssh.sooljari.ui.home.navigation.NavigationBar
 fun HomeView(
     onNavigateToSearch: () -> Unit,
     viewModel: AlcoholViewModel,
-    onVerticalCardClick: (Long) -> Unit
+    onVerticalCardClick: (Long) -> Unit,
+    onNavigateToSearchByQuery: (String) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -46,7 +47,8 @@ fun HomeView(
                 modifier = Modifier
                     .weight(1f),
                 viewModel = viewModel,
-                onVerticalCardClick = onVerticalCardClick
+                onVerticalCardClick = onVerticalCardClick,
+                onNavigateToSearchByQuery = onNavigateToSearchByQuery,
             )
         }
     }
@@ -75,6 +77,7 @@ fun HomePreview() {
     HomeView(
         onNavigateToSearch = {},
         viewModel = AlcoholViewModel(AlcoholRepository()),
-        onVerticalCardClick = {}
+        onVerticalCardClick = {},
+        onNavigateToSearchByQuery = {}
     )
 }
