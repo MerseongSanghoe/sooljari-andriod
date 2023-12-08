@@ -1,6 +1,7 @@
 package com.mssh.sooljari.ui.search
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,10 +28,12 @@ import com.mssh.sooljari.ui.components.TransparentIconButton
 import com.mssh.sooljari.ui.components.defaultTagChip
 import com.mssh.sooljari.ui.components.lightTagChip
 import com.mssh.sooljari.ui.components.testTags
+import com.mssh.sooljari.ui.components.testTagsRecommand
 
 @Composable
 fun SearchSuggestions(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickTag: (String) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -41,17 +44,24 @@ fun SearchSuggestions(
             .padding(horizontal = 12.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        SearchHistory()
+        SearchHistory(
+            onClickTag = onClickTag
+        )
 
-        PopularTags()
+        PopularTags(
+            onClickTag = onClickTag
+        )
 
-        TagRanking()
+        TagRanking(
+            onClickTag = onClickTag
+        )
     }
 }
 
 @Composable
 private fun SearchHistory(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickTag: (String) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -74,7 +84,7 @@ private fun SearchHistory(
             )
 
             TransparentIconButton(
-                onClick = { /*TODO*/ },
+                onClick = {  },
                 icon = painterResource(id = R.drawable.ic_more),
                 buttonSize = 24.dp,
                 iconSize = 22.dp
@@ -84,14 +94,16 @@ private fun SearchHistory(
         TagListLazyRows(
             tagStringList = testTags,
             chip = lightTagChip,
-            paddingBetweenChips = 8.dp
+            paddingBetweenChips = 8.dp,
+            onClickChip = onClickTag
         )
     }
 }
 
 @Composable
 private fun PopularTags(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickTag: (String) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -106,11 +118,12 @@ private fun PopularTags(
         )
 
         TagListLazyRows(
-            tagStringList = testTags,
+            tagStringList = testTagsRecommand,
             chip = defaultTagChip,
             paddingBetweenChips = 8.dp,
             rowNum = 3,
             paddingBetweenRows = 12.dp,
+            onClickChip = onClickTag
         )
     }
 }
@@ -118,7 +131,8 @@ private fun PopularTags(
 @Composable
 private fun TagRanking(
     modifier: Modifier = Modifier,
-    tagList: List<String> = testTags
+    tagList: List<String> = testTags,
+    onClickTag: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -154,7 +168,8 @@ private fun TagRanking(
                             append("\t\t")
                             append(tagList[index])
                         },
-                        fontSize = 14.sp
+                        modifier = Modifier.clickable(onClick = {onClickTag(tagList[index])}),
+                        fontSize = 14.sp,
                     )
                 }
             }
@@ -175,6 +190,7 @@ private fun TagRanking(
                             append("\t\t")
                             append(tagList[index])
                         },
+                        modifier = Modifier.clickable(onClick = {onClickTag(tagList[index])}),
                         fontSize = 14.sp
                     )
                 }
@@ -186,5 +202,5 @@ private fun TagRanking(
 @Preview
 @Composable
 private fun SearchSuggestionsPreview() {
-    SearchSuggestions(Modifier.fillMaxSize())
+    SearchSuggestions(Modifier.fillMaxSize(), onClickTag = {})
 }

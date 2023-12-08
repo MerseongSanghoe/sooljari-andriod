@@ -99,7 +99,14 @@ fun SearchView(
         when {
             //검색어 입력 안했을 때
             query.isEmpty() && alcoholList.isNullOrEmpty() -> {
-                SearchSuggestions(modifier = Modifier.padding(paddingValues))
+                SearchSuggestions(
+                    modifier = Modifier.padding(paddingValues),
+                    onClickTag = {
+                        query = it
+                        viewModel.initialLoad(query)
+                        focusManager.clearFocus()
+                    }
+                )
             }
 
             //검색중 일 때
@@ -117,6 +124,7 @@ fun SearchView(
                     }
                 )
             }
+
             //위의 모든 상황이 해당되지 않으면 검색 결과 화면 표시
             else -> {
                 SearchResults(

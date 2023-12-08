@@ -3,6 +3,7 @@ package com.mssh.sooljari.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -64,7 +65,8 @@ val textTagChip: Chip =
 
 @Composable
 fun TextTagChip(
-    tagString: String
+    tagString: String,
+    onClick: () -> Unit = {}
 ) {
     Text(
         text = tagString,
@@ -75,6 +77,9 @@ fun TextTagChip(
             )
             .padding(
                 horizontal = textTagChip.horizontalPadding,
+            )
+            .clickable(
+                onClick = onClick
             ),
         fontSize = textTagChip.fontSize
     )
@@ -82,7 +87,8 @@ fun TextTagChip(
 
 @Composable
 fun RandomBackgroundTagChip(
-    tagString: String
+    tagString: String,
+    onClick: () -> Unit = {}
 ) {
     val random = Random.nextInt(0, 8)
 
@@ -112,6 +118,9 @@ fun RandomBackgroundTagChip(
             .padding(
                 horizontal = randomBackgroundChip.horizontalPadding,
                 vertical = 2.dp
+            )
+            .clickable(
+                onClick = onClick
             ),
         color = textColor,
         fontSize = randomBackgroundChip.fontSize
@@ -120,7 +129,8 @@ fun RandomBackgroundTagChip(
 
 @Composable
 fun LightTagChip(
-    tagString: String
+    tagString: String,
+    onClick: () -> Unit = {}
 ) {
     Text(
         text = tagString,
@@ -140,6 +150,9 @@ fun LightTagChip(
             .padding(
                 horizontal = lightTagChip.horizontalPadding,
                 vertical = 2.dp
+            )
+            .clickable(
+                onClick = onClick
             ),
         fontSize = lightTagChip.fontSize
     )
@@ -147,7 +160,8 @@ fun LightTagChip(
 
 @Composable
 fun DefaultTagChip(
-    tagString: String
+    tagString: String,
+    onClick: () -> Unit = {}
 ) {
     Text(
         text = tagString,
@@ -167,6 +181,9 @@ fun DefaultTagChip(
             .padding(
                 horizontal = defaultTagChip.horizontalPadding,
                 vertical = 2.dp
+            )
+            .clickable(
+                onClick = onClick
             ),
         fontSize = defaultTagChip.fontSize
     )
@@ -174,7 +191,8 @@ fun DefaultTagChip(
 
 @Composable
 fun SearchBarTagChip(
-    tagString: String = stringResource(id = R.string.tag_short)
+    tagString: String = stringResource(id = R.string.tag_short),
+    onClick: () -> Unit = {}
 ) {
     val chipShape: Shape = CircleShape
 
@@ -196,6 +214,9 @@ fun SearchBarTagChip(
             .padding(
                 horizontal = searchBarTagChip.horizontalPadding,
                 vertical = 4.dp
+            )
+            .clickable(
+                onClick = onClick
             ),
         color = colorResource(id = R.color.neutral0),
         fontSize = searchBarTagChip.fontSize,
@@ -205,7 +226,8 @@ fun SearchBarTagChip(
 @Composable
 fun ResultCardTagChip(
     tagString: String = stringResource(id = R.string.tag_short),
-    isKeyword: Boolean = false
+    isKeyword: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
     val backgroundColor =
         if (isKeyword) {
@@ -250,6 +272,7 @@ fun ResultCardTagChip(
  * @param rowNum 태그가 표시될 행의 총 갯수
  * @param paddingBetweenRows 행 사이 간격
  * @param keyword 특별히 강조해야 할 태그
+ * @param onClickChip 칩 클릭시 수행하는 동작, 모든 칩에 일괄 적용됨, parameter로 tagString을 사용
  */
 
 @Composable
@@ -260,7 +283,8 @@ fun TagListLazyRows(
     paddingBetweenChips: Dp = 0.dp,
     rowNum: Int = 1,
     paddingBetweenRows: Dp = 0.dp,
-    keyword: String = ""
+    keyword: String = "",
+    onClickChip: (String) -> Unit = {},
 ) {
     val density = LocalDensity.current
     val rowWidth = remember { mutableStateOf(0.dp) }
@@ -308,7 +332,12 @@ fun TagListLazyRows(
                 horizontalArrangement = Arrangement.spacedBy(paddingBetweenChips)
             ) {
                 tagListRow.forEach { tag ->
-                    AddChip(chipType = chip.chipType, tagString = tag, keyword = keyword)
+                    AddChip(
+                        chipType = chip.chipType,
+                        tagString = tag,
+                        keyword = keyword,
+                        onClick = { onClickChip(tag) }
+                    )
                 }
             }
 
@@ -327,33 +356,34 @@ fun TagListLazyRows(
 private fun AddChip(
     chipType: Chips,
     tagString: String,
-    keyword: String
+    keyword: String,
+    onClick: () -> Unit = {},
 ) {
     return when (chipType) {
         Chips.SEARCH_BAR_TAG -> {
-            SearchBarTagChip(tagString)
+            SearchBarTagChip(tagString, onClick)
         }
 
         Chips.RESULT_CARD_TAG -> {
             if (tagString == keyword) {
-                ResultCardTagChip(tagString, true)
-            } else ResultCardTagChip(tagString, false)
+                ResultCardTagChip(tagString, true, onClick)
+            } else ResultCardTagChip(tagString, false, onClick)
         }
 
         Chips.DEFAULT_TAG -> {
-            DefaultTagChip(tagString)
+            DefaultTagChip(tagString, onClick)
         }
 
         Chips.LIGHT_TAG -> {
-            LightTagChip(tagString)
+            LightTagChip(tagString, onClick)
         }
 
         Chips.RANDOM_BACKGROUND_TAG -> {
-            RandomBackgroundTagChip(tagString)
+            RandomBackgroundTagChip(tagString, onClick)
         }
 
         Chips.TEXT_TAG -> {
-            TextTagChip(tagString)
+            TextTagChip(tagString, onClick)
         }
     }
 }
@@ -372,6 +402,20 @@ val testTags: List<String> =
         "채밤비",
         "도은호",
         "유하민"
+    )
+
+val testTagsRecommand: List<String> =
+    listOf(
+        "와인",
+        "막걸리",
+        "오미자",
+        "탁주",
+        "단맛",
+        "신맛",
+        "약주",
+        "생막걸리",
+        "떠먹는막걸리",
+        "이화주"
     )
 
 @Preview(showBackground = true, backgroundColor = 0xF0FFFFFF)
