@@ -29,13 +29,15 @@ import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.searchBarTagChip
 import com.mssh.sooljari.ui.components.testTags
+import com.mssh.sooljari.ui.components.testTagsRecommand
 import com.mssh.sooljari.ui.theme.SoolJariTheme
 import com.mssh.sooljari.ui.theme.logoFont
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun TopAppBar(
-    onNavigateToSearch: () -> Unit
+    onNavigateToSearch: () -> Unit = {},
+    onNavigateToSearchWithQuery: (String) -> Unit = {}
 ) {
     val statusBarPadding = WindowInsets.statusBars.asPaddingValues()
 
@@ -86,13 +88,14 @@ fun TopAppBar(
                     .height(12.dp)
             )
 
-            val tagList = addHash(testTags)
+            val tagList = addHash(testTagsRecommand)
 
             TagListLazyRows(
                 tagStringList = tagList,
                 chip = searchBarTagChip,
                 paddingBetweenChips = 8.dp,
-                rowNum = 1
+                rowNum = 1,
+                onClickChip = onNavigateToSearchWithQuery
             )
         }
     }

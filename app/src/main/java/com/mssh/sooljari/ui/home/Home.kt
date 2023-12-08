@@ -29,7 +29,10 @@ fun HomeView(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(onNavigateToSearch)
+            TopAppBar(
+                onNavigateToSearch,
+                onNavigateToSearchByQuery
+            )
         },
         bottomBar = {
             NavigationBar(
