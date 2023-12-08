@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Alcohol(
     val id: Long? = null,
-    val score: Long = 0,
+    val score: Float = 0f,
 
     @SerialName("title")
     val name: String? = null,
@@ -60,7 +60,7 @@ val testSearchedByTagAlcoholList: List<Alcohol> =
     listOf(
         Alcohol(
             id = 1,
-            score = 1,
+            score = 1f,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
@@ -68,7 +68,7 @@ val testSearchedByTagAlcoholList: List<Alcohol> =
         ),
         Alcohol(
             id = 1,
-            score = 1,
+            score = 1f,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
@@ -76,7 +76,7 @@ val testSearchedByTagAlcoholList: List<Alcohol> =
         ),
         Alcohol(
             id = 1,
-            score = 1,
+            score = 1f,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
@@ -84,7 +84,7 @@ val testSearchedByTagAlcoholList: List<Alcohol> =
         ),
         Alcohol(
             id = 1,
-            score = 1,
+            score = 1f,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
@@ -92,7 +92,7 @@ val testSearchedByTagAlcoholList: List<Alcohol> =
         ),
         Alcohol(
             id = 1,
-            score = 1,
+            score = 1f,
             name = "술이름",
             degree = 15.0f,
             category = "소주",
