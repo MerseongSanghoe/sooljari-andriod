@@ -23,4 +23,7 @@
     <color name="neutral3">#787878</color>
     <color name="neutral4">#313131</color>
     <color name="neutral5_alpha25">#40000000</color>
+    <color name="orange_0">#FF9D6F</color>
+    <color name="orange_5">#A53500</color>
+    <color name="orange_6">#2C0E00</color>
 </resources>
