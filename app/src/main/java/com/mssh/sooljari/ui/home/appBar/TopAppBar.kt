@@ -1,6 +1,5 @@
 package com.mssh.sooljari.ui.home.appBar
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,8 +26,7 @@ import com.mssh.sooljari.R
 import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.searchBarTagChip
-import com.mssh.sooljari.ui.components.testTags
-import com.mssh.sooljari.ui.components.testTagsRecommand
+import com.mssh.sooljari.ui.components.testTagsRecommend
 import com.mssh.sooljari.ui.theme.SoolJariTheme
 import com.mssh.sooljari.ui.theme.logoFont
 
@@ -88,7 +85,7 @@ fun TopAppBar(
                     .height(12.dp)
             )
 
-            val tagList = addHash(testTagsRecommand)
+            val tagList = addHash(testTagsRecommend)
 
             TagListLazyRows(
                 tagStringList = tagList,

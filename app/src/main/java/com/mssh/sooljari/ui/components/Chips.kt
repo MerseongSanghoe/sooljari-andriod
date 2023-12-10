@@ -407,7 +407,7 @@ val testTags: List<String> =
         "유하민"
     )
 
-val testTagsRecommand: List<String> =
+val testTagsRecommend: List<String> =
     listOf(
         "와인",
         "막걸리",
