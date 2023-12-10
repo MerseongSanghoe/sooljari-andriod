@@ -1,18 +1,26 @@
 package com.mssh.sooljari.model
 
+import android.app.Application
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json.Default.decodeFromString
+import kotlinx.serialization.json.Json.Default.encodeToString
+import java.io.IOException
 
-class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() {
+class AlcoholViewModel(private val repository: AlcoholRepository, private val application: Application) : AndroidViewModel(application) {
     //검색 결과 리스트
     private val _alcoholList = MutableStateFlow<List<Alcohol>?>(emptyList())
     val alcoholList: StateFlow<List<Alcohol>?> = _alcoholList.asStateFlow()
@@ -39,6 +47,10 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
 
     //검색화면 사용자 인풋 플로우
     private val userInputFlow = MutableStateFlow("")
+    
+    // 검색기록
+    private val _searchHistoryList = MutableStateFlow<List<String>>(emptyList())
+    val searchHistoryList: StateFlow<List<String>> = _searchHistoryList
 
     /*
      검색 관련 함수들
@@ -58,12 +70,50 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
 
         _isLoading.value = true
 
+        saveToHistory(keyword)
+
         viewModelScope.launch {
             val result = repository.getInitialResults(keyword)
             currentPage = result.page ?: 0
             totalAlcoholCount = result.count ?: 0
             _alcoholList.value = result.data
             _isLoading.value = false
+        }
+    }
+
+    private fun saveToHistory(keyword: String) {
+        val context = application.applicationContext
+        viewModelScope.launch {
+            // 1. 기존 히스토리 맨 앞에 추가
+            val newList: MutableList<String> = mutableListOf(keyword)
+            newList.addAll(_searchHistoryList.value.filter { it != keyword })
+            _searchHistoryList.emit(newList)
+            // 2. json으로 변환
+            val jsonString = encodeToString(ListSerializer(String.serializer()), newList.toList())
+            // 3. 실제 데이터 저장
+            context.openFileOutput("history.json", Context.MODE_PRIVATE).use { stream ->
+                stream.write(jsonString.toByteArray())
+            }
+        }
+    }
+
+    private fun loadHistory() {
+        val context = application.applicationContext
+        viewModelScope.launch {
+            // 1. 실제 데이터 가져오기
+            var jsonString = "[]"
+            try {
+                context.openFileInput("history.json").bufferedReader().useLines { lines ->
+                    jsonString = lines.joinToString("")
+                }
+            } catch (e: IOException) {
+                Log.d("history", "No history.json file detected")
+            }
+            // 2. json to object
+            val loadedList = decodeFromString<MutableList<String>>(jsonString)
+            // 3. 검증 후 mutablestateflow emit
+            if (loadedList.isNotEmpty())
+                _searchHistoryList.emit((loadedList))
         }
     }
 
@@ -105,6 +155,8 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         viewModelScope.launch {
             repository.login(id, pw)
         }
+
+        loadHistory()
     }
 
     /*
@@ -126,7 +178,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
      */
 
     fun getAlcoholsByTags(tags: List<String>) {
-        viewModelScope.async {
+        viewModelScope.launch {
             val newList = mutableMapOf<String, SearchedByTagAlcoholResults?>()
             for (tag in tags) {
                 newList[tag] = null
@@ -162,11 +214,12 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     }
 }
 
-class AlcoholViewModelFactory(private val alcoholRepository: AlcoholRepository) :
+class AlcoholViewModelFactory(private val alcoholRepository: AlcoholRepository, private val application: Application) :
     ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(AlcoholViewModel::class.java)) {
-            AlcoholViewModel(alcoholRepository) as T
+            AlcoholViewModel(alcoholRepository, application) as T
         } else {
             throw IllegalArgumentException()
         }

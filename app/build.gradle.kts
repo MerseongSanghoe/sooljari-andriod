@@ -90,4 +90,7 @@ dependencies {
 
     //이미지 로딩용
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
+    // json convert
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }

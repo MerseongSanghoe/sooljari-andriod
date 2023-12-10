@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.search
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -190,7 +191,7 @@ private fun SearchResultsPreview() {
     SearchResults(
         modifier = Modifier
             .fillMaxSize(),
-        viewModel = AlcoholViewModel(AlcoholRepository()),
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
         query = "한노아",
         isLoading = true,
         results = emptyList(),

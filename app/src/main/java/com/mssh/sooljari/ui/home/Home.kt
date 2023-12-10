@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.home
 
+import android.app.Application
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -79,7 +80,7 @@ fun NavGraphBuilder.homeGraph(
 fun HomePreview() {
     HomeView(
         onNavigateToSearch = {},
-        viewModel = AlcoholViewModel(AlcoholRepository()),
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
         onVerticalCardClick = {},
         onNavigateToSearchByQuery = {}
     )

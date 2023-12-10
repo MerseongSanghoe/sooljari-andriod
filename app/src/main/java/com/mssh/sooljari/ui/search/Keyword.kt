@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.search
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -116,7 +117,7 @@ private fun QueryHighlightedText(
 private fun KeywordsPreview() {
     SearchKeywords(
         modifier = Modifier.fillMaxSize(),
-        viewModel = AlcoholViewModel(AlcoholRepository()),
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
         query = "검색어",
         onKeywordClick = {}
     )

@@ -106,6 +106,7 @@ fun SearchView(
             //검색어 입력 안했을 때
             query.isEmpty() && alcoholList.isNullOrEmpty() -> {
                 SearchSuggestions(
+                    viewModel = viewModel,
                     modifier = Modifier.padding(paddingValues),
                     onClickTag = {
                         query = it

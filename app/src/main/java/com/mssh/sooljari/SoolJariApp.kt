@@ -1,7 +1,9 @@
 package com.mssh.sooljari
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -22,10 +24,10 @@ import com.mssh.sooljari.ui.search.SearchView
 import com.mssh.sooljari.ui.theme.SoolJariTheme
 
 @Composable
-fun SoolJariApp() {
+fun SoolJariApp(application: Application) {
     SoolJariTheme {
         val viewModel: AlcoholViewModel =
-            viewModel(factory = AlcoholViewModelFactory(AlcoholRepository()))
+            viewModel(factory = AlcoholViewModelFactory(AlcoholRepository(), application))
         viewModel.login("testandroid", "catdog09321")
 
         val sooljariNavController = rememberNavController()

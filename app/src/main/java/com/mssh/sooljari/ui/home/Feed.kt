@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.home
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -75,7 +76,7 @@ fun Feed(
 fun FeedPreview() {
     Feed(
         modifier = Modifier,
-        viewModel = AlcoholViewModel(AlcoholRepository()),
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
         onVerticalCardClick = {},
         onNavigateToSearchByQuery = {}
     )
