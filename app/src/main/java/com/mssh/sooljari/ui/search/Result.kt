@@ -88,10 +88,10 @@ private fun SearchResults(
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .distinctUntilChanged()
             .collect { lastIndex ->
-                if (lastIndex != null) {
+                if (lastIndex != null && viewModel.canLoadMore) {
                     val totalItemCount = listState.layoutInfo.totalItemsCount
 
-                    if (lastIndex == totalItemCount - 1) {
+                    if (lastIndex >= totalItemCount - 3) {
                         viewModel.loadMoreList(query)
                     }
                 }

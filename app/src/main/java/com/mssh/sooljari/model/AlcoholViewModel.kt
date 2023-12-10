@@ -44,6 +44,8 @@ class AlcoholViewModel(private val repository: AlcoholRepository, private val ap
     private var totalAlcoholCount = 0
     private var _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    val canLoadMore: Boolean
+        get() = canLoadMore()
 
     //검색화면 사용자 인풋 플로우
     private val userInputFlow = MutableStateFlow("")
@@ -135,7 +137,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository, private val ap
     }
 
     private fun canLoadMore(): Boolean {
-        return (_alcoholList.value?.size!! - 1) < totalAlcoholCount
+        return _alcoholList.value?.size!! < totalAlcoholCount
     }
 
     fun resetSearchResult() {
