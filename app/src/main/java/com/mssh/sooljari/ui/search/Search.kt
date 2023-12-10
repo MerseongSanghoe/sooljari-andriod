@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -51,7 +52,8 @@ import com.mssh.sooljari.ui.components.TransparentIconButton
 fun SearchView(
     onNavigateToHome: () -> Unit,
     onResultCardClick: (Long) -> Unit,
-    viewModel: AlcoholViewModel
+    viewModel: AlcoholViewModel,
+    initialQuery: String = "",
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -60,6 +62,12 @@ fun SearchView(
     var query by rememberSaveable { mutableStateOf("") }
 
     val isSearching = remember { mutableStateOf(false) }
+
+    if (!initialQuery.isNullOrEmpty()) {
+        query = initialQuery
+        viewModel.initialLoad(initialQuery)
+        focusManager.clearFocus()
+    }
 
     val alcoholList by viewModel.alcoholList.collectAsState()
 
@@ -73,6 +81,11 @@ fun SearchView(
 
                     //뷰모델에 사용자 입력 업데이트
                     viewModel.updateUserInput(it)
+                },
+                onTextReset = {
+                    query = ""
+                    isSearching.value = false
+                    viewModel.resetSearchResult()
                 },
                 onNavigateToHome = onNavigateToHome,
                 onSearchButtonClick = {
@@ -93,7 +106,15 @@ fun SearchView(
         when {
             //검색어 입력 안했을 때
             query.isEmpty() && alcoholList.isNullOrEmpty() -> {
-                SearchSuggestions(modifier = Modifier.padding(paddingValues))
+                SearchSuggestions(
+                    viewModel = viewModel,
+                    modifier = Modifier.padding(paddingValues),
+                    onClickTag = {
+                        query = it
+                        viewModel.initialLoad(query)
+                        focusManager.clearFocus()
+                    }
+                )
             }
 
             //검색중 일 때
@@ -111,6 +132,7 @@ fun SearchView(
                     }
                 )
             }
+
             //위의 모든 상황이 해당되지 않으면 검색 결과 화면 표시
             else -> {
                 SearchResults(
@@ -132,6 +154,7 @@ fun SearchView(
 private fun SearchAppBar(
     query: String,
     onTextChanged: (String) -> Unit,
+    onTextReset: () -> Unit = {},
     onNavigateToHome: () -> Unit,
     onSearchButtonClick: () -> Unit,
     onKeyboardSearch: KeyboardActionScope.() -> Unit,
@@ -170,10 +193,11 @@ private fun SearchAppBar(
             )
 
             SearchTextField(
-                text = query,
-                onTextChanged = onTextChanged,
                 modifier = Modifier
                     .weight(1f),
+                text = query,
+                onTextChanged = onTextChanged,
+                onTextReseted = onTextReset,
                 onKeyboardSearch = onKeyboardSearch,
                 focusRequester = focusRequester
             )
@@ -194,6 +218,7 @@ private fun SearchAppBar(
 private fun SearchTextField(
     text: String,
     onTextChanged: (String) -> Unit,
+    onTextReseted: () -> Unit = {},
     modifier: Modifier = Modifier,
     onKeyboardSearch: KeyboardActionScope.() -> Unit,
     focusRequester: FocusRequester
@@ -209,34 +234,57 @@ private fun SearchTextField(
             onSearch = onKeyboardSearch
         ),
         singleLine = true,
-        cursorBrush = SolidColor(colorResource(id = R.color.black)),
-        decorationBox = { innerTextField ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+        cursorBrush = SolidColor(colorResource(id = R.color.black))
+    ) { innerTextField ->
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .fillMaxHeight()
+                .background(
+                    color = colorResource(id = R.color.neutral0_alpha65),
+                    shape = RoundedCornerShape(3.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = colorResource(id = R.color.neutral0),
+                    shape = RoundedCornerShape(3.dp)
+                )
+                .padding(horizontal = 8.dp)
+        ) {
+            innerTextField()
+        }
+
+        //리셋 버튼
+        if (text.isNotEmpty()) {
+            Column(
                 modifier = modifier
-                    .fillMaxHeight()
-                    .background(
-                        color = colorResource(id = R.color.neutral0_alpha65),
-                        shape = RoundedCornerShape(3.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = colorResource(id = R.color.neutral0),
-                        shape = RoundedCornerShape(3.dp)
-                    )
-                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth(),
             ) {
-                innerTextField()
+                TransparentIconButton(
+                    modifier = Modifier.align(Alignment.End).padding(end = 3.dp),
+                    onClick = onTextReseted,
+                    icon = painterResource(R.drawable.ic_x),
+                    iconColor = colorResource(R.color.neutral0),
+                    buttonSize = 32.dp,
+                    iconSize = 20.dp
+                )
             }
         }
-    )
+    }
 }
 
 @Preview(heightDp = 48)
 @Composable
 private fun SearchAppBarPreview() {
     val home: () -> Unit = {}
-    SearchAppBar("", {}, home, home, {}, FocusRequester())
+    SearchAppBar("", {}, {}, home, home, {}, FocusRequester())
+}
+
+@Preview(heightDp = 48)
+@Composable
+private fun SearchAppBarPreview2() {
+    val home: () -> Unit = {}
+    SearchAppBar("hello search", {}, {}, home, home, {}, FocusRequester())
 }
 
 /*

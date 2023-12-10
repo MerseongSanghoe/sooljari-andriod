@@ -1,6 +1,8 @@
 package com.mssh.sooljari.ui.search
 
+import android.app.Application
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -22,16 +25,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
+import com.mssh.sooljari.model.AlcoholRepository
+import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.TransparentIconButton
 import com.mssh.sooljari.ui.components.defaultTagChip
 import com.mssh.sooljari.ui.components.lightTagChip
 import com.mssh.sooljari.ui.components.testTags
+import com.mssh.sooljari.ui.components.testTagsRecommand
 
 @Composable
 fun SearchSuggestions(
-    modifier: Modifier = Modifier
+    viewModel: AlcoholViewModel,
+    modifier: Modifier = Modifier,
+    onClickTag: (String) -> Unit,
 ) {
+    val searchHistoryList = viewModel.searchHistoryList.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -41,17 +51,26 @@ fun SearchSuggestions(
             .padding(horizontal = 12.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        SearchHistory()
+        SearchHistory(
+            tagList = searchHistoryList.value,
+            onClickTag = onClickTag
+        )
 
-        PopularTags()
+        PopularTags(
+            onClickTag = onClickTag
+        )
 
-        TagRanking()
+        TagRanking(
+            onClickTag = onClickTag
+        )
     }
 }
 
 @Composable
 private fun SearchHistory(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tagList: List<String> = emptyList(),
+    onClickTag: (String) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -74,7 +93,7 @@ private fun SearchHistory(
             )
 
             TransparentIconButton(
-                onClick = { /*TODO*/ },
+                onClick = {  },
                 icon = painterResource(id = R.drawable.ic_more),
                 buttonSize = 24.dp,
                 iconSize = 22.dp
@@ -82,16 +101,18 @@ private fun SearchHistory(
         }
 
         TagListLazyRows(
-            tagStringList = testTags,
+            tagStringList = tagList,
             chip = lightTagChip,
-            paddingBetweenChips = 8.dp
+            paddingBetweenChips = 8.dp,
+            onClickChip = onClickTag
         )
     }
 }
 
 @Composable
 private fun PopularTags(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickTag: (String) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -106,11 +127,12 @@ private fun PopularTags(
         )
 
         TagListLazyRows(
-            tagStringList = testTags,
+            tagStringList = testTagsRecommand,
             chip = defaultTagChip,
             paddingBetweenChips = 8.dp,
             rowNum = 3,
             paddingBetweenRows = 12.dp,
+            onClickChip = onClickTag
         )
     }
 }
@@ -118,7 +140,8 @@ private fun PopularTags(
 @Composable
 private fun TagRanking(
     modifier: Modifier = Modifier,
-    tagList: List<String> = testTags
+    tagList: List<String> = testTags,
+    onClickTag: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -154,7 +177,8 @@ private fun TagRanking(
                             append("\t\t")
                             append(tagList[index])
                         },
-                        fontSize = 14.sp
+                        modifier = Modifier.clickable(onClick = {onClickTag(tagList[index])}),
+                        fontSize = 14.sp,
                     )
                 }
             }
@@ -175,6 +199,7 @@ private fun TagRanking(
                             append("\t\t")
                             append(tagList[index])
                         },
+                        modifier = Modifier.clickable(onClick = {onClickTag(tagList[index])}),
                         fontSize = 14.sp
                     )
                 }
@@ -186,5 +211,9 @@ private fun TagRanking(
 @Preview
 @Composable
 private fun SearchSuggestionsPreview() {
-    SearchSuggestions(Modifier.fillMaxSize())
+    SearchSuggestions(
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
+        modifier = Modifier.fillMaxSize(),
+        onClickTag = {}
+    )
 }

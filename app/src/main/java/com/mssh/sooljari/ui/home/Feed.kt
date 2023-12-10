@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.home
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mssh.sooljari.R
-import com.mssh.sooljari.model.Alcohol
 import com.mssh.sooljari.model.AlcoholRepository
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.model.testImageList
@@ -26,7 +26,8 @@ import com.mssh.sooljari.ui.components.VerticalCardContainer
 fun Feed(
     modifier: Modifier = Modifier,
     viewModel: AlcoholViewModel,
-    onVerticalCardClick: (Long) -> Unit
+    onVerticalCardClick: (Long) -> Unit,
+    onNavigateToSearchByQuery: (String) -> Unit
 ) {
     val tags = listOf("와인", "막걸리", "신맛")
     val alcoholList = viewModel.alcoholListByTag.collectAsState()
@@ -56,10 +57,12 @@ fun Feed(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             for (tag in tags) {
+                val clickFunc: () -> Unit = { onNavigateToSearchByQuery("#$tag") }
                 VerticalCardContainer(
                     headerTitle = "요즘 인기있는 #$tag",
                     alcoholList = alcoholList.value[tag]?.data ?: emptyList(),
-                    onCardClick = onVerticalCardClick
+                    onCardClick = onVerticalCardClick,
+                    onMoreButtonClick = clickFunc
                 )
             }
         }
@@ -73,7 +76,8 @@ fun Feed(
 fun FeedPreview() {
     Feed(
         modifier = Modifier,
-        viewModel = AlcoholViewModel(AlcoholRepository()),
-        onVerticalCardClick = {}
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
+        onVerticalCardClick = {},
+        onNavigateToSearchByQuery = {}
     )
 }

@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.home
 
+import android.app.Application
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -24,11 +25,15 @@ import com.mssh.sooljari.ui.home.navigation.NavigationBar
 fun HomeView(
     onNavigateToSearch: () -> Unit,
     viewModel: AlcoholViewModel,
-    onVerticalCardClick: (Long) -> Unit
+    onVerticalCardClick: (Long) -> Unit,
+    onNavigateToSearchByQuery: (String) -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(onNavigateToSearch)
+            TopAppBar(
+                onNavigateToSearch,
+                onNavigateToSearchByQuery
+            )
         },
         bottomBar = {
             NavigationBar(
@@ -46,7 +51,8 @@ fun HomeView(
                 modifier = Modifier
                     .weight(1f),
                 viewModel = viewModel,
-                onVerticalCardClick = onVerticalCardClick
+                onVerticalCardClick = onVerticalCardClick,
+                onNavigateToSearchByQuery = onNavigateToSearchByQuery,
             )
         }
     }
@@ -74,7 +80,8 @@ fun NavGraphBuilder.homeGraph(
 fun HomePreview() {
     HomeView(
         onNavigateToSearch = {},
-        viewModel = AlcoholViewModel(AlcoholRepository()),
-        onVerticalCardClick = {}
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
+        onVerticalCardClick = {},
+        onNavigateToSearchByQuery = {}
     )
 }

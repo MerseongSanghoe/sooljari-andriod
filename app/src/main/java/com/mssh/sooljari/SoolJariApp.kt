@@ -1,7 +1,9 @@
 package com.mssh.sooljari
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -22,10 +24,10 @@ import com.mssh.sooljari.ui.search.SearchView
 import com.mssh.sooljari.ui.theme.SoolJariTheme
 
 @Composable
-fun SoolJariApp() {
+fun SoolJariApp(application: Application) {
     SoolJariTheme {
         val viewModel: AlcoholViewModel =
-            viewModel(factory = AlcoholViewModelFactory(AlcoholRepository()))
+            viewModel(factory = AlcoholViewModelFactory(AlcoholRepository(), application))
         viewModel.login("testandroid", "catdog09321")
 
         val sooljariNavController = rememberNavController()
@@ -45,6 +47,7 @@ fun SoolJariApp() {
 object SoolJariDestinations {
     const val HOME_ROUTE = "home"
     const val SEARCH_ROUTE = "search"
+    const val SEARCH_WITH_QUERY_ROUTE = "search/{query}"
     const val ALCOHOL_DETAIL_ROUTE = "alcoholDetail/{alcoholId}"
 }
 
@@ -81,12 +84,50 @@ private fun NavGraphBuilder.sooljariGraph(
                     launchSingleTop = true
                     restoreState = true
                 }
+            },
+            onNavigateToSearchByQuery = { query ->
+                navController.navigate("search/$query") {
+                    popUpTo(SoolJariDestinations.HOME_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
         )
     }
 
     composable(SoolJariDestinations.SEARCH_ROUTE) {
         SearchView(
+            initialQuery = "",
+            onNavigateToHome = {
+                navController.navigate(SoolJariDestinations.HOME_ROUTE) {
+                    popUpTo(SoolJariDestinations.SEARCH_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                }
+            },
+            onResultCardClick = { alcoholId ->
+                navController.navigate("alcoholDetail/$alcoholId") {
+                    popUpTo(SoolJariDestinations.SEARCH_ROUTE) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            viewModel = viewModel
+        )
+    }
+
+    composable(
+        route = SoolJariDestinations.SEARCH_WITH_QUERY_ROUTE,
+        arguments = listOf(navArgument("query") { type = NavType.StringType })
+    ) {backStackEntry ->
+        val query = backStackEntry.arguments?.getString("query") ?: ""
+        SearchView(
+            initialQuery = query,
             onNavigateToHome = {
                 navController.navigate(SoolJariDestinations.HOME_ROUTE) {
                     popUpTo(SoolJariDestinations.SEARCH_ROUTE) {

@@ -1,5 +1,6 @@
 package com.mssh.sooljari.ui.search
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -87,10 +88,10 @@ private fun SearchResults(
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .distinctUntilChanged()
             .collect { lastIndex ->
-                if (lastIndex != null) {
+                if (lastIndex != null && viewModel.canLoadMore) {
                     val totalItemCount = listState.layoutInfo.totalItemsCount
 
-                    if (lastIndex == totalItemCount - 1) {
+                    if (lastIndex >= totalItemCount - 3) {
                         viewModel.loadMoreList()
                     }
                 }
@@ -190,7 +191,7 @@ private fun SearchResultsPreview() {
     SearchResults(
         modifier = Modifier
             .fillMaxSize(),
-        viewModel = AlcoholViewModel(AlcoholRepository()),
+        viewModel = AlcoholViewModel(AlcoholRepository(), Application()),
         query = "한노아",
         isLoading = true,
         results = emptyList(),
