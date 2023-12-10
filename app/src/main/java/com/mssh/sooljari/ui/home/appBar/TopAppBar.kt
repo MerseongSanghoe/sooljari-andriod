@@ -88,6 +88,7 @@ fun TopAppBar(
             val tagList = addHash(testTagsRecommend)
 
             TagListLazyRows(
+                modifier = Modifier.fillMaxWidth(),
                 tagStringList = tagList,
                 chip = searchBarTagChip,
                 paddingBetweenChips = 8.dp,

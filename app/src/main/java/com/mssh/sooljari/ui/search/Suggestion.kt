@@ -102,6 +102,7 @@ private fun SearchHistory(
         }
 
         TagListLazyRows(
+            modifier = modifier,
             tagStringList = tagList,
             chip = lightTagChip,
             paddingBetweenChips = 8.dp,
@@ -128,7 +129,8 @@ private fun PopularTags(
         )
 
         TagListLazyRows(
-            tagStringList = testTags,
+            modifier = modifier,
+            tagStringList = testTagsRecommend,
             chip = defaultTagChip,
             paddingBetweenChips = 8.dp,
             rowNum = 3,

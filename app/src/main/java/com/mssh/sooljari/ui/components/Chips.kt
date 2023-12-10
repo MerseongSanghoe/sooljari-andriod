@@ -231,13 +231,13 @@ fun ResultCardTagChip(
 ) {
     val backgroundColor =
         if (isKeyword) {
-            colorResource(id = R.color.purple0)
+            colorResource(id = R.color.orange_0)
         } else {
             colorResource(id = R.color.neutral5_alpha15)
         }
     val textColor =
         if (isKeyword) {
-            colorResource(id = R.color.purple5)
+            colorResource(id = R.color.orange_6)
         } else {
             colorResource(id = R.color.black)
         }
