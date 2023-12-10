@@ -57,8 +57,8 @@ fun VerticalCard(
     keyword: String = "",
     onCardClick: (Long) -> Unit
 ) {
-    val name = alcohol.name ?: stringResource(id = R.string.error_no_value)
-    val category = alcohol.category ?: stringResource(id = R.string.error_no_value)
+    val name = alcohol.name?.trimStart() ?: stringResource(id = R.string.error_no_value)
+    val category = alcohol.category?.trimStart() ?: stringResource(id = R.string.error_no_value)
     val staredNumber = remember { String.format("%,d", Random.nextInt(0, 3000)) }
     val thumbnail = if (alcohol.imageUrl.isNullOrEmpty()) {
         R.drawable.img_placeholder
@@ -277,15 +277,9 @@ fun ResultCard(
     } else {
         "http://211.37.148.214${alcohol.imageUrl}"
     }
-    val name = alcohol.name ?: stringResource(id = R.string.error_no_value)
-    val category = alcohol.category ?: stringResource(id = R.string.error_no_value)
-    val degree = if (alcohol.degree == null) {
-        ""
-    } else {
-        alcohol.degree.toString() + "도"
-    }
-
-    val keywordList = keyword.split(" ", "#")
+    val name = alcohol.name?.trimStart() ?: stringResource(id = R.string.error_no_value)
+    val category = alcohol.category?.trimStart() ?: stringResource(id = R.string.error_no_value)
+    val degree = alcohol.degree?.let { "${it}도" } ?: stringResource(id = R.string.error_no_value)
 
     Card(
         modifier = Modifier
