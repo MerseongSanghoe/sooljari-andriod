@@ -76,14 +76,16 @@ class AlcoholViewModel(private val repository: AlcoholRepository, private val ap
             return
         }
 
+        val searchWord = keyword.trimIndent()
+
         _isLoading.value = true
 
-        saveToHistory(keyword)
+        saveToHistory(searchWord)
 
         viewModelScope.launch {
-            reqUrl = repository.getInitialResults(keyword).reqUrl
+            reqUrl = repository.getInitialResults(searchWord).reqUrl
 
-            val result = repository.getInitialResults(keyword).result
+            val result = repository.getInitialResults(searchWord).result
             currentPage = result.page ?: 0
             totalAlcoholCount = result.count ?: 0
             _alcoholList.value = result.data
