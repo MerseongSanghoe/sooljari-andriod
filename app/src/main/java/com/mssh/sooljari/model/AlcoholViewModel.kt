@@ -71,6 +71,10 @@ class AlcoholViewModel(private val repository: AlcoholRepository, private val ap
 
     fun initialLoad(keyword: String) {
         if (isLoading.value) return
+        if (keyword.isBlank()) {
+            resetSearchResult()
+            return
+        }
 
         _isLoading.value = true
 
