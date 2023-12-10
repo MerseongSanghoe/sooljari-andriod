@@ -294,8 +294,6 @@ fun TagListLazyRows(
     var sumOfChipWidth = 0.dp
     var tagList = mutableListOf<String>()
 
-    //
-
     tagStringList.forEach { tagString ->
         val chipWidth = with(density) {
             (tagString.length * chip.fontSize.value).sp.toDp() + chip.horizontalPadding
@@ -337,8 +335,8 @@ fun TagListLazyRows(
                 tagListRow.forEach { tag ->
                     AddChip(
                     	chipType = chip.chipType, 
-                    	tagString = tag, 
-                    	keyword = "", 
+                    	tagString = tag,
+                        keywordList = keywordList,
                         onClick = { onClickChip(tag) }
                     )
                 }
@@ -359,7 +357,7 @@ fun TagListLazyRows(
 private fun AddChip(
     chipType: Chips,
     tagString: String,
-    keyword: String,
+    keywordList: List<String>,
     onClick: () -> Unit = {},
 ) {
     return when (chipType) {
@@ -368,7 +366,7 @@ private fun AddChip(
         }
 
         Chips.RESULT_CARD_TAG -> {
-            if (tagString == keyword) {
+            if (keywordList.contains(tagString.removePrefix("#"))) {
                 ResultCardTagChip(tagString, true, onClick)
             } else ResultCardTagChip(tagString, false, onClick)
         }
@@ -421,7 +419,7 @@ val testTagsRecommend: List<String> =
         "이화주"
     )
 
-@Preview(showBackground = true, backgroundColor = 0xF0FFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xF0FFFFFF, widthDp = 200)
 @Composable
 private fun TagListLazyRowPreview() {
     TagListLazyRows(

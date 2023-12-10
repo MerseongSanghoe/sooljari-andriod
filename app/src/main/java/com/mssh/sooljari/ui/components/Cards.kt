@@ -267,7 +267,7 @@ fun FairCard() {
 @Composable
 fun ResultCard(
     alcohol: Alcohol,
-    keyword: String,
+    query: String,
     onResultCardClick: (Long) -> Unit
 ) {
     val cardHeight = 140.dp
@@ -312,7 +312,7 @@ fun ResultCard(
                     .background(
                         color = colorResource(id = R.color.neutral0)
                     ),
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.FillHeight,
                 failure = placeholder(R.drawable.img_placeholder),
                 contentDescription = null
             )
@@ -324,17 +324,18 @@ fun ResultCard(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .wrapContentHeight()
+                        .wrapContentHeight(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
                         text = name,
-                        fontSize = 16.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = "$category  $degree",
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                     )
 
                     Spacer(
@@ -343,9 +344,14 @@ fun ResultCard(
                             .height(8.dp)
                     )
 
-                    val tagList = addHash(alcohol.tags)
+                    //하이라이트 할 태그들이 앞쪽으로 재배치된 태그 리스트
+                    val tagList = addHash(reorderTagList(alcohol.tags, query))
+
+                    //하이라이트 할 키워드들
+                    val keywordList = query.split(" ").map { it.removePrefix("#") }
 
                     TagListLazyRows(
+                        modifier = Modifier.fillMaxWidth(),
                         tagStringList = tagList,
                         chip = resultCardChip,
                         paddingBetweenChips = 4.dp,
@@ -376,6 +382,26 @@ fun ResultCard(
     }
 }
 
+//하이라이트 할 태그들을 리스트 앞으로 가져옴
+private fun reorderTagList(tagList: List<String>, query: String): List<String> {
+    val words = query.split(" ").map { it.removePrefix("#") }
+    val keywordList = mutableListOf<String>()
+
+    words.reversed().forEach { word ->
+        if (tagList.contains(word)) {
+            keywordList.add(word)
+        }
+    }
+
+    tagList.forEach { word ->
+        if (!keywordList.contains(word)) {
+            keywordList.add(word)
+        }
+    }
+
+    return keywordList
+}
+
 @Preview
 @Composable
 fun ResultCardPreview() {
@@ -387,7 +413,7 @@ fun ResultCardPreview() {
             degree = 4.3f,
             tags = testTags
         ),
-        keyword = "유하민",
+        query = "유하민",
         onResultCardClick = {}
     )
 }

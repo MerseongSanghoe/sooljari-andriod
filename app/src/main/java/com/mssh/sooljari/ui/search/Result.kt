@@ -117,7 +117,7 @@ private fun SearchResults(
         items(results) {
             ResultCard(
                 alcohol = it,
-                keyword = query,
+                query = query,
                 onResultCardClick = onResultCardClick
             )
         }
