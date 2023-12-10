@@ -46,6 +46,7 @@ fun SearchKeywords(
                 color = colorResource(id = R.color.neutral0)
             )
             .padding(horizontal = 56.dp)
+            .padding(top = 10.dp)
     ) {
         keywords?.forEach {
             QueryHighlightedText(
