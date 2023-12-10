@@ -60,11 +60,8 @@ fun VerticalCard(
     val name = alcohol.name?.trimStart() ?: stringResource(id = R.string.error_no_value)
     val category = alcohol.category?.trimStart() ?: stringResource(id = R.string.error_no_value)
     val staredNumber = remember { String.format("%,d", Random.nextInt(0, 3000)) }
-    val thumbnail = if (alcohol.imageUrl.isNullOrEmpty()) {
-        R.drawable.img_placeholder
-    } else {
-        "http://211.37.148.214${alcohol.imageUrl}"
-    }
+    val thumbnail = alcohol.imageUrl?.let { "http://211.37.148.214${alcohol.imageUrl}" }
+        ?: R.drawable.img_placeholder
 
     Card(
         modifier = modifier
@@ -87,9 +84,9 @@ fun VerticalCard(
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(3.dp))
                 .background(
-                    color = colorResource(id = R.color.neutral5_alpha15)
+                    color = colorResource(id = R.color.neutral0)
                 ),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.FillHeight,
             failure = placeholder(R.drawable.img_placeholder),
             contentDescription = null
         )
@@ -272,11 +269,8 @@ fun ResultCard(
 ) {
     val cardHeight = 140.dp
 
-    val thumbnail = if (alcohol.imageUrl.isNullOrEmpty()) {
-        R.drawable.img_placeholder
-    } else {
-        "http://211.37.148.214${alcohol.imageUrl}"
-    }
+    val thumbnail = alcohol.imageUrl?.let { "http://211.37.148.214${alcohol.imageUrl}" }
+        ?: R.drawable.img_placeholder
     val name = alcohol.name?.trimStart() ?: stringResource(id = R.string.error_no_value)
     val category = alcohol.category?.trimStart() ?: stringResource(id = R.string.error_no_value)
     val degree = alcohol.degree?.let { "${it}도" } ?: stringResource(id = R.string.error_no_value)

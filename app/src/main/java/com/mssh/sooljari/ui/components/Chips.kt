@@ -53,11 +53,11 @@ data class Chip(
 val searchBarTagChip: Chip =
     Chip(Chips.SEARCH_BAR_TAG, 12.sp, 8.dp)
 val resultCardChip: Chip =
-    Chip(Chips.RESULT_CARD_TAG, 14.sp, 4.dp)
+    Chip(Chips.RESULT_CARD_TAG, 14.sp, 6.dp)
 val defaultTagChip: Chip =
-    Chip(Chips.DEFAULT_TAG, 14.sp, 8.dp)
+    Chip(Chips.DEFAULT_TAG, 14.sp, 10.dp)
 val lightTagChip: Chip =
-    Chip(Chips.LIGHT_TAG, 14.sp, 8.dp)
+    Chip(Chips.LIGHT_TAG, 14.sp, 10.dp)
 val randomBackgroundChip: Chip =
     Chip(Chips.RANDOM_BACKGROUND_TAG, 16.sp, 8.dp)
 val textTagChip: Chip =
@@ -250,7 +250,8 @@ fun ResultCardTagChip(
                 shape = RoundedCornerShape(3.dp),
             )
             .padding(
-                horizontal = resultCardChip.horizontalPadding
+                horizontal = resultCardChip.horizontalPadding,
+                vertical = 2.dp
             ),
         color = textColor,
         fontSize = resultCardChip.fontSize

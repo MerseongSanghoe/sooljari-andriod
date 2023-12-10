@@ -147,7 +147,7 @@ private fun AlcoholDetailView(
                     //술 이름
                     Row {
                         Text(
-                            text = alcoholInfo.title
+                            text = alcoholInfo.title?.trimStart()
                                 ?: stringResource(R.string.error_no_value),
                             modifier = Modifier
                                 .weight(1f),
@@ -205,7 +205,8 @@ private fun AlcoholDetailView(
                 //술 정보
                 AlcoholInfo(
                     modifier = modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
                     alcoholInfo = alcoholInfo
                 )
             }

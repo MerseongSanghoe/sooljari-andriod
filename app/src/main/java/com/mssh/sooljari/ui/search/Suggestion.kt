@@ -130,7 +130,7 @@ private fun PopularTags(
 
         TagListLazyRows(
             modifier = modifier,
-            tagStringList = testTagsRecommend,
+            tagStringList = addHash(testTagsRecommend),
             chip = defaultTagChip,
             paddingBetweenChips = 8.dp,
             rowNum = 3,
