@@ -56,6 +56,7 @@ fun SearchView(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
+    //다른창에 다녀와도 쿼리 기억하도록 Saveable 사용
     var query by rememberSaveable { mutableStateOf("") }
 
     val isSearching = remember { mutableStateOf(false) }

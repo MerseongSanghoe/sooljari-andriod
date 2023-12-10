@@ -91,7 +91,7 @@ private fun SearchResults(
                     val totalItemCount = listState.layoutInfo.totalItemsCount
 
                     if (lastIndex == totalItemCount - 1) {
-                        viewModel.loadMoreList(query)
+                        viewModel.loadMoreList()
                     }
                 }
             }

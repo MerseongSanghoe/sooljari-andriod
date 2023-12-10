@@ -22,10 +22,10 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
     val alcoholInfo: StateFlow<AlcoholInfo?> = _alcoholInfo
 
     //태그로 가져온 술 리스트
-    private val _alcoholListByTag = MutableStateFlow<MutableMap<String, SearchedByTagAlcoholResults?>>(
-        mutableMapOf()
-    )
-    val alcoholListByTag: StateFlow<MutableMap<String, SearchedByTagAlcoholResults?>> = _alcoholListByTag
+    private val _alcoholListByTag =
+        MutableStateFlow<MutableMap<String, SearchedByTagAlcoholResults?>>(mutableMapOf())
+    val alcoholListByTag: StateFlow<MutableMap<String, SearchedByTagAlcoholResults?>> =
+        _alcoholListByTag
 
     //자동완성 키워드 리스트
     private val _keywordList = MutableStateFlow<List<String>?>(emptyList())
@@ -39,6 +39,8 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
 
     //검색화면 사용자 인풋 플로우
     private val userInputFlow = MutableStateFlow("")
+
+    private var reqUrl = ""
 
     /*
      검색 관련 함수들
@@ -59,7 +61,9 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         _isLoading.value = true
 
         viewModelScope.launch {
-            val result = repository.getInitialResults(keyword)
+            reqUrl = repository.getInitialResults(keyword).reqUrl
+
+            val result = repository.getInitialResults(keyword).result
             currentPage = result.page ?: 0
             totalAlcoholCount = result.count ?: 0
             _alcoholList.value = result.data
@@ -67,7 +71,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         }
     }
 
-    fun loadMoreList(keyword: String) {
+    fun loadMoreList() {
         if (isLoading.value) return
 
         _isLoading.value = true
@@ -75,7 +79,7 @@ class AlcoholViewModel(private val repository: AlcoholRepository) : ViewModel() 
         viewModelScope.launch {
             if (canLoadMore()) {
                 val nextPage = currentPage + 1
-                val result = repository.getMoreResults(keyword, nextPage)
+                val result = repository.getMoreResults(reqUrl, nextPage)
 
                 currentPage = result.page ?: nextPage
                 _alcoholList.value = _alcoholList.value?.plus(result.data)

@@ -137,7 +137,6 @@ fun VerticalCard(
                     chip = textTagChip,
                     paddingBetweenChips = 2.dp,
                     rowNum = 1,
-                    keyword = keyword,
                 )
             }
 
@@ -245,7 +244,6 @@ fun HorizontalCard(
                         paddingBetweenChips = 4.dp,
                         rowNum = 1,
                         paddingBetweenRows = 4.dp,
-                        keyword = keyword
                     )
 
                     Text(
@@ -286,6 +284,8 @@ fun ResultCard(
     } else {
         alcohol.degree.toString() + "도"
     }
+
+    val keywordList = keyword.split(" ", "#")
 
     Card(
         modifier = Modifier
@@ -351,7 +351,7 @@ fun ResultCard(
                         paddingBetweenChips = 4.dp,
                         rowNum = 2,
                         paddingBetweenRows = 4.dp,
-                        keyword = keyword
+                        keywordList = keywordList
                     )
                 }
 

@@ -13,14 +13,22 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.ParametersBuilder
+import io.ktor.http.URLBuilder
+import io.ktor.http.URLProtocol
+import io.ktor.http.appendPathSegments
 import io.ktor.http.contentType
+import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 val BASE_URL = "http://211.37.148.214/api"
 val LOGIN_ID = "testandroid"
 val LOGIN_PASSWORD = "catdog09321"
+
+const val BASE_URL_ = "http://211.37.148.214"
 
 class AlcoholRepository {
     private var jwt: String? = null
@@ -41,22 +49,65 @@ class AlcoholRepository {
         }
     }
 
-    //최초 검색 결과 가져오기
-    suspend fun getInitialResults(keyword: String): AlcoholResults {
-        val url = "$BASE_URL/alcohol/search?s="
-        val query = URLEncoder.encode(keyword, "UTF-8")
-        val results: AlcoholResults = client.get("$url$query").body()
+    data class SearchRequest(
+        val reqUrl: String,
+        val result: AlcoholResults
+    )
 
-        return results
+    //최초 검색 결과 가져오기
+    suspend fun getInitialResults(query: String): SearchRequest {
+        val url = queryToUrl(query)
+        val result: AlcoholResults = client.get(url).body()
+
+        return SearchRequest(url, result)
+    }
+
+    //유저 쿼리를 url로 변환
+    private fun queryToUrl(query: String): String {
+        val words = query.split(" ")
+        val tagList = mutableListOf<String>()
+        val keywordList = mutableListOf<String>()
+
+
+        for (w in words) {
+            if (w.startsWith("#")) {
+                //해쉬 문자 제외하고 추가
+                tagList.add(w.substring(1))
+            } else {
+                keywordList.add(w)
+            }
+        }
+
+        val tag = tagList.joinToString(" ")
+        val keyword = keywordList.joinToString(" ")
+
+        val parameters = ParametersBuilder()
+
+        if (tag.isNotBlank()) {
+            parameters.append("t", URLEncoder.encode(tag, StandardCharsets.UTF_8.toString()))
+        }
+
+        if (keyword.isNotBlank()) {
+            parameters.append("s", URLEncoder.encode(keyword, StandardCharsets.UTF_8.toString()))
+        }
+
+        val url = URLBuilder().apply {
+            protocol = URLProtocol.HTTP
+            host = "211.37.148.214"
+            encodedPath = "/api/alcohol/search"
+            encodedParameters = parameters
+        }.buildString()
+
+        return url
     }
 
     //추가 검색 결과 가져오기
-    suspend fun getMoreResults(keyword: String, page: Int): AlcoholResults {
-        val url = "$BASE_URL/alcohol/search?s="
-        val query = URLEncoder.encode(keyword, "UTF-8")
-        val results: AlcoholResults = client.get("$url$query&page=$page").body()
+    suspend fun getMoreResults(url: String, page: Int): AlcoholResults {
+        Log.d("url", "${url}&page=$page")
+        val result: AlcoholResults = client.get("${url}&page=$page").body()
+        Log.d("getMoreResults", result.toString())
 
-        return results
+        return result
     }
 
     //strip용 로그인

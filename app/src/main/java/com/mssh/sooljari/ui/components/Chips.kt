@@ -249,7 +249,7 @@ fun ResultCardTagChip(
  * @param paddingBetweenChips 칩 사이 간격
  * @param rowNum 태그가 표시될 행의 총 갯수
  * @param paddingBetweenRows 행 사이 간격
- * @param keyword 특별히 강조해야 할 태그
+ * @param keywordList 특별히 강조해야 할 태그들
  */
 
 @Composable
@@ -260,14 +260,17 @@ fun TagListLazyRows(
     paddingBetweenChips: Dp = 0.dp,
     rowNum: Int = 1,
     paddingBetweenRows: Dp = 0.dp,
-    keyword: String = ""
+    keywordList: List<String> = emptyList()
 ) {
+    //레이아웃 크기 계산 관련 변수들
     val density = LocalDensity.current
     val rowWidth = remember { mutableStateOf(0.dp) }
     val tagListRows = mutableListOf<List<String>>()
 
     var sumOfChipWidth = 0.dp
     var tagList = mutableListOf<String>()
+
+    //
 
     tagStringList.forEach { tagString ->
         val chipWidth = with(density) {
@@ -308,7 +311,7 @@ fun TagListLazyRows(
                 horizontalArrangement = Arrangement.spacedBy(paddingBetweenChips)
             ) {
                 tagListRow.forEach { tag ->
-                    AddChip(chipType = chip.chipType, tagString = tag, keyword = keyword)
+                    AddChip(chipType = chip.chipType, tagString = tag, keyword = "")
                 }
             }
 
@@ -380,7 +383,7 @@ private fun TagListLazyRowPreview() {
     TagListLazyRows(
         tagStringList = testTags,
         chip = resultCardChip,
-        keyword = "세글자",
+        keywordList = emptyList(),
         rowNum = 2,
         paddingBetweenRows = 4.dp
     )
