@@ -296,7 +296,7 @@ fun TagListLazyRows(
 
     tagStringList.forEach { tagString ->
         val chipWidth = with(density) {
-            (tagString.length * chip.fontSize.value).sp.toDp() + chip.horizontalPadding
+            (tagString.length * chip.fontSize.value).sp.toDp() + (chip.horizontalPadding * 2)
         }
 
         if (sumOfChipWidth + chipWidth <= rowWidth.value) {
