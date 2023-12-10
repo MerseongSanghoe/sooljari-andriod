@@ -27,12 +27,13 @@ import androidx.compose.ui.unit.sp
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.AlcoholRepository
 import com.mssh.sooljari.model.AlcoholViewModel
+import com.mssh.sooljari.model.addHash
 import com.mssh.sooljari.ui.components.TagListLazyRows
 import com.mssh.sooljari.ui.components.TransparentIconButton
 import com.mssh.sooljari.ui.components.defaultTagChip
 import com.mssh.sooljari.ui.components.lightTagChip
 import com.mssh.sooljari.ui.components.testTags
-import com.mssh.sooljari.ui.components.testTagsRecommand
+import com.mssh.sooljari.ui.components.testTagsRecommend
 
 @Composable
 fun SearchSuggestions(
@@ -127,7 +128,7 @@ private fun PopularTags(
         )
 
         TagListLazyRows(
-            tagStringList = testTagsRecommand,
+            tagStringList = testTags,
             chip = defaultTagChip,
             paddingBetweenChips = 8.dp,
             rowNum = 3,
@@ -140,7 +141,7 @@ private fun PopularTags(
 @Composable
 private fun TagRanking(
     modifier: Modifier = Modifier,
-    tagList: List<String> = testTags,
+    tagList: List<String> = addHash(testTagsRecommend),
     onClickTag: (String) -> Unit = {},
 ) {
     Column(
