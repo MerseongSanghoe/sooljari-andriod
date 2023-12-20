@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,11 +39,12 @@ fun Banner(
     isAutoScroll: Boolean = true
 ) {
     val pageCount = imageList.size
-    val pagerState = rememberPagerState(pageCount = { Int.MAX_VALUE })
+    val bannerPageCount = if (imageList.size == 1) 1 else Int.MAX_VALUE
+    val pagerState = rememberPagerState(pageCount = { bannerPageCount })
 
     //3초마다 다음 배너로 넘어감
     LaunchedEffect(pagerState) {
-        while (true) {
+        while (imageList.size > 1) {
             delay(3000)
             //스크롤이 Int.MAX 보다 큰 경우 처리
             pagerState.animateScrollToPage((pagerState.currentPage + 1) % Int.MAX_VALUE)
@@ -75,7 +77,7 @@ fun Banner(
                 modifier = modifier
                     .background(Color.White)
                     .fillMaxWidth()
-                    .height(280.dp),
+                    .aspectRatio(1.33f),
                 contentScale = ContentScale.FillHeight,
                 failure = placeholder(R.drawable.img_placeholder)
             )
@@ -98,7 +100,7 @@ fun Banner(
                     if (pageIndex == iteration) {
                         colorResource(id = R.color.neutral0)
                     } else {
-                        colorResource(id = R.color.neutral5_alpha25)
+                        colorResource(id = R.color.neutral5_alpha35)
                     }
                 Box(
                     modifier = Modifier

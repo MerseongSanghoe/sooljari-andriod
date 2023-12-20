@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -258,15 +259,16 @@ private fun SearchTextField(
         if (text.isNotEmpty()) {
             Column(
                 modifier = modifier
-                    .fillMaxWidth(),
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center
             ) {
                 TransparentIconButton(
                     modifier = Modifier.align(Alignment.End).padding(end = 3.dp),
                     onClick = onTextReseted,
                     icon = painterResource(R.drawable.ic_x),
                     iconColor = colorResource(R.color.neutral0),
-                    buttonSize = 32.dp,
-                    iconSize = 20.dp
+                    buttonSize = 28.dp,
+                    iconSize = 16.dp
                 )
             }
         }

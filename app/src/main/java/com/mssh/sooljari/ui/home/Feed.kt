@@ -20,6 +20,7 @@ import com.mssh.sooljari.model.AlcoholRepository
 import com.mssh.sooljari.model.AlcoholViewModel
 import com.mssh.sooljari.model.testImageList
 import com.mssh.sooljari.ui.components.Banner
+import com.mssh.sooljari.ui.components.HorizontalCardContainer
 import com.mssh.sooljari.ui.components.VerticalCardContainer
 
 @Composable
@@ -29,7 +30,7 @@ fun Feed(
     onVerticalCardClick: (Long) -> Unit,
     onNavigateToSearchByQuery: (String) -> Unit
 ) {
-    val tags = listOf("와인", "막걸리", "신맛")
+    val tags = listOf("와인", "단맛", "막걸리", "탁주", "신맛")
     val alcoholList = viewModel.alcoholListByTag.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -56,15 +57,40 @@ fun Feed(
                 .wrapContentHeight(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            for (tag in tags) {
-                val clickFunc: () -> Unit = { onNavigateToSearchByQuery("#$tag") }
-                VerticalCardContainer(
-                    headerTitle = "요즘 인기있는 #$tag",
-                    alcoholList = alcoholList.value[tag]?.data ?: emptyList(),
-                    onCardClick = onVerticalCardClick,
-                    onMoreButtonClick = clickFunc
-                )
-            }
+            VerticalCardContainer(
+                headerTitle = "요즘 인기있는 #와인",
+                alcoholList = alcoholList.value["와인"]?.data ?: emptyList(),
+                onCardClick = onVerticalCardClick,
+                onMoreButtonClick = { onNavigateToSearchByQuery("#와인") }
+            )
+
+            HorizontalCardContainer(
+                headerTitle = "이런 #단맛 술을 추천해요",
+                alcoholList = alcoholList.value["단맛"]?.data ?: emptyList(),
+                onCardClick = onVerticalCardClick,
+                onMoreButtonClick = { onNavigateToSearchByQuery("#단맛") }
+            )
+
+            VerticalCardContainer(
+                headerTitle = "오늘은 #막걸리 어때요?",
+                alcoholList = alcoholList.value["막걸리"]?.data ?: emptyList(),
+                onCardClick = onVerticalCardClick,
+                onMoreButtonClick = { onNavigateToSearchByQuery("#막걸리") }
+            )
+
+            HorizontalCardContainer(
+                headerTitle = "많이 찾아본 #탁주",
+                alcoholList = alcoholList.value["탁주"]?.data ?: emptyList(),
+                onCardClick = onVerticalCardClick,
+                onMoreButtonClick = { onNavigateToSearchByQuery("#탁주") }
+            )
+
+            VerticalCardContainer(
+                headerTitle = "#신맛 태그와 연관된",
+                alcoholList = alcoholList.value["신맛"]?.data ?: emptyList(),
+                onCardClick = onVerticalCardClick,
+                onMoreButtonClick = { onNavigateToSearchByQuery("#신맛") }
+            )
         }
     }
 }

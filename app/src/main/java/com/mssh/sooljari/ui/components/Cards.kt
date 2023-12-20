@@ -2,6 +2,7 @@ package com.mssh.sooljari.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -91,7 +92,13 @@ fun VerticalCard(
             contentDescription = null
         )
 
-//본문
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+        )
+
+        //본문
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -103,13 +110,13 @@ fun VerticalCard(
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 // title
                 Text(
                     modifier = modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
+
                     text = name,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -120,11 +127,16 @@ fun VerticalCard(
                     modifier = modifier
                         .fillMaxWidth(),
                     text = category,
-                    color = colorResource(id = R.color.neutral4),
+                    color = colorResource(id = R.color.neutral3),
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
                 )
 
                 val tagList = addHash(alcohol.tags)
@@ -148,8 +160,8 @@ fun VerticalCard(
             ) {
                 TransparentIconButton(
                     onClick = { /*TODO*/ },
-                    icon = painterResource(id = R.drawable.ic_star),
-                    iconColor = colorResource(id = R.color.neutral3),
+                    icon = painterResource(id = R.drawable.ic_star_filled),
+                    iconColor = Color(0xffffe500),
                     buttonSize = 20.dp,
                     iconSize = 18.dp
                 )
@@ -166,6 +178,7 @@ fun VerticalCard(
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun HorizontalCard(
     alcohol: Alcohol,
@@ -174,6 +187,12 @@ fun HorizontalCard(
     contentMaxLines: Int = 2,
     onCardClick: (Long) -> Unit
 ) {
+    val name = alcohol.name?.trimStart() ?: stringResource(id = R.string.error_no_value)
+    val category = alcohol.category?.trimStart() ?: stringResource(id = R.string.error_no_value)
+    val staredNumber = remember { String.format("%,d", Random.nextInt(0, 3000)) }
+    val thumbnail = alcohol.imageUrl?.let { "http://211.37.148.214${alcohol.imageUrl}" }
+        ?: R.drawable.img_placeholder
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,7 +203,7 @@ fun HorizontalCard(
             containerColor = colorResource(id = R.color.neutral0)
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 0.dp
         )
     ) {
         Row(
@@ -192,15 +211,21 @@ fun HorizontalCard(
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_placeholder),
+            GlideImage(
+                model = thumbnail,
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp)
-                    .aspectRatio(1f)
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(3.dp))
+                    .border(
+                        width = 0.5.dp,
+                        color = colorResource(id = R.color.neutral2),
+                        shape = RoundedCornerShape(3.dp)
+                    )
                     .background(
-                        color = colorResource(id = R.color.neutral5_alpha15)
+                        color = colorResource(id = R.color.neutral0)
                     ),
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.FillHeight,
                 contentDescription = null
             )
 
@@ -214,7 +239,7 @@ fun HorizontalCard(
                         .wrapContentHeight()
                 ) {
                     Text(
-                        text = "${alcohol.name ?: R.string.error_no_value}",
+                        text = name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold,
                         overflow = TextOverflow.Ellipsis,
@@ -222,7 +247,7 @@ fun HorizontalCard(
                     )
 
                     Text(
-                        text = "${alcohol.category ?: R.string.error_no_value}",
+                        text = category,
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -237,18 +262,18 @@ fun HorizontalCard(
 
                     TagListLazyRows(
                         tagStringList = tagList,
-                        chip = resultCardChip,
+                        chip = textTagChip,
                         paddingBetweenChips = 4.dp,
-                        rowNum = 1,
+                        rowNum = 2,
                         paddingBetweenRows = 4.dp,
                     )
 
-                    Text(
-                        text = stringResource(id = R.string.placeholder_long),/*TODO*/
+                    /*Text(
+                        text = "등록된 술 설명이 없어요",*//*TODO*//*
                         fontSize = 10.sp,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = contentMaxLines
-                    )
+                    )*/
                 }
             }
         }
@@ -285,7 +310,7 @@ fun ResultCard(
             containerColor = colorResource(id = R.color.neutral0)
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 0.dp
         )
     ) {
         Row(
@@ -313,7 +338,7 @@ fun ResultCard(
                     modifier = Modifier
                         .weight(1f)
                         .wrapContentHeight(),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = name,
@@ -323,7 +348,8 @@ fun ResultCard(
 
                     Text(
                         text = "$category  $degree",
-                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.neutral3),
+                        fontSize = 14.sp,
                     )
 
                     Spacer(
@@ -346,23 +372,6 @@ fun ResultCard(
                         rowNum = 2,
                         paddingBetweenRows = 4.dp,
                         keywordList = keywordList
-                    )
-                }
-
-                Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .size(18.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Black
-                    ),
-                    contentPadding = PaddingValues(0.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_star),
-                        contentDescription = null,
                     )
                 }
             }

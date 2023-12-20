@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -90,19 +91,19 @@ fun RandomBackgroundTagChip(
     tagString: String,
     onClick: () -> Unit = {}
 ) {
-    val random = Random.nextInt(0, 8)
+    val random = rememberSaveable { Random.nextInt(0, 8) }
 
     val backgroundColor =
         when (random) {
-            0 -> colorResource(id = R.color.purple0)
-            1 -> colorResource(id = R.color.purple_200)
+            in 0..2 -> colorResource(id = R.color.orange_0)
 
-            else -> colorResource(id = R.color.neutral5_alpha15)
+
+            else -> colorResource(id = R.color.neutral1)
         }
 
     val textColor =
         when (random) {
-            in 0..1 -> colorResource(id = R.color.purple5)
+            in 0..2 -> colorResource(id = R.color.orange_6)
 
             else -> colorResource(id = R.color.black)
         }
@@ -233,7 +234,7 @@ fun ResultCardTagChip(
         if (isKeyword) {
             colorResource(id = R.color.orange_0)
         } else {
-            colorResource(id = R.color.neutral5_alpha15)
+            colorResource(id = R.color.neutral1)
         }
     val textColor =
         if (isKeyword) {
@@ -335,8 +336,8 @@ fun TagListLazyRows(
             ) {
                 tagListRow.forEach { tag ->
                     AddChip(
-                    	chipType = chip.chipType, 
-                    	tagString = tag,
+                        chipType = chip.chipType,
+                        tagString = tag,
                         keywordList = keywordList,
                         onClick = { onClickChip(tag) }
                     )

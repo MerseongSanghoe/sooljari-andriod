@@ -43,3 +43,13 @@ val nanumSquare = FontFamily(
         Font(R.font.nanumsquare_ac_eb, FontWeight.ExtraBold),
         Font(R.font.nanumsquare_ac_l, FontWeight.Light)
         )
+
+val SoolJariTypography = Typography(
+        bodyMedium = TextStyle(
+                fontFamily = nanumSquare,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                lineHeight = 24.sp,
+                letterSpacing = 0.5.sp
+        )
+)

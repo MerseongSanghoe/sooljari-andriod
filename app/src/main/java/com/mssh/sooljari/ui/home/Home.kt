@@ -2,16 +2,24 @@ package com.mssh.sooljari.ui.home
 
 import android.app.Application
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.mssh.sooljari.R
@@ -40,6 +48,20 @@ fun HomeView(
                 modifier = Modifier
                     .navigationBarsPadding()
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .size(52.dp),
+                shape = CircleShape,
+                containerColor = Color.Transparent
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_add_filled),
+                    contentDescription = null 
+                )
+            }
         }
     ) { innerPadding ->
         Column(

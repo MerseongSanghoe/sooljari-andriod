@@ -11,7 +11,7 @@
     <color name="neutral0_alpha65">#A6FFFFFF</color>
     <color name="neutral0_alpha15">#26FFFFFF</color>
     <color name="neutral5_alpha15">#26000000</color>
-    <color name="neutral1">#F8F8F8</color>
+    <color name="neutral1">#EEEEEE</color>
     <color name="purple0">#FDD9FF</color>
     <color name="purple1">#AE43B5</color>
     <color name="purple2">#9E1CA7</color>
@@ -20,10 +20,11 @@
     <color name="purple5">#4E0054</color>
     <color name="neutral5_alpha75">#BF000000</color>
     <color name="neutral2">#B7B7B7</color>
-    <color name="neutral3">#787878</color>
+    <color name="neutral3">#757575</color>
     <color name="neutral4">#313131</color>
     <color name="neutral5_alpha25">#40000000</color>
     <color name="orange_0">#FF9D6F</color>
     <color name="orange_5">#A53500</color>
-    <color name="orange_6">#2C0E00</color>
+    <color name="orange_6">#611700</color>
+    <color name="neutral5_alpha35">#59000000</color>
 </resources>

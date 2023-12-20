@@ -59,6 +59,7 @@ fun CardListContainerHeader(
                 ),
             color = colorResource(id = R.color.purple3),
             fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
@@ -126,6 +127,44 @@ fun VerticalCardContainer(
     }
 }
 
+@Composable
+fun HorizontalCardContainer(
+    headerTitle: String,
+    alcoholList: List<Alcohol> = emptyList(),
+    onCardClick: (Long) -> Unit,
+    onMoreButtonClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .background(
+                color = colorResource(id = R.color.neutral0)
+            )
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
+    ) {
+        CardListContainerHeader(
+            headerTitle = headerTitle,
+            onMoreButtonClick = onMoreButtonClick
+        )
+
+        alcoholList.take(5)
+            .forEach { alcohol ->
+            HorizontalCard(
+                alcohol = alcohol,
+                onCardClick = onCardClick
+            )
+
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
+                )
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun CardListContainerHeaderPreview() {
@@ -139,6 +178,17 @@ private fun CardListContainerHeaderPreview() {
 @Composable
 private fun VerticalCardContainerPreview() {
     VerticalCardContainer(
+        headerTitle = "오늘의 추천",
+        alcoholList = testSearchedByTagAlcoholList,
+        onCardClick = {},
+        onMoreButtonClick = {}
+    )
+}
+
+@Preview
+@Composable
+private fun HorizontalCardContainerPreview() {
+    HorizontalCardContainer(
         headerTitle = "오늘의 추천",
         alcoholList = testSearchedByTagAlcoholList,
         onCardClick = {},

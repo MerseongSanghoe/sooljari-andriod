@@ -1,7 +1,9 @@
 package com.mssh.sooljari.ui.home.navigation
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +17,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,25 +33,31 @@ import com.mssh.sooljari.ui.theme.SoolJariTheme
 @Composable
 fun NavigationButton(
     icon: Painter,
-    description: String
+    description: String,
+    descriptionColor: Color = Color.Black,
+    onClick: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .size(32.dp)
+            .size(38.dp)
+            .clickable(
+                onClick = onClick
+            )
     ) {
         Image(
             painter = icon,
             contentDescription = null,
             modifier = Modifier
-                .height(18.dp)
-                .width(32.dp)
+                .height(20.dp)
+                .width(35.56.dp)
         )
 
         Text(
             text = description,
-            fontSize = 7.sp,
+            color = descriptionColor,
+            fontSize = 9.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -67,12 +77,17 @@ fun NavigationBar(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(52.dp)
                 .background(color = colorResource(id = R.color.neutral0))
         ) {
+            val context = LocalContext.current
+
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_menu),
-                description = stringResource(id = R.string.navi_description_menu)
+                description = stringResource(id = R.string.navi_description_menu),
+                onClick = {
+                    Toast.makeText(context, "준비중 입니다", Toast.LENGTH_SHORT).show()
+                }
             )
 
             NavigationButton(
@@ -81,18 +96,25 @@ fun NavigationBar(modifier: Modifier = Modifier) {
             )
 
             NavigationButton(
-                icon = painterResource(id = R.drawable.ic_home),
-                description = stringResource(id = R.string.navi_description_home)
+                icon = painterResource(id = R.drawable.ic_home_filled),
+                description = stringResource(id = R.string.navi_description_home),
+                descriptionColor = colorResource(id = R.color.purple4)
             )
 
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_user),
-                description = stringResource(id = R.string.navi_description_user)
+                description = stringResource(id = R.string.navi_description_user),
+                onClick = {
+                    Toast.makeText(context, "준비중 입니다", Toast.LENGTH_SHORT).show()
+                }
             )
 
             NavigationButton(
                 icon = painterResource(id = R.drawable.ic_review),
-                description = stringResource(id = R.string.navi_description_review)
+                description = stringResource(id = R.string.navi_description_review),
+                onClick = {
+                    Toast.makeText(context, "준비중 입니다", Toast.LENGTH_SHORT).show()
+                }
             )
 
         }

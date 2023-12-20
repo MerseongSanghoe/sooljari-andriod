@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -104,14 +105,13 @@ private fun SearchResults(
             .fillMaxWidth()
             .wrapContentHeight()
             .background(
-                color = colorResource(id = R.color.neutral1)
+                color = colorResource(id = R.color.neutral0)
             ),
         state = listState,
         contentPadding = PaddingValues(
             horizontal = 12.dp,
             vertical = 8.dp
         ),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(results) {
@@ -119,6 +119,24 @@ private fun SearchResults(
                 alcohol = it,
                 query = query,
                 onResultCardClick = onResultCardClick
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+            )
+
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(0.2.dp),
+                color = colorResource(id = R.color.neutral2)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
             )
         }
 

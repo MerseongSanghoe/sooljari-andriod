@@ -70,7 +70,7 @@ fun SoolJariTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = SoolJariTypography,
         content = content
     )
 }

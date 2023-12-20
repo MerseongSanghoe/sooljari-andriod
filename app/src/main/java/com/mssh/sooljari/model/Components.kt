@@ -14,16 +14,13 @@ data class Image(
 
 val testImageList: List<Image> = listOf(
     Image(
-        url = "https://www.siwse.com/images/contents/landing_visual.png"
+        url = "https://media.discordapp.net/attachments/1151138404130627624/1187148548769325056/1.PNG?ex=6595d53e&is=6583603e&hm=1685c0163d3c51c831d7c177fc3bf3c8a140fbb6e32549c610f2233dd3695752&=&format=webp&quality=lossless&width=895&height=671"
     ),
     Image(
-        url = "https://bsiwse.com/data/designImages/POPUP_1701598081.jpg"
+        url = "https://media.discordapp.net/attachments/1151138404130627624/1187148549192962099/2.PNG?ex=6595d53e&is=6583603e&hm=11db01a7331774c108a78e91cc8be180e24f23139c10af6120727f67c6ac97f5&=&format=webp&quality=lossless&width=895&height=671"
     ),
     Image(
-        url = "https://thesool.com/images/front/cont/info-logo.png"
-    ),
-    Image(
-        url = "https://thesool.com/ckeditor/imageUpload/%EC%8B%9C%EC%9D%8C%EC%83%81%EB%8B%B4%ED%9A%8C1_1692681920574.jpg"
+        url = "https://media.discordapp.net/attachments/1151138404130627624/1187148549654315089/3.PNG?ex=6595d53e&is=6583603e&hm=cca153e76471790e13dab26919822a7682ee3785a42fbc7d77f5552d42671677&=&format=webp&quality=lossless&width=895&height=671"
     ),
 )
 

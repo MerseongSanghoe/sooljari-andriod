@@ -1,11 +1,14 @@
 package com.mssh.sooljari.ui.detail
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,15 +17,20 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -32,16 +40,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.mssh.sooljari.R
 import com.mssh.sooljari.model.AlcoholInfo
 import com.mssh.sooljari.model.AlcoholViewModel
@@ -60,7 +77,8 @@ fun AlcoholDetailView(
     modifier: Modifier = Modifier,
     alcoholId: Long,
     viewModel: AlcoholViewModel,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    onTagClick: (String) -> Unit
 ) {
     val alcoholInfo by viewModel.alcoholInfo.collectAsState()
 
@@ -81,36 +99,127 @@ fun AlcoholDetailView(
             AlcoholDetailView(
                 modifier = modifier,
                 alcoholInfo = alcoholInfo!!,
-                onBackButtonClick = onBackButtonClick
+                onBackButtonClick = onBackButtonClick,
+                onTagClick = onTagClick
             )
         }
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 private fun AlcoholDetailView(
     modifier: Modifier = Modifier,
     alcoholInfo: AlcoholInfo,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    onTagClick: (String) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(
+                color = colorResource(id = R.color.neutral0)
+            ),
         topBar = {
             AlcoholDetailAppBar(
-                modifier = modifier,
                 onBackButtonClick = onBackButtonClick,
                 scrollBehavior = scrollBehavior
             )
+        },
+        bottomBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .background(color = colorResource(id = R.color.neutral0))
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TransparentIconButton(
+                    onClick = {},
+                    icon = painterResource(id = R.drawable.ic_star),
+                    buttonSize = 32.dp,
+                    iconSize = 28.dp
+                )
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxHeight(0.8f)
+                        .width(1.dp),
+                    color = colorResource(id = R.color.neutral3)
+                )
+
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .weight(1f),
+                    shape = RoundedCornerShape(3.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = colorResource(id = R.color.purple3)
+                    ),
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = colorResource(id = R.color.purple3)
+                    )
+                ) {
+                    Text(text = "리뷰 작성하기")
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .clip(RoundedCornerShape(3.dp))
+                        .background(
+                            color = Color.Black
+                        )
+                ) {
+                    GlideImage(
+                        model = R.drawable.bg_button,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .matchParentSize(),
+                        contentScale = ContentScale.FillBounds,
+                        alpha = 0.85f
+                    )
+
+                    Button(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .matchParentSize(),
+                        shape = RoundedCornerShape(3.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.White
+                        ),
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_search_star),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+
+                        Text(text = "비슷한 술 찾기")
+                    }
+                }
+            }
         }
-    ) { PaddingValues ->
+    ) { paddingValues ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = PaddingValues.calculateBottomPadding())
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
             //배너 표시 또는 placeholder 이미지 표시
             if (alcoholInfo.imageList == null
@@ -144,6 +253,19 @@ private fun AlcoholDetailView(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
+                    //양조장
+                    Row {
+                        Text(
+                            text = alcoholInfo.maker?.name
+                                ?: stringResource(R.string.error_no_value),
+                            modifier = Modifier
+                                .weight(1f),
+                            color = colorResource(id = R.color.neutral3),
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                        )
+                    }
+
                     //술 이름
                     Row {
                         Text(
@@ -157,27 +279,14 @@ private fun AlcoholDetailView(
                         )
                     }
 
-                    //양조장
-                    Row {
-                        Text(
-                            text = alcoholInfo.maker?.name
-                                ?: stringResource(R.string.error_no_value),
-                            modifier = Modifier
-                                .weight(1f),
-                            color = colorResource(id = R.color.neutral3),
-                            fontSize = 16.sp,
-                            maxLines = 1,
-                        )
-                    }
-
                     //주종, 도수
                     Row {
                         Text(
                             text = "${alcoholInfo.category ?: ""}, ${alcoholInfo.degree ?: 0}도",
                             modifier = Modifier
                                 .weight(1f),
-                            color = colorResource(id = R.color.neutral3),
-                            fontSize = 16.sp,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
                             maxLines = 1,
                         )
                     }
@@ -186,7 +295,7 @@ private fun AlcoholDetailView(
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colorResource(id = R.color.neutral3),
-                    thickness = 0.25.dp
+                    thickness = 0.2.dp
                 )
 
                 //태그 리스트
@@ -195,23 +304,95 @@ private fun AlcoholDetailView(
                 )
 
                 TagListLazyRows(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 4.dp),
                     tagStringList = tagList,
                     chip = randomBackgroundChip,
                     paddingBetweenChips = randomBackgroundChip.horizontalPadding,
                     rowNum = 3,
                     paddingBetweenRows = 8.dp,
+                    onClickChip = onTagClick
                 )
 
                 //술 정보
                 AlcoholInfo(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
+                        .padding(horizontal = 4.dp),
                     alcoholInfo = alcoholInfo
                 )
             }
 
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .background(
+                        color = colorResource(id = R.color.neutral1)
+                    )
+            )
 
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            ) {
+                                append("리뷰")
+
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = colorResource(id = R.color.purple3),
+                                    )
+                                ) {
+                                    append(" 0")
+                                }
+                            }
+                        }
+                    )
+
+                    Text(
+                        text = "+ 더보기",
+                        modifier = Modifier
+                            .clickable(
+                                onClick = {}
+                            ),
+                        color = colorResource(id = R.color.purple3),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Text(
+                    text = "아직 리뷰가 없어요 :(",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(
+                            color = colorResource(id = R.color.neutral1)
+                        )
+                        .padding(vertical = 20.dp),
+                    color = colorResource(id = R.color.neutral2),
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }
@@ -266,7 +447,7 @@ private fun AlcoholDetailAppBar(
 
     CenterAlignedTopAppBar(
         title = { /*TODO*/ },
-        modifier = Modifier,
+        modifier = modifier,
         navigationIcon = {
             TransparentIconButton(
                 onClick = onBackButtonClick,
@@ -334,6 +515,7 @@ private fun AlcoholDetailPreview() {
     AlcoholDetailView(
         modifier = Modifier,
         alcoholInfo = alcoholInfoPreview(),
-        onBackButtonClick = {}
+        onBackButtonClick = {},
+        onTagClick = {}
     )
 }

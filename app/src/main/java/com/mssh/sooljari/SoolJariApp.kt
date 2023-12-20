@@ -2,7 +2,9 @@ package com.mssh.sooljari
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -158,10 +160,15 @@ private fun NavGraphBuilder.sooljariGraph(
             Log.d("SoolJariApp", "alcoholId: $alcoholId")
 
             AlcoholDetailView(
+                modifier = Modifier.fillMaxSize(),
                 alcoholId = it,
                 viewModel = viewModel,
                 onBackButtonClick = {
                     navController.popBackStack()
+                },
+                onTagClick = { tag ->
+                    navController.navigate("search/$tag") {
+                    }
                 }
             )
         }
